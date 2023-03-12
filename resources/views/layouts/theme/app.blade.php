@@ -44,8 +44,8 @@
     </div>
     <!-- [ Main Content ] end -->
     @include('layouts.theme.footer')
-    @include('layouts.theme.scripts')
     @yield('javascript')
+    @include('layouts.theme.scripts')
 </body>
 <!-- [Body] end -->
 
