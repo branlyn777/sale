@@ -6,9 +6,6 @@
 <script src="template/js/pcoded.js"></script>
 
 
-<!-- [Page Specific JS] start -->
-<!-- Apex Chart -->
-<script src="template/js/plugins/apexcharts.min.js"></script>
-<script src="template/js/pages/dashboard-default.js"></script>
-<!-- [Page Specific JS] end -->
+<script src="sweetalert/sweetalert2.all.min.js"></script>
+
 @livewireScripts

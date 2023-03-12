@@ -56,7 +56,7 @@
                     role="tab"
                     aria-controls="chart-tab-home"
                     aria-selected="true"
-                    >Month</button
+                    >Mes</button
                   >
                 </li>
                 <li class="nav-item" role="presentation">
@@ -69,7 +69,7 @@
                     role="tab"
                     aria-controls="chart-tab-profile"
                     aria-selected="false"
-                    >Year</button
+                    >Año</button
                   >
                 </li>
               </ul>
@@ -258,3 +258,9 @@
     </div>
     <!-- [ sample-page ] end -->
   </div>
+  @section('javascript')
+    <!-- Apex Chart -->
+    <script src="template/js/plugins/apexcharts.min.js"></script>
+    <script src="template/js/pages/dashboard-default.js"></script>
+    <!-- [Page Specific JS] end -->
+  @endsection
