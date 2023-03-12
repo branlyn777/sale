@@ -11,4 +11,6 @@
     <link rel="stylesheet" href="template/css/style-preset.css" id="preset-style-link" />
     <!-- [My Styles Own] -->
     {{-- <link rel="stylesheet" href="own/styles.css" id="preset-style-link" /> --}}
+    <!-- [Bootstrap Icons] -->
+    <link rel="stylesheet" href="bootstrap-icons/font/bootstrap-icons.css" id="preset-style-link" />
 @livewireStyles
