@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Models\InvCategory;
 use Livewire\Component;
-use Carbon\Carbon;
 
 class InvCategorieController extends Component
 {

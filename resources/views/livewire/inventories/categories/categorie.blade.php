@@ -43,12 +43,12 @@
                                     {{ \Carbon\Carbon::parse($c->updated_at)->format('d/m/Y H:i') }}
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-outline-primary btn-sm">
+                                    <button onclick="toast()" type="button" class="btn btn-outline-primary btn-sm">
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
                                 </td>
                                 <td class="text-center">
-                                    <button onclick="asd()" type="button" class="btn btn-outline-danger btn-sm">
+                                    <button onclick="confirm({{ $c->id }}, '{{ $c->name }}')" type="button" class="btn btn-outline-danger btn-sm">
                                         <i class="bi bi-trash3"></i>
                                     </button>
                                 </td>
@@ -62,7 +62,7 @@
     <!-- [ sample-page ] end -->
 
     <!-- [ Modal ] start -->
-    @include('livewire.inventories.categories.modal_categories')
+        @include('livewire.inventories.categories.modal_categories')
     <!-- [ Modal ] end -->
 </div>
 @section('javascript')
@@ -70,22 +70,60 @@
         document.addEventListener('DOMContentLoaded', function() {
 
             window.livewire.on('show-modal-categorie', msg => {
-                $('#categorie').modal('show')
+                var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
+                categorieModal.show();
             });
 
             window.livewire.on('hide-modal-categorie', msg => {
-                $('#categorie').modal('hide')
-            });
+                var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
+                categorieModal.hide();
 
+                Swal.fire({
+                    toast: true,
+                    text: 'Categoría creada exitósamente',
+                    showConfirmButton: false,
+                    position: 'top-right',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    icon: 'success'
+                })
+            });
         });
 
-      function asd()
+      function confirm(id, name)
       {
-          Swal.fire(
-          'The Internet?',
-          'That thing is still around?',
-          'info'
-        )
+        Swal.fire({
+            title: '¿Eliminar Categoría?',
+            text: "Esta acción eliminará la categoria '" + name + "'",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+            }).then((result) => {
+            if (result.isConfirmed)
+            {
+                Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+                )
+            }
+        })
+      }
+      function toast()
+      {
+        Swal.fire({
+            toast: true,
+            text: 'Categoría creada exitósamente',
+            showConfirmButton: false,
+            position: 'top-right',
+            timer: 2000,
+            timerProgressBar: true,
+            icon: 'success'
+        })
+
       }
     </script>
 @endsection
