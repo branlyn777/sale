@@ -1957,8 +1957,10 @@ progress {
   --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
   --bs-table-active-color: #212529;
   --bs-table-active-bg: rgba(0, 0, 0, 0.1);
-  --bs-table-hover-color: #212529;
-  --bs-table-hover-bg: rgba(38, 137, 226, 0.02);
+  --bs-table-hover-color: #007ffd;
+  /* --bs-table-hover-color: #212529; */
+  --bs-table-hover-bg: rgba(38, 137, 226, 0.10);
+  /* --bs-table-hover-bg: rgba(38, 137, 226, 0.02); */
   width: 100%;
   margin-bottom: 1rem;
   color: var(--bs-table-color);

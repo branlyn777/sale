@@ -4,15 +4,18 @@ namespace App\Http\Livewire;
 
 use App\Models\InvCategory;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class InvCategorieController extends Component
 {
     //Guarda el nombre de la cetegoria (Crear o editar)
     public $name_category;
 
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     public function render()
     {
-        $categories = InvCategory::where("status","active")->orderBy("created_at","desc")->get();
+        $categories = InvCategory::where("status","active")->orderBy("created_at","desc")->paginate(10);
         return view('livewire.inventories.categories.categorie', [
             'categories' => $categories
         ])

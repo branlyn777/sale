@@ -12,7 +12,7 @@
                     <label>Inicio</label>
                     <i class="ti ti-dashboard"></i>
                 </li>
-                <li class="pc-item active">
+                <li class="pc-item">
                     <a href="{{ url('inicio') }}" class="pc-link">
                       <span class="pc-micon">
                         <i class="ti ti-dashboard"></i>
