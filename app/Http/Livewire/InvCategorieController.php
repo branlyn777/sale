@@ -3,13 +3,24 @@
 namespace App\Http\Livewire;
 
 use App\Models\InvCategory;
+use App\Models\InvProduct;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class InvCategorieController extends Component
 {
-    //Guarda el nombre de la cetegoria (Crear o editar)
+    // Guarda el nombre de la categoria para Crear o Editar
     public $name_category;
+
+
+    // Guardan un mensaje para una notificación de tipo toast
+    public $toast_message;
+    // Guardan un mensaje para una alerta
+    public $alert_message;
+    // Guarda el titulo para una alerta
+    public $alert_title;
+    // Guarda el nombre boton para una alerta
+    public $alert_name_button;
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -22,12 +33,12 @@ class InvCategorieController extends Component
         ->extends('layouts.theme.app')
         ->section('content');
     }
-    //Muestra la ventana modal Categories
+    // Muestra la ventana modal Categories
     public function showModalCategories()
     {
         $this->emit("show-modal-categorie");
     }
-    //Crea una nueva categoria
+    // Crea una nueva categoria
     public function create_category()
     {
         $rules = [
@@ -47,5 +58,24 @@ class InvCategorieController extends Component
         ]);
 
         $this->emit("hide-modal-categorie");
+    }
+    // Verifica si una categoria tiene registros con su id
+    public function check_category(InvCategory $category)
+    {
+        // Buscando productos que tengan el id de la categoria
+        $products = InvProduct::where("inv_categorie_id", $category->id)->get();
+        if($products->count() > 0)
+        {
+            $this->alert_title = "¿Inactivar Categoria?";
+            $this->alert_name_button = "Inactivar";
+            $this->alert_message = "La categoria '" . $category->name_category . "' tiene ". $products->count() ." productos a su nombre, por lo cual no puede ser eliminada, pero si puede ser inactivada.";
+        }
+        else
+        {
+            $this->alert_title = "¿Eliminar Categoria?";
+            $this->alert_name_button = "Eliminar";
+            $this->alert_message = "La categoria '" . $category->name_category . "' no tiene ningun producto a su nombre, por lo cual puede ser eliminada.";
+        }
+        $this->emit("alert-category");
     }
 }

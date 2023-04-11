@@ -70,7 +70,7 @@
                                         {{ ($categories->currentpage() - 1) * $categories->perpage() + $loop->index + 1 }}
                                     </th>
                                     <td>
-                                        {{$c->name}}
+                                        {{$c->name_category}}
                                     </td>
                                     <td class="text-center">
                                         {{ \Carbon\Carbon::parse($c->created_at)->format('d/m/Y H:i') }}
@@ -84,7 +84,10 @@
                                         </button>
                                     </td>
                                     <td class="text-center">
-                                        <button onclick="confirm({{ $c->id }}, '{{ $c->name }}')" type="button" class="btn btn-outline-danger btn-sm">
+                                        {{-- <button onclick="confirm({{ $c->id }}, '{{ $c->name_category }}')" type="button" class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash3"></i>
+                                        </button> --}}
+                                        <button wire:click.prevent="check_category({{ $c->id }})" type="button" class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
@@ -107,11 +110,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
+            // Muestra la ventana modal crear/actualizar categoria producto
             window.livewire.on('show-modal-categorie', msg => {
                 var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
                 categorieModal.show();
             });
-
+            // Oculta la ventana modal crear/actualizar categoria producto
             window.livewire.on('hide-modal-categorie', msg => {
                 var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
                 categorieModal.hide();
@@ -125,14 +129,38 @@
                     timerProgressBar: true,
                     icon: 'success'
                 })
+
+            });
+
+            // Muestra alerta de eliminación de una categoria
+            window.livewire.on('alert-category', msg => {
+                Swal.fire({
+                    title: @this.alert_title,
+                    text: @this.alert_message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: @this.alert_name_button,
+                    cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                    if (result.isConfirmed)
+                    {
+                        Swal.fire(
+                        '¡Eliminado!',
+                        'La categoría fue eliminada.',
+                        'success'
+                        )
+                    }
+                })
             });
         });
 
-      function confirm(id, name)
+      function confirm(id, name_category)
       {
         Swal.fire({
             title: '¿Eliminar Categoría?',
-            text: "Esta acción eliminará la categoria '" + name + "'",
+            text: "Esta acción eliminará la categoria '" + name_category + "'",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

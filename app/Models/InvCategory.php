@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class InvCategory extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','status'];
+    protected $fillable = ['name_category','status'];
 }

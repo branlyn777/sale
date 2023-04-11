@@ -14,40 +14,40 @@ class InvCategorySeeder extends Seeder
     public function run(): void
     {
         InvCategory::create([
-            'name' => 'Teléfonos móviles'
+            'name_category' => 'Teléfonos móviles'
         ]);
         InvCategory::create([
-            'name' => 'Tabletas'
+            'name_category' => 'Tabletas'
         ]);
         InvCategory::create([
-            'name' => 'Computadoras Portátiles'
+            'name_category' => 'Computadoras Portátiles'
         ]);
         InvCategory::create([
-            'name' => 'Computadoras de Escritorio'
+            'name_category' => 'Computadoras de Escritorio'
         ]);
         InvCategory::create([
-            'name' => 'Cámaras Digitales'
+            'name_category' => 'Cámaras Digitales'
         ]);
         InvCategory::create([
-            'name' => 'Televisores'
+            'name_category' => 'Televisores'
         ]);
         InvCategory::create([
-            'name' => 'Altavoces y Sistemas de Sonido'
+            'name_category' => 'Altavoces y Sistemas de Sonido'
         ]);
         InvCategory::create([
-            'name' => 'Auriculares y Audífonos'
+            'name_category' => 'Auriculares y Audífonos'
         ]);
         InvCategory::create([
-            'name' => 'Dispositivos de Almacenamiento'
+            'name_category' => 'Dispositivos de Almacenamiento'
         ]);
         InvCategory::create([
-            'name' => 'Dispositivos de Red'
+            'name_category' => 'Dispositivos de Red'
         ]);
         InvCategory::create([
-            'name' => 'Accesorios para Dispositivos Electrónicos'
+            'name_category' => 'Accesorios para Dispositivos Electrónicos'
         ]);
         InvCategory::create([
-            'name' => 'Juegos y Consolas de Videojuegos'
+            'name_category' => 'Juegos y Consolas de Videojuegos'
         ]);
     }
 }
