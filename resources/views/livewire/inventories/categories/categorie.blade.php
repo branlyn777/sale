@@ -27,7 +27,7 @@
                             
                         </div>
                         <div class="col-4 text-center">
-                            <h5>Categoría Producto</h5>
+                            <h5>CATEGORÍA PRODUCTO</h5>
                         </div>
                         <div class="col-4 text-end">
                             <button wire:click.prevent="showModalCategories()" type="button" class="btn btn-outline-primary">
@@ -114,6 +114,8 @@
             window.livewire.on('show-modal-categorie', msg => {
                 var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
                 categorieModal.show();
+                document.getElementById('name_category').focus();
+                alert("Hola")
             });
             // Oculta la ventana modal crear/actualizar categoria producto
             window.livewire.on('hide-modal-categorie', msg => {
@@ -132,7 +134,7 @@
 
             });
 
-            // Muestra alerta de eliminación de una categoria
+            // Muestra una alerta
             window.livewire.on('alert-category', msg => {
                 Swal.fire({
                     title: @this.parameters_alert.title,

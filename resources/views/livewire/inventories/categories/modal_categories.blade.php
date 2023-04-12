@@ -10,7 +10,7 @@
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Nombre Categoría:</label>
-                        <input wire:model.lazy="name_category" type="text" class="form-control">
+                        <input wire:model.lazy="name_category" id="name_category" type="text" class="form-control">
                         @error('name_category')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror

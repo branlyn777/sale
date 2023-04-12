@@ -16,12 +16,6 @@ class InvCategorieController extends Component
 
     // Guardan un mensaje para una notificación de tipo toast
     public $toast_message;
-    // Guardan un mensaje para una alerta
-    public $alert_message;
-    // Guarda el titulo para una alerta
-    public $alert_title;
-    // Guarda el nombre boton para una alerta
-    public $alert_name_button;
 
     // Variable que almacena parametros de una alerta
     public $parameters_alert = [
@@ -50,8 +44,8 @@ class InvCategorieController extends Component
     public function create_category()
     {
         $rules = [
-            'name_category' => 'required|min:3|unique:inv_categories,name',
-            'name_category' => 'required|max:255|unique:inv_categories,name'
+            'name_category' => 'required|min:3|unique:inv_categories,name_category',
+            'name_category' => 'required|max:255|unique:inv_categories,name_category'
         ];
         $messages = [
             'name_category.required' => 'El nombre de la categoría es requerido',
@@ -62,29 +56,29 @@ class InvCategorieController extends Component
         $this->validate($rules, $messages);
 
         InvCategory::create([
-            'name' =>  $this->name_category
+            'name_category' =>  $this->name_category
         ]);
 
         $this->emit("hide-modal-categorie");
     }
-    // Verifica si una categoria tiene registros con su id y muestra una alerta para inactivar o eliminar una categoria
+    // Verifica si una categoria tiene registros con su id y muestra una alerta para inactivar o eliminar la categoria
     public function check_category(InvCategory $category)
     {
         // Buscando productos que tengan el id de la categoria
         $products = InvProduct::where("inv_categorie_id", $category->id)->get();
         if($products->count() > 0)
         {
-            $alert_title = "¿Inactivar Categoria?";
-            $alert_message = "La categoria '" . $category->name_category . "' tiene " . $products->count() . " productos que usan su nombre, por lo cual no puede ser eliminada.";
+            $alert_title = "¿Inactivar Categoría?";
+            $alert_message = "La categoría '" . $category->name_category . "' tiene " . $products->count() . " productos que usan su nombre, por lo cual no puede ser eliminada.";
             $alert_button = "Inactivar";
         }
         else
         {
-            $alert_title = "¿Eliminar Categoria?";
-            $alert_message = "La categoria '" . $category->name_category . "' no tiene ningun producto a su nombre, por lo cual puede ser eliminada.";
+            $alert_title = "¿Eliminar Categoría?";
+            $alert_message = "La categoría '" . $category->name_category . "' no tiene ningun producto a su nombre, por lo cual puede ser eliminada.";
             $alert_button = "Eliminar";
         }
-        // Actualizando parametros de la alerta
+        // Actualizando parámetros de la alerta
         $this->update_parameters_alert($alert_title, $alert_message, $alert_button);
         $this->emit("alert-category");
     }
