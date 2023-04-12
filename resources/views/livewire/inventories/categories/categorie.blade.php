@@ -135,13 +135,13 @@
             // Muestra alerta de eliminación de una categoria
             window.livewire.on('alert-category', msg => {
                 Swal.fire({
-                    title: @this.alert_title,
-                    text: @this.alert_message,
+                    title: @this.parameters_alert.title,
+                    text: @this.parameters_alert.message,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: @this.alert_name_button,
+                    confirmButtonText: @this.parameters_alert.button,
                     cancelButtonText: 'Cancelar'
                     }).then((result) => {
                     if (result.isConfirmed)

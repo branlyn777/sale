@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\InvCategory;
 use App\Models\InvProduct;
+use GuzzleHttp\Psr7\Message;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,6 +22,13 @@ class InvCategorieController extends Component
     public $alert_title;
     // Guarda el nombre boton para una alerta
     public $alert_name_button;
+
+    // Variable que almacena parametros de una alerta
+    public $parameters_alert = [
+        'title' => '',
+        'message' => '',
+        'button' => '',
+    ];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -59,23 +67,34 @@ class InvCategorieController extends Component
 
         $this->emit("hide-modal-categorie");
     }
-    // Verifica si una categoria tiene registros con su id
+    // Verifica si una categoria tiene registros con su id y muestra una alerta para inactivar o eliminar una categoria
     public function check_category(InvCategory $category)
     {
         // Buscando productos que tengan el id de la categoria
         $products = InvProduct::where("inv_categorie_id", $category->id)->get();
         if($products->count() > 0)
         {
-            $this->alert_title = "¿Inactivar Categoria?";
-            $this->alert_name_button = "Inactivar";
-            $this->alert_message = "La categoria '" . $category->name_category . "' tiene ". $products->count() ." productos a su nombre, por lo cual no puede ser eliminada, pero si puede ser inactivada.";
+            $alert_title = "¿Inactivar Categoria?";
+            $alert_message = "La categoria '" . $category->name_category . "' tiene " . $products->count() . " productos que usan su nombre, por lo cual no puede ser eliminada.";
+            $alert_button = "Inactivar";
         }
         else
         {
-            $this->alert_title = "¿Eliminar Categoria?";
-            $this->alert_name_button = "Eliminar";
-            $this->alert_message = "La categoria '" . $category->name_category . "' no tiene ningun producto a su nombre, por lo cual puede ser eliminada.";
+            $alert_title = "¿Eliminar Categoria?";
+            $alert_message = "La categoria '" . $category->name_category . "' no tiene ningun producto a su nombre, por lo cual puede ser eliminada.";
+            $alert_button = "Eliminar";
         }
+        // Actualizando parametros de la alerta
+        $this->update_parameters_alert($alert_title, $alert_message, $alert_button);
         $this->emit("alert-category");
+    }
+    // Función que actualiza los valores del array asociativo parameters_alert
+    public function update_parameters_alert($title, $message, $button)
+    {
+        $this->parameters_alert = [
+            'title' => $title,
+            'message' => $message,
+            'button' => $button
+        ];
     }
 }
