@@ -114,8 +114,6 @@
             window.livewire.on('show-modal-categorie', msg => {
                 var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
                 categorieModal.show();
-                document.getElementById('name_category').focus();
-                alert("Hola")
             });
             // Oculta la ventana modal crear/actualizar categoria producto
             window.livewire.on('hide-modal-categorie', msg => {
