@@ -23,21 +23,21 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-12 col-sm-6 col-md-4">
                             
                         </div>
-                        <div class="col-4 text-center">
+                        <div class="col-12 col-sm-6 col-md-4 text-center mb-3">
                             <h5>CATEGORÍA PRODUCTO</h5>
                         </div>
-                        <div class="col-4 text-end">
-                            <button wire:click.prevent="showModalCategories()" type="button" class="btn btn-outline-primary">
+                        <div class="col-12 col-sm-6 col-md-4 text-end">
+                            <button wire:click.prevent="showModalCategories(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
                                 Nueva Categor&Iacute;a
                             </button>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <h6><b>Buscar</b></h6>
                             <div class="input-group">
                                 <span class="input-group-text">
@@ -46,55 +46,54 @@
                                 <input type="text" class="form-control" placeholder="Buscar Categoría...">
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-sm-6 col-md-6">
                             
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr class="text-center">
-                                <th scope="col">#</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Fecha Creación</th>
-                                <th scope="col">Fecha Actualización</th>
-                                <th scope="col">Editar</th>
-                                <th scope="col">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($categories as $c)
-                                <tr>
-                                    <th class="text-center" scope="row">
-                                        {{ ($categories->currentpage() - 1) * $categories->perpage() + $loop->index + 1 }}
-                                    </th>
-                                    <td>
-                                        {{$c->name_category}}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($c->created_at)->format('d/m/Y H:i') }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($c->updated_at)->format('d/m/Y H:i') }}
-                                    </td>
-                                    <td class="text-center">
-                                        <button onclick="toast()" type="button" class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                    </td>
-                                    <td class="text-center">
-                                        {{-- <button onclick="confirm({{ $c->id }}, '{{ $c->name_category }}')" type="button" class="btn btn-outline-danger btn-sm">
-                                            <i class="bi bi-trash3"></i>
-                                        </button> --}}
-                                        <button wire:click.prevent="check_category({{ $c->id }})" type="button" class="btn btn-outline-danger btn-sm">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </td>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Fecha Creación</th>
+                                    <th scope="col">Fecha Actualización</th>
+                                    <th scope="col">Editar</th>
+                                    <th scope="col">Eliminar</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($categories as $c)
+                                    <tr>
+                                        <th class="text-center" scope="row">
+                                            {{ ($categories->currentpage() - 1) * $categories->perpage() + $loop->index + 1 }}
+                                        </th>
+                                        <td>
+                                            {{$c->name_category}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ \Carbon\Carbon::parse($c->created_at)->format('d/m/Y H:i') }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ \Carbon\Carbon::parse($c->updated_at)->format('d/m/Y H:i') }}
+                                        </td>
+                                        <td class="text-center">
+                                            <button wire:click.prevent="showModalCategories({{ $c->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button wire:click.prevent="check_category({{ $c->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     {{ $categories->links() }}
                 </div>
             </div>
@@ -155,41 +154,5 @@
                 })
             });
         });
-
-      function confirm(id, name_category)
-      {
-        Swal.fire({
-            title: '¿Eliminar Categoría?',
-            text: "Esta acción eliminará la categoria '" + name_category + "'",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Eliminar',
-            cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            if (result.isConfirmed)
-            {
-                Swal.fire(
-                '¡Eliminado!',
-                'La categoría fue eliminada.',
-                'success'
-                )
-            }
-        })
-      }
-      function toast()
-      {
-        Swal.fire({
-            toast: true,
-            text: 'Categoría creada exitósamente',
-            showConfirmButton: false,
-            position: 'top-right',
-            timer: 2000,
-            timerProgressBar: true,
-            icon: 'success'
-        })
-
-      }
     </script>
 @endsection

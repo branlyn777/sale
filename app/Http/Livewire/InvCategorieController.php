@@ -12,7 +12,8 @@ class InvCategorieController extends Component
 {
     // Guarda el nombre de la categoria para Crear o Editar
     public $name_category;
-
+    // Guarda el id de la categoria
+    public $category_id;
 
     // Guardan un mensaje para una notificación de tipo toast
     public $toast_message;
@@ -26,6 +27,10 @@ class InvCategorieController extends Component
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+    public function mount()
+    {
+        $this->category_id = 0;
+    }
     public function render()
     {
         $categories = InvCategory::where("status","active")->orderBy("created_at","desc")->paginate(10);
@@ -35,30 +40,42 @@ class InvCategorieController extends Component
         ->extends('layouts.theme.app')
         ->section('content');
     }
-    // Muestra la ventana modal Categories
-    public function showModalCategories()
+    // Muestra la ventana modal Categories (Para Crear o Actualizar)
+    public function showModalCategories($id)
     {
+        if($id == 0)
+        {
+            $this->category_id = 0;
+        }
+        else
+        {
+            $categorie = InvCategory::find($id);
+            $this->name_category = $categorie->name_category;
+            $this->category_id = $id;
+        }
+        // Quita los mensajes de validación
+        $this->resetValidation();
+        // Lanza el evento para mostrar la ventana modal
         $this->emit("show-modal-categorie");
     }
     // Crea una nueva categoria
     public function create_category()
     {
         $rules = [
-            'name_category' => 'required|min:3|unique:inv_categories,name_category',
-            'name_category' => 'required|max:255|unique:inv_categories,name_category'
+            'name_category' => 'required|min:2|max:255|unique:inv_categories,name_category',
         ];
         $messages = [
             'name_category.required' => 'El nombre de la categoría es requerido',
             'name_category.unique' => 'Ya existe el nombre de la categoría',
-            'name_category.min' => 'El nombre de la categoría debe tener al menos 3 caracteres',
+            'name_category.min' => 'El nombre de la categoría debe tener al menos 2 caracteres',
             'name_category.max' => 'El nombre de la categoría no debe pasar los 255 caracteres'
         ];
-        $this->validate($rules, $messages);
-
+        $this->validate($rules, $messages); 
+        // Elimina espacios en blanco extras y reemplaza multiples espacios por un solo espacio
+        $this->name_category = trim(preg_replace('/\s+/', ' ', $this->name_category));
         InvCategory::create([
             'name_category' =>  $this->name_category
         ]);
-
         $this->emit("hide-modal-categorie");
     }
     // Verifica si una categoria tiene registros con su id y muestra una alerta para inactivar o eliminar la categoria

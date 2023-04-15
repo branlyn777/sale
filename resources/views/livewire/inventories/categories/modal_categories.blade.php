@@ -10,7 +10,7 @@
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Nombre Categoría:</label>
-                        <input wire:model.lazy="name_category" type="text" class="form-control">
+                        <input wire:model="name_category" wire:keydown.enter.prevent="create_category()" type="text" class="form-control">
                         @error('name_category')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -19,7 +19,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" wire:click.prevent="create_category()" class="btn btn-primary">Crear</button>
+                @if($this->category_id == 0)
+                    <button type="button" wire:click.prevent="create_category()" class="btn btn-primary">Crear</button>
+                @else
+                    <button type="button" wire:click.prevent="update_category()" class="btn btn-primary">Actualizar</button>
+                @endif
             </div>
         </div>
     </div>
