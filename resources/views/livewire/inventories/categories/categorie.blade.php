@@ -43,7 +43,7 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-search"></i>
                                 </span>
-                                <input type="text" class="form-control" placeholder="Buscar Categoría...">
+                                <input wire:model="search" type="text" class="form-control" placeholder="Buscar Categoría...">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-6">

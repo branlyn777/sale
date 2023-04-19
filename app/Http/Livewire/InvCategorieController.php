@@ -10,6 +10,8 @@ use Livewire\WithPagination;
 
 class InvCategorieController extends Component
 {
+    // Guarda los terminos de busqueda para encontrar una categoria
+    public $search;
     // Guarda el nombre de la categoria para Crear o Editar
     public $name_category;
     // Guarda el id de la categoria
@@ -33,7 +35,14 @@ class InvCategorieController extends Component
     }
     public function render()
     {
-        $categories = InvCategory::where("status","active")->orderBy("created_at","desc")->paginate(10);
+        if (strlen($this->search) == 0)
+        {
+            $categories = InvCategory::where("status","active")->orderBy("created_at","desc")->paginate(10);
+        }
+        else
+        {
+            $categories = InvCategory::where("status","active")->where('name_category', 'like', '%' . $this->search . '%')->orderBy("created_at","desc")->paginate(10);
+        }
         return view('livewire.inventories.categories.categorie', [
             'categories' => $categories
         ])
@@ -43,9 +52,10 @@ class InvCategorieController extends Component
     // Muestra la ventana modal Categories (Para Crear o Actualizar)
     public function showModalCategories($id)
     {
-        if($id == 0)
+        if ($id == 0)
         {
             $this->category_id = 0;
+            $this->name_category = "";
         }
         else
         {
@@ -78,12 +88,22 @@ class InvCategorieController extends Component
         ]);
         $this->emit("hide-modal-categorie");
     }
+    // Actualiza una categoría
+    public function update_category()
+    {
+        $category = InvCategory::find($this->category_id);
+        $category->update([
+            'name_category' => $this->name_category
+        ]);
+        $category->save();
+        $this->emit("hide-modal-categorie");
+    }
     // Verifica si una categoria tiene registros con su id y muestra una alerta para inactivar o eliminar la categoria
     public function check_category(InvCategory $category)
     {
         // Buscando productos que tengan el id de la categoria
         $products = InvProduct::where("inv_categorie_id", $category->id)->get();
-        if($products->count() > 0)
+        if ($products->count() > 0)
         {
             $alert_title = "¿Inactivar Categoría?";
             $alert_message = "La categoría '" . $category->name_category . "' tiene " . $products->count() . " productos que usan su nombre, por lo cual no puede ser eliminada.";
