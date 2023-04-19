@@ -16,7 +16,11 @@
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Nombre Categoría:</label>
+                        @if($this->category_id == 0)
                         <input wire:model="name_category" wire:keydown.enter.prevent="create_category()" type="text" class="form-control">
+                        @else
+                        <input wire:model="name_category" wire:keydown.enter.prevent="update_category()" type="text" class="form-control">
+                        @endif
                         @error('name_category')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
