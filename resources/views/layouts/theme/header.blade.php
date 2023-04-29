@@ -153,11 +153,11 @@
         </a>
         <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
           <div class="dropdown-header">
-            <h4>Good Morning, <span class="small text-muted"> John Doe</span></h4>
-            <p class="text-muted">Project Admin</p>
+            <h4>Buenos Dias, <span class="small text-muted"> Branlyn Mamani</span></h4>
+            <p class="text-muted">Administrador</p>
             <form class="header-search">
               <i class="ti ti-search icon-search"></i>
-              <input type="search" class="form-control" placeholder="Search profile options" />
+              <input type="search" class="form-control" placeholder="Buscar opciones perfil" />
             </form>
             <hr />
             <div class="profile-notification-scroll position-relative" style="max-height: calc(100vh - 280px)">

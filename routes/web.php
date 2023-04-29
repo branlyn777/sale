@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\HomeController;
 use App\Http\Livewire\InvCategorieController;
+use App\Http\Livewire\InvProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,7 @@ Route::middleware('auth')->group(function () {
 
     //Inventories
     Route::get('categoriaproducto', InvCategorieController::class);
+    Route::get('listaproducto', InvProductController::class);
 });
 
 require __DIR__.'/auth.php';

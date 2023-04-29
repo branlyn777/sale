@@ -16,6 +16,10 @@ class InvCategorieController extends Component
     public $name_category;
     // Guarda el id de la categoria
     public $category_id;
+    // Guarda true o false para eliminar o inactivar una categoria
+    public $delete_cancel;
+    // Guarda true o false para mostrar categorias activas o inactivas
+    public $status;
 
     // Guardan un mensaje para una notificación de tipo toast
     public $toast_message;
@@ -27,21 +31,34 @@ class InvCategorieController extends Component
         'button' => '',
     ];
 
+    // Variable que almacena parametros de una alerta
+    public $parameters_message_toast = [
+        'text' => '',
+        'timer' => '',
+        'icon' => '',
+    ];
+
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public function mount()
     {
         $this->category_id = 0;
+        $this->status = "active";
     }
     public function render()
     {
         if (strlen($this->search) == 0)
         {
-            $categories = InvCategory::where("status","active")->orderBy("created_at","desc")->paginate(10);
+            $categories = InvCategory::where("status",$this->status)
+            ->orderBy("created_at","desc")
+            ->paginate(10);
         }
         else
         {
-            $categories = InvCategory::where("status","active")->where('name_category', 'like', '%' . $this->search . '%')->orderBy("created_at","desc")->paginate(10);
+            $categories = InvCategory::where("status",$this->status)
+            ->where('name_category', 'like', '%' . $this->search . '%')
+            ->orderBy("created_at","desc")
+            ->paginate(10);
         }
         return view('livewire.inventories.categories.categorie', [
             'categories' => $categories
@@ -102,24 +119,28 @@ class InvCategorieController extends Component
     public function check_category(InvCategory $category)
     {
         // Buscando productos que tengan el id de la categoria
-        $products = InvProduct::where("inv_categorie_id", $category->id)->get();
-        if ($products->count() > 0)
+        $productCount = InvProduct::where('inv_categorie_id', $category->id)->exists();
+        if ($productCount)
         {
             $alert_title = "¿Inactivar Categoría?";
-            $alert_message = "La categoría '" . $category->name_category . "' tiene " . $products->count() . " productos que usan su nombre, por lo cual no puede ser eliminada.";
+            $alert_message = "La categoría '" . $category->name_category . "' tiene productos que usan su nombre, por lo cual no puede ser eliminada.";
             $alert_button = "Inactivar";
+            $this->delete_cancel = false;
         }
         else
         {
             $alert_title = "¿Eliminar Categoría?";
             $alert_message = "La categoría '" . $category->name_category . "' no tiene ningun producto a su nombre, por lo cual puede ser eliminada.";
             $alert_button = "Eliminar";
+            $this->delete_cancel = true;
         }
+        // Actualizando la variable category_id
+        $this->category_id = $category->id;
         // Actualizando parámetros de la alerta
         $this->update_parameters_alert($alert_title, $alert_message, $alert_button);
         $this->emit("alert-category");
     }
-    // Función que actualiza los valores del array asociativo parameters_alert
+    // Función que actualiza los valores del array asociativo parameters_alert (Mensaje de Alerta)
     public function update_parameters_alert($title, $message, $button)
     {
         $this->parameters_alert = [
@@ -127,5 +148,41 @@ class InvCategorieController extends Component
             'message' => $message,
             'button' => $button
         ];
+    }
+    // Función que actualiza los valores del array asociativo parameters_message_toast (Mensaje Toast)
+    public function update_parameters_message_toast($text, $timer, $icon)
+    {
+        $this->parameters_message_toast = [
+            'text' => $text,
+            'timer' => $timer,
+            'icon' => $icon
+        ];
+    }
+    // Escucha eventos JavaScript de la vista para ejecutar métodos de este controlador
+    protected $listeners = [
+        'deleteCategory' => 'delete_category'
+    ];
+    public function delete_category()
+    {
+        $category = InvCategory::find($this->category_id);
+        $name_category = $category->name_category;
+        if($this->delete_cancel)
+        {
+            $category->delete();
+            $text = "¡Categoria '" . $name_category . "' eliminada con éxito!";
+        }
+        else
+        {
+            $category->update([
+                'status' => "inactive"
+            ]);
+            $category->save();
+            $text = "¡Categoria '" . $name_category . "' inactivada con éxito!";
+        }
+        $timer = "3000";
+        $icon = "success";
+        // Actualizando parámetros del mensaje toast
+        $this->update_parameters_message_toast($text, $timer, $icon);
+        $this->emit("message-toast");
     }
 }

@@ -27,12 +27,12 @@
                             
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-center mb-3">
-                            <h5>CATEGORÍA PRODUCTO</h5>
+                            <h5>LISTA PRODUCTOS</h5>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-end">
                             <button wire:click.prevent="showModalCategories(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
-                                Nueva Categor&Iacute;a
+                                Nuevo Producto
                             </button>
                         </div>
                     </div>
@@ -62,35 +62,39 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" scope="col">#</th>
-                                    <th scope="col">Nombre</th>
-                                    <th class="text-center" scope="col">Fecha Creación</th>
-                                    <th class="text-center" scope="col">Fecha Actualización</th>
+                                    <th class="text-center" scope="col">Imagen</th>
+                                    <th scope="col">Nombre Producto</th>
+                                    <th class="text-center" scope="col">Código</th>
+                                    <th class="text-center" scope="col">Precio</th>
                                     <th class="text-center" scope="col">Editar</th>
                                     <th class="text-center" scope="col">Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($categories as $c)
+                                @foreach($products as $p)
                                     <tr>
                                         <th class="text-center" scope="row">
-                                            {{ ($categories->currentpage() - 1) * $categories->perpage() + $loop->index + 1 }}
+                                            {{ ($products->currentpage() - 1) * $products->perpage() + $loop->index + 1 }}
                                         </th>
+                                        <td class="text-center">
+                                            <img style="width: 50px; height: 50px;" src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp" class="rounded float-start mx-auto" alt="...">
+                                        </td>
                                         <td>
-                                            {{$c->name_category}}
+                                            {{$p->name_product}}
+                                        </td>
+                                        <td>
+                                            {{ $p->barcode }}
+                                        </td>
+                                        <td>
+                                            {{ $p->price }}
                                         </td>
                                         <td class="text-center">
-                                            {{ \Carbon\Carbon::parse($c->created_at)->format('d/m/Y H:i') }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ \Carbon\Carbon::parse($c->updated_at)->format('d/m/Y H:i') }}
-                                        </td>
-                                        <td class="text-center">
-                                            <button wire:click.prevent="showModalCategories({{ $c->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                            <button wire:click.prevent="showModalCategories({{ $p->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
                                         </td>
                                         <td class="text-center">
-                                            <button wire:click.prevent="check_category({{ $c->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                            <button wire:click.prevent="check_category({{ $p->id }})" type="button" class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                         </td>
@@ -99,14 +103,14 @@
                             </tbody>
                         </table>
                     </div>
-                    {{ $categories->links() }}
+                    {{ $products->links() }}
                 </div>
             </div>
         </div>
         <!-- [ sample-page ] end -->
     
         <!-- [ Modal ] start -->
-            @include('livewire.inventories.categories.modal_categories')
+            {{-- @include('livewire.inventories.categories.modal_categories') --}}
         <!-- [ Modal ] end -->
     </div>
 </div>

@@ -39,7 +39,7 @@
                           </a>
                         </li>
                         <li class="pc-item">
-                          <a class="pc-link" target="_blank" href="../pages/register-v3.html">
+                          <a class="pc-link" href="{{ url('listaproducto') }}">
                           Lista Productos
                         </a>
                       </li>
