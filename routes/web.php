@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Livewire\CatalogueController;
 use App\Http\Livewire\HomeController;
 use App\Http\Livewire\InvCategorieController;
 use App\Http\Livewire\InvProductController;
@@ -24,6 +25,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Ruta del catálogo (fuera del inicio de sesión)
+Route::get('catalogo', CatalogueController::class);
 
 Route::middleware('auth')->group(function () {
 
