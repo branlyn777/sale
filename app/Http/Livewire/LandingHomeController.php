@@ -4,15 +4,15 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 
-class CatalogueController extends Component
+class LandingHomeController extends Component
 {
     public function render()
     {
         $data = "";
-        return view('livewire.catalogue', [
+        return view('livewire.landing.home', [
             'data' => $data,
         ])
-        ->extends('layouts.catalogue.app')
+        ->extends('layouts.landing.app')
         ->section('content');
     }
 }

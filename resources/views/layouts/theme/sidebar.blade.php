@@ -23,10 +23,58 @@
                     <label>Inventarios</label>
                     <i class="ti ti-news"></i>
                 </li>
+                <li class="pc-item">
+                    <a href="#" class="pc-link">
+                      <span class="pc-micon">
+                        <i class="ti ti-briefcase"></i>
+                      </span>
+                        <span class="pc-mtext">Administración</span>
+                        <span class="pc-arrow">
+                          <i class="ti ti-chevron-right"></i>
+                        </span>
+                      </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item">
+                          <a class="pc-link" href="#">
+                            Usuarios
+                          </a>
+                        </li>
+                        <li class="pc-item">
+                          <a class="pc-link" href="">
+                            Asignar Permisos
+                          </a>
+                        </li>
+                        <li class="pc-item">
+                          <a class="pc-link" href="">
+                            Empresa
+                          </a>
+                        </li>
+                        <li class="pc-item">
+                          <a class="pc-link" href="">
+                            Sucursales
+                          </a>
+                        </li>
+                        <li class="pc-item">
+                          <a class="pc-link" href="">
+                            Carteras
+                          </a>
+                        </li>
+                        <li class="pc-item">
+                          <a class="pc-link" href="">
+                            Clientes
+                          </a>
+                        </li>
+                        <li class="pc-item">
+                          <a class="pc-link" href="">
+                            Asignar Permisos
+                          </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                       <span class="pc-micon">
-                        <i class="ti ti-key"></i>
+                        <i class="ti ti-archive"></i>
                       </span>
                         <span class="pc-mtext">Productos</span>
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i>
@@ -45,41 +93,68 @@
                       </li>
                     </ul>
                 </li>
-
                 <li class="pc-item pc-caption">
-                    <label>Elements</label>
+                    <label>Ventas</label>
                     <i class="ti ti-apps"></i>
                 </li>
                 <li class="pc-item">
-                    <a href="../elements/bc_typography.html" class="pc-link"><span class="pc-micon"><i
-                                class="ti ti-typography"></i></span><span class="pc-mtext">Typography</span></a>
+                    <a href="../elements/bc_typography.html" class="pc-link">
+                      <span class="pc-micon">
+                        <i class="ti ti-shopping-cart"></i>
+                      </span>
+                      <span class="pc-mtext">
+                        Vender
+                      </span>
+                    </a>
                 </li>
                 <li class="pc-item">
-                    <a href="../elements/bc_color.html" class="pc-link"><span class="pc-micon"><i
-                                class="ti ti-brush"></i></span><span class="pc-mtext">Color</span></a>
+                    <a href="../elements/bc_color.html" class="pc-link">
+                      <span class="pc-micon">
+                        <i class="ti ti-list"></i>
+                      </span>
+                      <span class="pc-mtext">
+                          Lista de Ventas 1
+                      </span>
+                    </a>
                 </li>
                 <li class="pc-item">
-                    <a href="https://tablericons.com" class="pc-link" target="_blank"><span class="pc-micon"><i
-                                class="ti ti-plant-2"></i></span><span class="pc-mtext">Tabler</span><span
-                            class="pc-arrow"></a>
+                    <a href="https://tablericons.com" class="pc-link">
+                      <span class="pc-micon">
+                        <i class="ti ti-list"></i>
+                      </span>
+                      <span class="pc-mtext">
+                        Lista de Ventas 2
+                      </span>
+                    </a>
                 </li>
 
                 <li class="pc-item pc-caption">
-                    <label>Other</label>
+                    <label>Reportes</label>
                     <i class="ti ti-brand-chrome"></i>
                 </li>
-                <li class="pc-item"><a href="../other/sample-page.html" class="pc-link"><span class="pc-micon"><i
-                                class="ti ti-brand-chrome"></i></span><span class="pc-mtext">Sample page</span></a></li>
-                <li class="pc-item"><a href="https://codedthemes.gitbook.io/berry-bootstrap/" target="_blank"
-                        class="pc-link"><span class="pc-micon"><i class="ti ti-vocabulary"></i></span><span
-                            class="pc-mtext">Document</span></a></li>
+                <li class="pc-item">
+                  <a href="../other/sample-page.html" class="pc-link">
+                    <span class="pc-micon">
+                      <i class="ti ti-brand-chrome"></i>
+                    </span>
+                    <span class="pc-mtext">Movimientos</span>
+                  </a>
+                </li>
+                <li class="pc-item">
+                  <a href="https://codedthemes.gitbook.io/berry-bootstrap/" class="pc-link">
+                    <span class="pc-micon">
+                      <i class="ti ti-vocabulary"></i>
+                    </span>
+                    <span class="pc-mtext">Estadísticas</span>
+                  </a>
+                </li>
             </ul>
-            <div class="pc-navbar-card bg-primary rounded">
-                <h4 class="text-white">Berry Pro</h4>
-                <p class="text-white opacity-75">Checkout Berry pro features</p>
+            {{-- <div class="pc-navbar-card bg-primary rounded">
+                <h4 class="text-white">Accesos</h4>
+                <p class="text-white opacity-75">a</p>
                 <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/" target="_blank"
                     class="btn btn-light text-primary">Pro</a>
-            </div>
+            </div> --}}
         </div>
     </div>
 </nav>

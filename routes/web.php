@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Livewire\CatalogueController;
+use App\Http\Livewire\LandingCatalogueController;
 use App\Http\Livewire\HomeController;
 use App\Http\Livewire\InvCategorieController;
 use App\Http\Livewire\InvProductController;
+use App\Http\Livewire\LandingHomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Ruta del catálogo (fuera del inicio de sesión)
-Route::get('catalogo', CatalogueController::class);
+Route::get('home', LandingHomeController::class);
+Route::get('catalogo', LandingCatalogueController::class);
 
 Route::middleware('auth')->group(function () {
 
