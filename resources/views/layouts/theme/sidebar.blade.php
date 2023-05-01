@@ -98,7 +98,7 @@
                     <i class="ti ti-apps"></i>
                 </li>
                 <li class="pc-item">
-                    <a href="../elements/bc_typography.html" class="pc-link">
+                    <a href="{{ url('vender') }}" class="pc-link">
                       <span class="pc-micon">
                         <i class="ti ti-shopping-cart"></i>
                       </span>

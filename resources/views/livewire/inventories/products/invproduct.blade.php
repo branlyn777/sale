@@ -30,7 +30,7 @@
                             <h5>LISTA PRODUCTOS</h5>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-end">
-                            <button wire:click.prevent="showModalCategories(0)" type="button" class="btn btn-outline-primary">
+                            <button wire:click.prevent="showModalProduct(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
                                 Nuevo Producto
                             </button>
@@ -110,7 +110,7 @@
         <!-- [ sample-page ] end -->
     
         <!-- [ Modal ] start -->
-            {{-- @include('livewire.inventories.categories.modal_categories') --}}
+            @include('livewire.inventories.products.modal_product')
         <!-- [ Modal ] end -->
     </div>
 </div>
@@ -118,15 +118,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Muestra la ventana modal crear/actualizar categoria producto
-            window.livewire.on('show-modal-categorie', msg => {
-                var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
-                categorieModal.show();
+            // Muestra la ventana modal crear/actualizar un producto
+            window.livewire.on('show-modal-product', msg => {
+                var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
+                productModal.show();
             });
-            // Oculta la ventana modal crear/actualizar categoria producto
-            window.livewire.on('hide-modal-categorie', msg => {
-                var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
-                categorieModal.hide();
+            // Oculta la ventana modal crear/actualizar un producto
+            window.livewire.on('hide-modal-product', msg => {
+                var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
+                productModal.hide();
 
                 Swal.fire({
                     toast: true,

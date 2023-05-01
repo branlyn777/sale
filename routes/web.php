@@ -6,6 +6,7 @@ use App\Http\Livewire\HomeController;
 use App\Http\Livewire\InvCategorieController;
 use App\Http\Livewire\InvProductController;
 use App\Http\Livewire\LandingHomeController;
+use App\Http\Livewire\SaleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,19 +34,22 @@ Route::get('catalogo', LandingCatalogueController::class);
 
 Route::middleware('auth')->group(function () {
 
-    //Ruta por defecto despues de iniciar sesión :)
+    // Ruta por defecto despues de iniciar sesión :)
     Route::redirect('/', 'inicio');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    //Route of Home
+    // Route of Home
     Route::get('inicio', HomeController::class);
 
-    //Inventories
+    // Inventories
     Route::get('categoriaproducto', InvCategorieController::class);
     Route::get('listaproducto', InvProductController::class);
+
+    // Sale
+    Route::get('vender', SaleController::class);
 });
 
 require __DIR__.'/auth.php';

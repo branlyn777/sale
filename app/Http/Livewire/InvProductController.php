@@ -10,6 +10,10 @@ class InvProductController extends Component
 {
     // Guarda los terminos de busqueda para encontrar una categoria
     public $search;
+    // Guarda el nombre de un producto para Crear o Editar
+    public $name_product;
+    // Guarda el id de un producto
+    public $product_id;
     // Guarda true o false para mostrar productos activos o inactivos
     public $status;
 
@@ -17,7 +21,7 @@ class InvProductController extends Component
     protected $paginationTheme = 'bootstrap';
     public function mount()
     {
-        // $this->category_id = 0;
+        // $this->product_id = 0;
         $this->status = "active";
     }
     public function render()
@@ -31,7 +35,7 @@ class InvProductController extends Component
         else
         {
             $products = InvProduct::where("status",$this->status)
-            ->where('name_category', 'like', '%' . $this->search . '%')
+            ->where('name_product', 'like', '%' . $this->search . '%')
             ->orderBy("created_at","desc")
             ->paginate(10);
         }
@@ -40,5 +44,24 @@ class InvProductController extends Component
         ])
         ->extends('layouts.theme.app')
         ->section('content');
+    }
+    // Muestra la ventana modal Product (Para Crear o Actualizar)
+    public function showModalProduct($id)
+    {
+        if ($id == 0)
+        {
+            $this->product_id = 0;
+            $this->name_product = "";
+        }
+        else
+        {
+            $product = InvProduct::find($id);
+            $this->name_product = $product->name_product;
+            $this->product_id = $id;
+        }
+        // Quita los mensajes de validación
+        $this->resetValidation();
+        // Lanza el evento para mostrar la ventana modal
+        $this->emit("show-modal-product");
     }
 }
