@@ -64,10 +64,13 @@
                     </div>
                     <div class="col-12 col-sm-6 col-md-6">
                         <label class="form-label">Categoría:</label>
-                        <select class="form-select">
-                            <option value="">aaa</option>
+                        <select class="form-select" wire:model="category_id">
+                            <option value="0">Seleccionar</option>
+                            @foreach($this->list_categories as $c)
+                            <option value="{{ $c->id }}">{{ $c->name_category }}</option>
+                            @endforeach
                         </select>
-                        @error('name_product')
+                        @error('category_id')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>

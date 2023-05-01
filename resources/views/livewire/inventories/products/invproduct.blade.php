@@ -1,22 +1,4 @@
 <div>
-    <!-- [ breadcrumb ] start -->
-    {{-- <div class="page-header">
-        <div class="page-block">
-          <div class="row align-items-center">
-            <div class="col-md-12">
-              <div class="page-header-title">
-                <h5 class="m-b-10">Categoría Producto</h5>
-              </div>
-              <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
-                <li class="breadcrumb-item" aria-current="page">Sample Page</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div> --}}
-      <!-- [ breadcrumb ] end -->
     <div class="row">
         <!-- [ sample-page ] start -->
         <div class="col-sm-12">
@@ -43,7 +25,7 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-search"></i>
                                 </span>
-                                <input wire:model="search" type="text" class="form-control" placeholder="Buscar Categoría...">
+                                <input wire:model="search" type="text" class="form-control" placeholder="Buscar Producto...">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
@@ -115,63 +97,63 @@
     </div>
 </div>
 @section('javascript')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
 
-            // Muestra la ventana modal crear/actualizar un producto
-            window.livewire.on('show-modal-product', msg => {
-                var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
-                productModal.show();
-            });
-            // Oculta la ventana modal crear/actualizar un producto
-            window.livewire.on('hide-modal-product', msg => {
-                var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
-                productModal.hide();
+        // Muestra la ventana modal crear/actualizar un producto
+        window.livewire.on('show-modal-product', msg => {
+            var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
+            productModal.show();
+        });
+        // Oculta la ventana modal crear/actualizar un producto
+        window.livewire.on('hide-modal-product', msg => {
+            var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
+            productModal.hide();
 
-                Swal.fire({
-                    toast: true,
-                    text: 'Categoría creada exitósamente',
-                    showConfirmButton: false,
-                    position: 'top-right',
-                    timer: 3000,
-                    timerProgressBar: true,
-                    icon: 'success'
-                })
-
-            });
-
-            // Muestra una alerta
-            window.livewire.on('alert-category', msg => {
-                Swal.fire({
-                    title: @this.parameters_alert.title,
-                    text: @this.parameters_alert.message,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: @this.parameters_alert.button,
-                    cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                    if (result.isConfirmed)
-                    {
-                        window.livewire.emit('deleteCategory')
-                        Swal.close()
-                    }
-                })
-            });
-            // Muestra un mensaje de tipo toast arriba a la derecha
-            window.livewire.on('message-toast', msg => {
-                Swal.fire({
-                    toast: true,
-                    text: @this.parameters_message_toast.text,
-                    showConfirmButton: false,
-                    position: 'top-right',
-                    timer: @this.parameters_message_toast.timer,
-                    timerProgressBar: true,
-                    icon: @this.parameters_message_toast.icon
-                })
-            });
+            Swal.fire({
+                toast: true,
+                text: 'Producto creado exitósamente',
+                showConfirmButton: false,
+                position: 'top-right',
+                timer: 3000,
+                timerProgressBar: true,
+                icon: 'success'
+            })
 
         });
-    </script>
+
+        // Muestra una alerta
+        window.livewire.on('alert-category', msg => {
+            Swal.fire({
+                title: @this.parameters_alert.title,
+                text: @this.parameters_alert.message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: @this.parameters_alert.button,
+                cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                if (result.isConfirmed)
+                {
+                    window.livewire.emit('deleteCategory')
+                    Swal.close()
+                }
+            })
+        });
+        // Muestra un mensaje de tipo toast arriba a la derecha
+        window.livewire.on('message-toast', msg => {
+            Swal.fire({
+                toast: true,
+                text: @this.parameters_message_toast.text,
+                showConfirmButton: false,
+                position: 'top-right',
+                timer: @this.parameters_message_toast.timer,
+                timerProgressBar: true,
+                icon: @this.parameters_message_toast.icon
+            })
+        });
+
+    });
+</script>
 @endsection
