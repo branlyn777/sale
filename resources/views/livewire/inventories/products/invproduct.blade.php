@@ -1,3 +1,40 @@
+@section('css')
+<style>
+            .autocomplete {
+          position: relative;
+        }
+
+        .autocomplete input {
+          width: 100%;
+          padding: 10px;
+          font-size: 16px;
+        }
+
+        .autocomplete .autocomplete-list {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          max-height: 200px;
+          overflow-y: auto;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-top: none;
+          z-index: 1;
+          display: none;
+        }
+
+        .autocomplete .autocomplete-list li {
+          padding: 10px;
+          font-size: 16px;
+          cursor: pointer;
+        }
+
+        .autocomplete .autocomplete-list li:hover {
+          background-color: #f2f2f2;
+        }
+</style>
+@endsection
 <div>
     <div class="row">
         <!-- [ sample-page ] start -->
@@ -154,6 +191,63 @@
             })
         });
 
+    });
+</script>
+<script>
+    const input = document.getElementById("input");
+    const list = document.querySelector(".autocomplete-list");
+
+    var asd = "nada";
+
+    var names = @json($list_categories);
+
+    function updateList(query)
+    {
+      // Clear list
+      list.innerHTML = "";
+
+      // Filter names based on query
+      const filterednames = names.filter(name => name.toLowerCase().includes(query.toLowerCase()));
+
+      // Add filtered names to list
+      filterednames.forEach(name => {
+        const li = document.createElement("li");
+        li.innerText = name;
+        li.setAttribute("value", "1");
+        li.addEventListener("click", () => {
+          asd = name;
+          input.value = name;
+          list.style.display = "none";
+        });
+        list.appendChild(li);
+      });
+
+      // Show or hide list
+      if (filterednames.length > 0) {
+        list.style.display = "block";
+      } else {
+        list.style.display = "none";
+      }
+    }
+
+    input.addEventListener("click", () => {
+      // Elimina todo lo que esta en el input
+      input.value = "";
+      updateList(input.value);
+    });
+
+    input.addEventListener("input", () => {
+      updateList(input.value);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".autocomplete")) {
+        if(asd != "nada")
+        {
+          input.value = asd;
+        }
+        list.style.display = "none";
+      }
     });
 </script>
 @endsection

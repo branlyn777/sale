@@ -11,16 +11,14 @@ class InvProductController extends Component
 {
     // Guarda los terminos de busqueda para encontrar una categoria
     public $search;
-    // Guarda el nombre de un producto para Crear o Editar
-    public $name_product;
+    // Variables para crear o editar un producto
+    public $name_product, $description, $price, $image, $barcode, $guarantee, $minimum_stock, $category_id;
     // Guarda el id de un producto
     public $product_id;
     // Guarda true o false para mostrar productos activos o inactivos
     public $status;
     // Guarda las categorias para los productos
     public $list_categories;
-    // Guarda el id de una categoria
-    public $category_id;
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -29,7 +27,7 @@ class InvProductController extends Component
         $this->product_id = 0;
         $this->status = "active";
         $this->category_id = 0;
-        $this->list_categories = InvCategory::where("status","active")->get();
+        $this->list_categories = InvCategory::where("status","active")->pluck('name_category')->toArray();
     }
     public function render()
     {
@@ -86,5 +84,7 @@ class InvProductController extends Component
             'category_id.not_in' => 'Seleccione Categoría'
         ];
         $this->validate($rules, $messages);
+
+        dd("Excelente");
     }
 }

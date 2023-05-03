@@ -23,53 +23,19 @@
                     </div>
                     <div class="col-12 col-sm-6 col-md-4">
                         <label class="form-label">Precio:</label>
-                        <input wire:model.lazy="name_product" type="text" class="form-control">
-                        @error('name_product')
+                        <input wire:model.lazy="price" type="text" class="form-control">
+                        @error('price')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col-12 col-sm-12 col-md-12">
-                        <label class="form-label">Descripción:</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
-                        @error('name_product')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-6 col-sm-6 col-md-6">
-                        <label class="form-label">Código:</label>
-                        <input wire:model.lazy="name_product" type="text" class="form-control">
-                        @error('name_product')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-6 col-sm-6 col-md-6">
-                        <label class="form-label">Garantía:</label>
-                        <input wire:model.lazy="name_product" type="text" class="form-control">
-                        @error('name_product')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-12 col-sm-6 col-md-6 mb-2">
-                        <label class="form-label">Alerta:</label>
-                        <input wire:model.lazy="name_product" type="text" class="form-control">
-                        @error('name_product')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6">
                         <label class="form-label">Categoría:</label>
-                        <select class="form-select" wire:model="category_id">
-                            <option value="0">Seleccionar</option>
-                            @foreach($this->list_categories as $c)
-                            <option value="{{ $c->id }}">{{ $c->name_category }}</option>
-                            @endforeach
-                        </select>
+                        <div class="autocomplete">
+                            <input type="text" id="input" placeholder="Buscar Categoria" class="form-select">
+                            <div class="autocomplete-list"></div>
+                          </div>
                         @error('category_id')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -77,9 +43,43 @@
                 </div>
                 <div class="row mb-2">
                     <div class="col-12 col-sm-12 col-md-12">
+                        <label class="form-label">Descripción:</label>
+                        <textarea wire:model.lazy="description" class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+                        @error('description')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6 col-sm-6 col-md-6">
+                        <label class="form-label">Código:</label>
+                        <input wire:model.lazy="barcode" type="text" class="form-control">
+                        @error('barcode')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6">
+                        <label class="form-label">Garantía:</label>
+                        <input wire:model.lazy="guarantee" type="text" class="form-control">
+                        @error('guarantee')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12 col-sm-6 col-md-6 mb-2">
+                        <label class="form-label">Stock Mínimo:</label>
+                        <input wire:model.lazy="minimum_stock" type="text" class="form-control">
+                        @error('minimum_stock')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12 col-sm-12 col-md-12">
                         <label class="form-label">Imagen:</label>
-                        <input wire:model.lazy="name_product" type="file" class="form-control">
-                        @error('name_product')
+                        <input wire:model.lazy="image" type="file" class="form-control">
+                        @error('image')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
