@@ -27,7 +27,7 @@ class InvProductController extends Component
         $this->product_id = 0;
         $this->status = "active";
         $this->category_id = 0;
-        $this->list_categories = InvCategory::where("status","active")->pluck('name_category')->toArray();
+        $this->list_categories = InvCategory::where("status","active")->get();
     }
     public function render()
     {
@@ -81,7 +81,7 @@ class InvProductController extends Component
             'name_product.unique' => 'Ya existe el nombre del producto',
             'name_product.min' => 'El nombre del producto debe tener al menos 2 caracteres',
             'name_product.max' => 'El nombre del producto no debe pasar los 255 caracteres',
-            'category_id.not_in' => 'Seleccione Categoría'
+            'category_id.not_in' => 'Seleccione categoría'
         ];
         $this->validate($rules, $messages);
 

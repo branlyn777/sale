@@ -1,39 +1,59 @@
 @section('css')
-<style>
-            .autocomplete {
-          position: relative;
+    <style>
+        .tooltip-container {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
         }
 
-        .autocomplete input {
-          width: 100%;
-          padding: 10px;
-          font-size: 16px;
+        .tooltip {
+            opacity: 0;
+            z-index: 99;
+            color: #ffffff;
+            width: 200px;
+            display: block;
+            font-size: 12px;
+            padding: 5px 5px;
+            border-radius: 7px;
+            text-align: center;
+            /* text-shadow: 1px 1px 2px #111; */
+            background: rgba(40, 134, 221, 0.9);
+            border: 1px solid rgba(0, 100, 182, 0.9);
+            box-shadow: 0 0 3px rgba(0,0,0,0.5);
+            -webkit-transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+            -o-transition: all .2s ease-in-out;
+            -ms-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+            -webkit-transform: scale(0);
+            -moz-transform: scale(0);
+            -o-transform: scale(0);
+            -ms-transform: scale(0);
+            transform: scale(0);
+            position: absolute;
+            right: -95px;
+            bottom: 40px;
         }
 
-        .autocomplete .autocomplete-list {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          width: 100%;
-          max-height: 200px;
-          overflow-y: auto;
-          background-color: #fff;
-          border: 1px solid #ddd;
-          border-top: none;
-          z-index: 1;
-          display: none;
+        .tooltip:before,.tooltip:after {
+            content: '';
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(40, 134, 221, 0.9);
+            position: absolute;
+            bottom: -10px;
+            left: 43%;
         }
 
-        .autocomplete .autocomplete-list li {
-          padding: 10px;
-          font-size: 16px;
-          cursor: pointer;
+        .tooltip-container:hover .tooltip,a:hover .tooltip {
+            opacity: 90%;
+            -webkit-transform: scale(1);
+            -moz-transform: scale(1);
+            -o-transform: scale(1);
+            -ms-transform: scale(1);
+            transform: scale(1);
         }
-
-        .autocomplete .autocomplete-list li:hover {
-          background-color: #f2f2f2;
-        }
-</style>
+    </style>
 @endsection
 <div>
     <div class="row">
@@ -42,13 +62,13 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-sm-12 col-md-4">
                             
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 text-center mb-3">
+                        <div class="col-12 col-sm-12 col-md-4 text-center mb-3">
                             <h5>LISTA PRODUCTOS</h5>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 text-end">
+                        <div class="col-12 col-sm-12 col-md-4 text-end">
                             <button wire:click.prevent="showModalProduct(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
                                 Nuevo Producto
@@ -191,63 +211,6 @@
             })
         });
 
-    });
-</script>
-<script>
-    const input = document.getElementById("input");
-    const list = document.querySelector(".autocomplete-list");
-
-    var asd = "nada";
-
-    var names = @json($list_categories);
-
-    function updateList(query)
-    {
-      // Clear list
-      list.innerHTML = "";
-
-      // Filter names based on query
-      const filterednames = names.filter(name => name.toLowerCase().includes(query.toLowerCase()));
-
-      // Add filtered names to list
-      filterednames.forEach(name => {
-        const li = document.createElement("li");
-        li.innerText = name;
-        li.setAttribute("value", "1");
-        li.addEventListener("click", () => {
-          asd = name;
-          input.value = name;
-          list.style.display = "none";
-        });
-        list.appendChild(li);
-      });
-
-      // Show or hide list
-      if (filterednames.length > 0) {
-        list.style.display = "block";
-      } else {
-        list.style.display = "none";
-      }
-    }
-
-    input.addEventListener("click", () => {
-      // Elimina todo lo que esta en el input
-      input.value = "";
-      updateList(input.value);
-    });
-
-    input.addEventListener("input", () => {
-      updateList(input.value);
-    });
-
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".autocomplete")) {
-        if(asd != "nada")
-        {
-          input.value = asd;
-        }
-        list.style.display = "none";
-      }
     });
 </script>
 @endsection
