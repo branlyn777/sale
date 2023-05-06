@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\InvCategory;
 use App\Models\InvProduct;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class InvProductController extends Component
@@ -21,6 +22,7 @@ class InvProductController extends Component
     public $list_categories;
 
     use WithPagination;
+    use WithFileUploads;
     protected $paginationTheme = 'bootstrap';
     public function mount()
     {
@@ -75,16 +77,51 @@ class InvProductController extends Component
         $rules = [
             'name_product' => 'required|min:2|max:255|unique:inv_products,name_product',
             'category_id' => 'not_in:0',
+            'price' => 'required',
         ];
         $messages = [
             'name_product.required' => 'El nombre del producto es requerido',
             'name_product.unique' => 'Ya existe el nombre del producto',
             'name_product.min' => 'El nombre del producto debe tener al menos 2 caracteres',
             'name_product.max' => 'El nombre del producto no debe pasar los 255 caracteres',
-            'category_id.not_in' => 'Seleccione categoría'
+            'category_id.not_in' => 'Seleccione categoría',
+            'price.required' => 'Precio requerido'
         ];
         $this->validate($rules, $messages);
 
-        dd("Excelente");
+        // Elimina espacios en blanco extras y reemplaza multiples espacios por un solo espacio
+        $this->name_product = trim(preg_replace('/\s+/', ' ', $this->name_product));
+        $product = InvProduct::create([
+            'name_product' =>  $this->name_product,
+            'description' =>  $this->description,
+            'price' =>  $this->price,
+            'inv_categorie_id' =>  $this->category_id
+        ]);
+        // Vericando si se selecciono una imagen
+        if($this->image)
+        {
+            $customFileName = uniqid() . '_.' . $this->image->extension();
+            $this->image->storeAs('public/invProducts', $customFileName);
+            $product->image  = $customFileName;
+            $product->save();
+
+            // $image = Image::make(storage_path('app/public/invProducts/' . $customFileName));
+            // $width = $image->getWidth();
+            // $height = $image->getHeight();
+
+            // dd("La imagen tiene una resolución de " . $width . "x" . $height . " píxeles.");
+        }
+        else
+        {
+            $product->image  = "no-image.png";
+            $product->save(); 
+        }
+        $this->resetUi();
+        $this->emit("hide-modal-product");
+    }
+    // Resetea todas las variables
+    public function resetUi()
+    {
+        $this->image = null;
     }
 }

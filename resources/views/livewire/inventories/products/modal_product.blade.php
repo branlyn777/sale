@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-6">
                         <label class="form-label">Imagen</label>
-                        <input wire:model.lazy="image" type="file" class="form-control">
+                        <input wire:model.lazy="image" type="file" class="form-control" accept="image/x-png, image/gif, image/jpeg">
                         @error('image')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror

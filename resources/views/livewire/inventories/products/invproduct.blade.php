@@ -116,7 +116,7 @@
                                             {{ ($products->currentpage() - 1) * $products->perpage() + $loop->index + 1 }}
                                         </th>
                                         <td class="text-center">
-                                            <img style="width: 50px; height: 50px;" src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp" class="rounded float-start mx-auto" alt="...">
+                                            <img src="{{ asset('storage/invProducts/' . $p->image) }}" alt="hoodie" width="50" height="50">
                                         </td>
                                         <td>
                                             {{$p->name_product}}
