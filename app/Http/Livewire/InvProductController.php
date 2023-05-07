@@ -95,6 +95,10 @@ class InvProductController extends Component
             'name_product' =>  $this->name_product,
             'description' =>  $this->description,
             'price' =>  $this->price,
+            'image' =>  $this->image,
+            'barcode' =>  $this->barcode,
+            'guarantee' =>  $this->guarantee,
+            'minimum_stock' =>  $this->minimum_stock,
             'inv_categorie_id' =>  $this->category_id
         ]);
         // Vericando si se selecciono una imagen
@@ -104,12 +108,6 @@ class InvProductController extends Component
             $this->image->storeAs('public/invProducts', $customFileName);
             $product->image  = $customFileName;
             $product->save();
-
-            // $image = Image::make(storage_path('app/public/invProducts/' . $customFileName));
-            // $width = $image->getWidth();
-            // $height = $image->getHeight();
-
-            // dd("La imagen tiene una resolución de " . $width . "x" . $height . " píxeles.");
         }
         else
         {

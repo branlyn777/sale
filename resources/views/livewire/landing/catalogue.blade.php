@@ -20,7 +20,7 @@
           @foreach($products as $p)
           <div class="col-12 col-sm-6 col-md-3">
               <div class="card">
-                  <img src="https://s3-hc-files-prod.s3.amazonaws.com/wp-content/uploads/2022/11/VNE-LX3X6SAZ_1PP.jpg" class="card-img-top" alt="...">
+                  <img src="{{ asset('storage/invProducts/' . $p->image) }}" class="card-img-top" alt="...">
                   <div class="card-body">
                       <h5 class="card-title">{{ $p->name_product }}</h5>
                       <p class="card-text">{{ $p->description }}</p>
