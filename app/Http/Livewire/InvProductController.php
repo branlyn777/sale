@@ -101,7 +101,7 @@ class InvProductController extends Component
             'minimum_stock' =>  $this->minimum_stock,
             'inv_categorie_id' =>  $this->category_id
         ]);
-        // Vericando si se selecciono una imagen
+        // Verificando si se selecciono una imagen
         if($this->image)
         {
             $customFileName = uniqid() . '_.' . $this->image->extension();

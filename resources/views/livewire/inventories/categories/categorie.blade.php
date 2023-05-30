@@ -123,30 +123,19 @@
             window.livewire.on('hide-modal-categorie', msg => {
                 var categorieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categorie'));
                 categorieModal.hide();
-
-                Swal.fire({
-                    toast: true,
-                    text: 'Categoría creada exitósamente',
-                    showConfirmButton: false,
-                    position: 'top-right',
-                    timer: 3000,
-                    timerProgressBar: true,
-                    icon: 'success'
-                })
-
             });
 
             // Muestra una alerta
             window.livewire.on('alert-category', msg => {
                 Swal.fire({
-                    title: @this.parameters_alert.title,
-                    text: @this.parameters_alert.message,
-                    icon: 'warning',
+                    title: @this.alert.title,
+                    text: @this.alert.text,
+                    icon: @this.alert.icon,
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: @this.parameters_alert.button,
-                    cancelButtonText: 'Cancelar'
+                    confirmButtonText: @this.alert.confirmButtonText,
+                    cancelButtonText: @this.alert.cancelButtonText,
                     }).then((result) => {
                     if (result.isConfirmed)
                     {
@@ -156,15 +145,15 @@
                 })
             });
             // Muestra un mensaje de tipo toast arriba a la derecha
-            window.livewire.on('message-toast', msg => {
+            window.livewire.on('toast', msg => {
                 Swal.fire({
                     toast: true,
-                    text: @this.parameters_message_toast.text,
+                    text: @this.toast.text,
                     showConfirmButton: false,
                     position: 'top-right',
-                    timer: @this.parameters_message_toast.timer,
+                    timer: @this.toast.timer,
                     timerProgressBar: true,
-                    icon: @this.parameters_message_toast.icon
+                    icon: @this.toast.icon
                 })
             });
 

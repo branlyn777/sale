@@ -24,15 +24,17 @@ class InvCategorieController extends Component
     // Guardan un mensaje para una notificación de tipo toast
     public $toast_message;
 
-    // Variable que almacena parametros de una alerta
-    public $parameters_alert = [
+    // Variable que almacena parametros para una alerta
+    public $alert = [
         'title' => '',
-        'message' => '',
-        'button' => '',
+        'text' => '',
+        'icon' => '',
+        'confirmButtonText' => '',
+        'cancelButtonText' => '',
     ];
 
-    // Variable que almacena parametros de una alerta
-    public $parameters_message_toast = [
+    // Variable que almacena parametros para un mensaje de tipo toast
+    public $toast = [
         'text' => '',
         'timer' => '',
         'icon' => '',
@@ -69,6 +71,7 @@ class InvCategorieController extends Component
     // Muestra la ventana modal Categories (Para Crear o Actualizar)
     public function showModalCategories($id)
     {
+        // Si el id recibido es igual a cero significa que se va a crear una categoria, caso contrario se actualizará una categoría
         if ($id == 0)
         {
             $this->category_id = 0;
@@ -76,8 +79,11 @@ class InvCategorieController extends Component
         }
         else
         {
+            // Obteniene la categoría a actualizar y lo guarda en una variable
             $categorie = InvCategory::find($id);
+            // Actualiza la variable global name_category a travez de la variable categorie
             $this->name_category = $categorie->name_category;
+            // Actualiza la variable global category_id a travez de la variable recibida
             $this->category_id = $id;
         }
         // Quita los mensajes de validación
@@ -98,11 +104,19 @@ class InvCategorieController extends Component
             'name_category.max' => 'El nombre de la categoría no debe pasar los 255 caracteres'
         ];
         $this->validate($rules, $messages); 
-        // Elimina espacios en blanco extras y reemplaza multiples espacios por un solo espacio
+        // Elimina espacios en blanco extras y reemplaza multiples espacios en blanco por un solo espacio
         $this->name_category = trim(preg_replace('/\s+/', ' ', $this->name_category));
-        InvCategory::create([
+        // Crea la categoría y guarda el objeto creado en una variable
+        $category = InvCategory::create([
             'name_category' =>  $this->name_category
         ]);
+        // Texto que se verá en el mensaje de tipo toast
+        $text = "Categoriá '" . $category->name_category . "' creada exitosamente";
+        // Actualizando parámetros del mensaje toast
+        $this->update_toast($text, "3000", "success");
+        // Muestra el mensaje de tipo toast
+        $this->emit("toast");
+        // Cierra la ventana modal
         $this->emit("hide-modal-categorie");
     }
     // Actualiza una categoría
@@ -113,6 +127,13 @@ class InvCategorieController extends Component
             'name_category' => $this->name_category
         ]);
         $category->save();
+        // Texto que se verá en el mensaje de tipo toast
+        $text = "Categoriá '" . $category->name_category . "' actualizada exitosamente";
+        // Actualiza parámetros del mensaje toast
+        $this->update_toast($text, "3000", "success");
+        // Muestra el mensaje de tipo toast
+        $this->emit("toast");
+        // Cierra la ventana modal
         $this->emit("hide-modal-categorie");
     }
     // Verifica si una categoria tiene registros con su id y muestra una alerta para inactivar o eliminar la categoria
@@ -123,45 +144,50 @@ class InvCategorieController extends Component
         if ($productCount)
         {
             $alert_title = "¿Inactivar Categoría?";
-            $alert_message = "La categoría '" . $category->name_category . "' tiene productos que usan su nombre, por lo cual no puede ser eliminada.";
-            $alert_button = "Inactivar";
+            $alert_text = "La categoría '" . $category->name_category . "' tiene productos que usan su nombre, por lo cual no puede ser eliminada, pero puede ser inactivada para que ya no pueda ser usada.";
+            $alert_confirmButtonText = "Inactivar";
+            $alert_icon = "warning";
             $this->delete_cancel = false;
         }
         else
         {
             $alert_title = "¿Eliminar Categoría?";
-            $alert_message = "La categoría '" . $category->name_category . "' no tiene ningun producto a su nombre, por lo cual puede ser eliminada.";
-            $alert_button = "Eliminar";
+            $alert_text = "La categoría '" . $category->name_category . "' no es usado por ningún producto por lo cual puede ser eliminado.";
+            $alert_confirmButtonText = "Eliminar";
+            $alert_icon = "info";
             $this->delete_cancel = true;
         }
         // Actualizando la variable category_id
         $this->category_id = $category->id;
         // Actualizando parámetros de la alerta
-        $this->update_parameters_alert($alert_title, $alert_message, $alert_button);
+        $this->update_alert($alert_title, $alert_text,$alert_icon, $alert_confirmButtonText, "Cancelar");
         $this->emit("alert-category");
     }
-    // Función que actualiza los valores del array asociativo parameters_alert (Mensaje de Alerta)
-    public function update_parameters_alert($title, $message, $button)
+    // Función que actualiza los valores del array asociativo alert (Mensaje de Alerta)
+    public function update_alert($title, $text, $icon, $confirmButtonText, $cancelButtonText)
     {
-        $this->parameters_alert = [
+        $this->alert = [
             'title' => $title,
-            'message' => $message,
-            'button' => $button
+            'text' => $text,
+            'icon' => $icon,
+            'confirmButtonText' => $confirmButtonText,
+            'cancelButtonText' => $cancelButtonText,
         ];
     }
-    // Función que actualiza los valores del array asociativo parameters_message_toast (Mensaje Toast)
-    public function update_parameters_message_toast($text, $timer, $icon)
+    // Función que actualiza los valores del array asociativo toast (Mensaje Toast)
+    public function update_toast($text, $timer, $icon)
     {
-        $this->parameters_message_toast = [
+        $this->toast = [
             'text' => $text,
             'timer' => $timer,
             'icon' => $icon
         ];
     }
-    // Escucha eventos JavaScript de la vista para ejecutar métodos de este controlador
+    // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
         'deleteCategory' => 'delete_category'
     ];
+    // Elimina o inactiva una categoría
     public function delete_category()
     {
         $category = InvCategory::find($this->category_id);
@@ -179,10 +205,9 @@ class InvCategorieController extends Component
             $category->save();
             $text = "¡Categoria '" . $name_category . "' inactivada con éxito!";
         }
-        $timer = "3000";
-        $icon = "success";
-        // Actualizando parámetros del mensaje toast
-        $this->update_parameters_message_toast($text, $timer, $icon);
-        $this->emit("message-toast");
+        // Actualiza parámetros del mensaje toast
+        $this->update_toast($text, "3000", "success");
+        // Muestra el mensaje de tipo toast
+        $this->emit("toast");
     }
 }
