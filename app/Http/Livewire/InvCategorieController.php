@@ -4,11 +4,11 @@ namespace App\Http\Livewire;
 
 use App\Models\InvCategory;
 use App\Models\InvProduct;
-use GuzzleHttp\Psr7\Message;
-use Livewire\Component;
 use Livewire\WithPagination;
 
-class InvCategorieController extends Component
+use App\Http\Livewire\MethodsController;
+
+class InvCategorieController extends MethodsController
 {
     // Guarda los terminos de busqueda para encontrar una categoria
     public $search;
@@ -111,9 +111,9 @@ class InvCategorieController extends Component
             'name_category' =>  $this->name_category
         ]);
         // Texto que se verá en el mensaje de tipo toast
-        $text = "Categoriá '" . $category->name_category . "' creada exitosamente";
+        $text = "Categoría '" . $category->name_category . "' creada exitosamente";
         // Actualizando parámetros del mensaje toast
-        $this->update_toast($text, "3000", "success");
+        $this->toast = $this->update_toast($text, "3000", "success");
         // Muestra el mensaje de tipo toast
         $this->emit("toast");
         // Cierra la ventana modal
@@ -122,7 +122,9 @@ class InvCategorieController extends Component
     // Actualiza una categoría
     public function update_category()
     {
+        // Busca la categoría y lo guarda en una variable
         $category = InvCategory::find($this->category_id);
+        // Actualiza la categoría
         $category->update([
             'name_category' => $this->name_category
         ]);
@@ -130,7 +132,7 @@ class InvCategorieController extends Component
         // Texto que se verá en el mensaje de tipo toast
         $text = "Categoriá '" . $category->name_category . "' actualizada exitosamente";
         // Actualiza parámetros del mensaje toast
-        $this->update_toast($text, "3000", "success");
+        $this->toast = $this->update_toast($text, "3000", "success");
         // Muestra el mensaje de tipo toast
         $this->emit("toast");
         // Cierra la ventana modal
@@ -141,6 +143,7 @@ class InvCategorieController extends Component
     {
         // Buscando productos que tengan el id de la categoria
         $productCount = InvProduct::where('inv_categorie_id', $category->id)->exists();
+        // Cambia los parámetros de la alerta dependiendo si la variable productCount tiene registros
         if ($productCount)
         {
             $alert_title = "¿Inactivar Categoría?";
@@ -160,28 +163,9 @@ class InvCategorieController extends Component
         // Actualizando la variable category_id
         $this->category_id = $category->id;
         // Actualizando parámetros de la alerta
-        $this->update_alert($alert_title, $alert_text,$alert_icon, $alert_confirmButtonText, "Cancelar");
+        // $this->update_alert($alert_title, $alert_text,$alert_icon, $alert_confirmButtonText, "Cancelar");
+        $this->alert = $this->update_alert($alert_title, $alert_text,$alert_icon, $alert_confirmButtonText, "Cancelar");
         $this->emit("alert-category");
-    }
-    // Función que actualiza los valores del array asociativo alert (Mensaje de Alerta)
-    public function update_alert($title, $text, $icon, $confirmButtonText, $cancelButtonText)
-    {
-        $this->alert = [
-            'title' => $title,
-            'text' => $text,
-            'icon' => $icon,
-            'confirmButtonText' => $confirmButtonText,
-            'cancelButtonText' => $cancelButtonText,
-        ];
-    }
-    // Función que actualiza los valores del array asociativo toast (Mensaje Toast)
-    public function update_toast($text, $timer, $icon)
-    {
-        $this->toast = [
-            'text' => $text,
-            'timer' => $timer,
-            'icon' => $icon
-        ];
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
@@ -192,10 +176,10 @@ class InvCategorieController extends Component
     {
         $category = InvCategory::find($this->category_id);
         $name_category = $category->name_category;
-        if($this->delete_cancel)
+        if ($this->delete_cancel)
         {
             $category->delete();
-            $text = "¡Categoria '" . $name_category . "' eliminada con éxito!";
+            $text = "¡Categoria '" . $name_category . "' eliminada exitósamente!";
         }
         else
         {
@@ -203,10 +187,10 @@ class InvCategorieController extends Component
                 'status' => "inactive"
             ]);
             $category->save();
-            $text = "¡Categoria '" . $name_category . "' inactivada con éxito!";
+            $text = "¡Categoria '" . $name_category . "' inactivada exitósamente!";
         }
         // Actualiza parámetros del mensaje toast
-        $this->update_toast($text, "3000", "success");
+        $this->toast = $this->update_toast($text, "3000", "success");
         // Muestra el mensaje de tipo toast
         $this->emit("toast");
     }
