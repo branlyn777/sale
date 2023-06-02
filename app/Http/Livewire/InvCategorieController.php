@@ -69,7 +69,7 @@ class InvCategorieController extends MethodsController
         ->section('content');
     }
     // Muestra la ventana modal Categories (Para Crear o Actualizar)
-    public function showModalCategories($id)
+    public function showModalCategorie($id)
     {
         // Si el id recibido es igual a cero significa que se va a crear una categoria, caso contrario se actualizará una categoría
         if ($id == 0)

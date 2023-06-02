@@ -30,7 +30,7 @@
                             <h5>CATEGORÍA PRODUCTO</h5>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-end">
-                            <button wire:click.prevent="showModalCategories(0)" type="button" class="btn btn-outline-primary">
+                            <button wire:click.prevent="showModalCategorie(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
                                 Nueva Categor&Iacute;a
                             </button>
@@ -85,7 +85,7 @@
                                             {{ \Carbon\Carbon::parse($c->updated_at)->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="text-center">
-                                            <button wire:click.prevent="showModalCategories({{ $c->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                            <button wire:click.prevent="showModalCategorie({{ $c->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
                                         </td>

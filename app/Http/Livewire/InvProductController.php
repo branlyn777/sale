@@ -64,6 +64,8 @@ class InvProductController extends Component
         {
             $product = InvProduct::find($id);
             $this->name_product = $product->name_product;
+            $this->price = $product->price;
+            $this->category_id = $product->inv_categorie_id;
             $this->product_id = $id;
         }
         // Quita los mensajes de validación

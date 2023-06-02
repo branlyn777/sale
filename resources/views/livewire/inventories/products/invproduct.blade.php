@@ -128,7 +128,7 @@
                                             {{ $p->price }}
                                         </td>
                                         <td class="text-center">
-                                            <button wire:click.prevent="showModalCategories({{ $p->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                            <button wire:click.prevent="showModalProduct({{ $p->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
                                         </td>
