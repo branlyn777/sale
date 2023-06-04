@@ -23,8 +23,8 @@
                   <img src="{{ asset('storage/invProducts/' . $p->image) }}" class="card-img-top" alt="...">
                   <div class="card-body">
                       <h5 class="card-title">{{ $p->name_product }}</h5>
-                      <p class="card-text">{{ $p->description }}</p>
-                      <a href="#" class="btn btn-primary">Comprar</a>
+                      <p class="card-text">{{ $p->description_catalogue }}</p>
+                      <a href="#" class="btn btn-primary">Ver Detalles</a>
                   </div>
               </div>
           </div>
