@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-sm-6 col-md-3">
                             <label>Buscar</label>
                             <div class="input-group">
                                 <span class="input-group-text">
@@ -85,7 +85,22 @@
                                 <input wire:model="search" type="text" class="form-control" placeholder="Buscar Producto...">
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <label>Sucursal</label>
+                            <select class="form-select">
+                                <option value="active">Central</option>
+                                <option value="inactive">Este</option>
+                                <option value="inactive">Sur</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <label>Almacén</label>
+                            <select class="form-select">
+                                <option value="active">Tienda</option>
+                                <option value="inactive">Depósito</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
                             <label>Estado</label>
                             <select wire:model="status" class="form-select">
                                 <option value="active">Activos</option>
@@ -102,9 +117,10 @@
                                 <tr>
                                     <th class="text-center" scope="col">#</th>
                                     <th class="text-center" scope="col">Imagen</th>
-                                    <th scope="col">Nombre Producto</th>
+                                    <th scope="col">Nombre</th>
                                     <th class="text-center" scope="col">Código</th>
-                                    <th class="text-center" scope="col">Precio</th>
+                                    <th class="text-end" scope="col">Precio</th>
+                                    <th class="text-end" scope="col">Cantidad</th>
                                     <th class="text-center" scope="col">Editar</th>
                                     <th class="text-center" scope="col">Eliminar</th>
                                 </tr>
@@ -121,11 +137,14 @@
                                         <td>
                                             {{$p->name_product}}
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             {{ $p->barcode }}
                                         </td>
+                                        <td class="text-end">
+                                            {{ number_format($p->price, 2, ',', '.') }} Bs
+                                        </td>
                                         <td>
-                                            {{ $p->price }}
+
                                         </td>
                                         <td class="text-center">
                                             <button wire:click.prevent="showModalProduct({{ $p->id }})" type="button" class="btn btn-outline-primary btn-sm">

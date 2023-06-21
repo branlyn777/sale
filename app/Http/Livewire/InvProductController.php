@@ -114,7 +114,7 @@ class InvProductController extends Component
         else
         {
             $product->image  = "no-image.png";
-            $product->save(); 
+            $product->save();
         }
         $this->resetUi();
         $this->emit("hide-modal-product");
