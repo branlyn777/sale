@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inv_branches', function (Blueprint $table) {
+        Schema::create('inv_warehouses', function (Blueprint $table) {
             $table->id();
-            $table->string('name_branch',255);
-            $table->string('direction',255);
+            $table->string('name_warehouse',255);
+            $table->text('description')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
+            $table->foreignId('inv_branch_id')->constrained();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inv_branches');
+        Schema::dropIfExists('inv_warehouses');
     }
 };

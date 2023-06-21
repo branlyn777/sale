@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2)->default(0.00);
             $table->string('image', 100)->nullable();
-            $table->string('barcode', 45)->nullable();
+            $table->string('barcode', 50)->nullable();
             $table->smallInteger('guarantee')->nullable(); //-32768 and 32767
             $table->smallInteger('minimum_stock')->nullable(); // -32768 and 32767
             $table->enum('status', ['active','inactive'])->default('active');

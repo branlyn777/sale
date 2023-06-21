@@ -53,6 +53,21 @@
             -ms-transform: scale(1);
             transform: scale(1);
         }
+        .style-price {
+            min-width: 90px;
+        }
+        .style-quantity {
+            min-width: 70px;
+            background-color: rgb(0, 78, 247);
+            color: white;
+            border-radius: 5px;
+        }
+        .style-quantity-alert {
+            min-width: 70px;
+            background-color: red;
+            color: white;
+            border-radius: 5px;
+        }
     </style>
 @endsection
 <div>
@@ -68,7 +83,7 @@
                         <div class="col-12 col-sm-12 col-md-4 text-center mb-3">
                             <h5>LISTA PRODUCTOS</h5>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-4 text-end">
+                        <div class="col-12 col-sm-12 col-md-4 text-end mb-3">
                             <button wire:click.prevent="showModalProduct(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
                                 Nuevo Producto
@@ -76,7 +91,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-3">
+                        <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
                             <label>Buscar</label>
                             <div class="input-group">
                                 <span class="input-group-text">
@@ -85,22 +100,23 @@
                                 <input wire:model="search" type="text" class="form-control" placeholder="Buscar Producto...">
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-3">
+                        <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
                             <label>Sucursal</label>
-                            <select class="form-select">
-                                <option value="active">Central</option>
-                                <option value="inactive">Este</option>
-                                <option value="inactive">Sur</option>
+                            <select wire:model="branch_id" class="form-select">
+                                @foreach( $list_branches as $b )
+                                    <option value="{{ $b->id }}">{{ $b->name_branch }}</option>
+                                @endforeach
+                                <option value="all">Todos</option>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-3">
+                        <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
                             <label>Almacén</label>
-                            <select class="form-select">
-                                <option value="active">Tienda</option>
+                            <select wire:model="warehouse_id" class="form-select">
                                 <option value="inactive">Depósito</option>
+                                <option value="all">Todos</option>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-3">
+                        <div class="col-12 col-sm-6 col-md-3 text-center">
                             <label>Estado</label>
                             <select wire:model="status" class="form-select">
                                 <option value="active">Activos</option>
@@ -119,8 +135,8 @@
                                     <th class="text-center" scope="col">Imagen</th>
                                     <th scope="col">Nombre</th>
                                     <th class="text-center" scope="col">Código</th>
-                                    <th class="text-end" scope="col">Precio</th>
-                                    <th class="text-end" scope="col">Cantidad</th>
+                                    <th class="text-center" scope="col">Precio</th>
+                                    <th class="text-center" scope="col">Cantidad</th>
                                     <th class="text-center" scope="col">Editar</th>
                                     <th class="text-center" scope="col">Eliminar</th>
                                 </tr>
@@ -136,15 +152,20 @@
                                         </td>
                                         <td>
                                             {{$p->name_product}}
+                                            <p class="text-muted m-b-30"> {{ $p->description }} </p>
                                         </td>
                                         <td class="text-center">
                                             {{ $p->barcode }}
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($p->price, 2, ',', '.') }} Bs
+                                            <div class="style-price">
+                                                {{ number_format($p->price, 2, ',', '.') }} Bs
+                                            </div>
                                         </td>
-                                        <td>
-
+                                        <td class="text-center">
+                                            <div class="{{ $p->quantity !== 'Agotado' ? 'style-quantity' : 'style-quantity-alert' }}">
+                                                {{ $p->quantity }}
+                                            </div>
                                         </td>
                                         <td class="text-center">
                                             <button wire:click.prevent="showModalProduct({{ $p->id }})" type="button" class="btn btn-outline-primary btn-sm">

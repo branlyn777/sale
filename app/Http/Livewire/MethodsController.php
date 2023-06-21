@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Livewire;
 
+use App\Models\AdmUserBranch;
+use App\Models\InvBranch;
 use Livewire\Component;
 
 class MethodsController extends Component
@@ -26,5 +28,17 @@ class MethodsController extends Component
             'icon' => $icon
         ];
         return $toast;
+    }
+    // Método que recibe un id de usuario y devuelve el id de su sucursal
+    public function get_branch_id($user_id)
+    {
+        $branch = AdmUserBranch::where("user_id", $user_id)->first();
+        return $branch->inv_branch_id;
+    }
+    // Método que devuelve todas las sucursales activas
+    public function get_branches()
+    {
+        $branches = InvBranch::where("status", "active")->get();
+        return $branches;
     }
 }

@@ -3,12 +3,14 @@
 namespace App\Http\Livewire;
 
 use App\Models\InvCategory;
+use App\Models\InvInventory;
 use App\Models\InvProduct;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
-class InvProductController extends Component
+class InvProductController extends MethodsController
 {
     // Guarda los terminos de busqueda para encontrar una categoria
     public $search;
@@ -16,10 +18,16 @@ class InvProductController extends Component
     public $name_product, $description, $price, $image, $barcode, $guarantee, $minimum_stock, $category_id;
     // Guarda el id de un producto
     public $product_id;
+    // Guarda el id de la sucursal seleccionada
+    public $branch_id;
+    // Guarda el id del almacen seleccionado
+    public $warehouse_id;
     // Guarda true o false para mostrar productos activos o inactivos
     public $status;
     // Guarda las categorias para los productos
     public $list_categories;
+    // Guarda las sucursales activas
+    public $list_branches;
 
     use WithPagination;
     use WithFileUploads;
@@ -30,22 +38,33 @@ class InvProductController extends Component
         $this->status = "active";
         $this->category_id = 0;
         $this->list_categories = InvCategory::where("status","active")->get();
+        $this->branch_id = $this->get_branch_id(Auth()->user()->id);
+        $this->warehouse_id = "all";
+        $this->list_branches = $this->get_branches();
     }
     public function render()
     {
         if (strlen($this->search) == 0)
         {
-            $products = InvProduct::where("status",$this->status)
+            $products = InvProduct::select("inv_products.*", DB::raw('0 as quantity'))
+            ->where("status", $this->status)
             ->orderBy("created_at","desc")
             ->paginate(10);
         }
         else
         {
-            $products = InvProduct::where("status",$this->status)
+            $products = InvProduct::select("inv_products.*", DB::raw('0 as quantity'))
+            ->where("status", $this->status)
             ->where('name_product', 'like', '%' . $this->search . '%')
             ->orderBy("created_at","desc")
             ->paginate(10);
         }
+
+        foreach($products as $p)
+        {
+            $p->quantity = $this->get_quantity($p->id);
+        }
+
         return view('livewire.inventories.products.invproduct', [
             'products' => $products
         ])
@@ -118,6 +137,57 @@ class InvProductController extends Component
         }
         $this->resetUi();
         $this->emit("hide-modal-product");
+    }
+    // Obtiene la cantidad disponoble de un determinado producto (Dependiendo de la sucursal y el almacen)
+    public function get_quantity($product_id)
+    {
+        if ($this->branch_id != "all")
+        {
+            if ($this->warehouse_id == "all")
+            {
+                $quantity = InvInventory::join("inv_warehouses as w", "w.id", "inv_inventories.inv_warehouse_id")
+                ->select("inv_inventories.quantity as quantity")
+                ->where("w.inv_branch_id", $this->branch_id)
+                ->where("inv_inventories.inv_product_id", $product_id)
+                ->get();
+            }
+            else
+            {
+                $quantity = InvInventory::join("inv_warehouses as w", "w.id", "inv_inventories.inv_warehouse_id")
+                ->select("inv_inventories.quantity as quantity")
+                ->where("w.inv_branch_id", $this->branch_id)
+                ->where("inv_inventories.inv_warehouse_id", $this->warehouse_id)
+                ->where("inv_inventories.inv_product_id", $product_id)
+                ->get();
+            }
+        }
+        else
+        {
+            if ($this->warehouse_id == "all")
+            {
+                $quantity = InvInventory::join("inv_warehouses as w", "w.id", "inv_inventories.inv_warehouse_id")
+                ->select("inv_inventories.quantity as quantity")
+                ->where("inv_inventories.inv_product_id", $product_id)
+                ->get();
+            }
+            else
+            {
+                $quantity = InvInventory::join("inv_warehouses as w", "w.id", "inv_inventories.inv_warehouse_id")
+                ->select("inv_inventories.quantity as quantity")
+                ->where("inv_inventories.inv_warehouse_id", $this->warehouse_id)
+                ->where("inv_inventories.inv_product_id", $product_id)
+                ->get();
+            }
+        }
+
+        $total_quantity = $quantity->sum('quantity');
+
+        if ($total_quantity == 0)
+        {
+            $total_quantity = "Agotado";
+        }
+
+        return $total_quantity;
     }
     // Resetea todas las variables
     public function resetUi()

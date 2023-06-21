@@ -18,5 +18,15 @@ class AdmUserSeeder extends Seeder
             'email' => 'branlyn@mail.com',
             'password' => bcrypt('1234')
         ]);
+        User::create([
+            'name' => 'Ana',
+            'email' => 'ana@mail.com',
+            'password' => bcrypt('1234')
+        ]);
+        User::create([
+            'name' => 'Peter',
+            'email' => 'peter@mail.com',
+            'password' => bcrypt('1234')
+        ]);
     }
 }

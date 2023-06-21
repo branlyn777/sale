@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inv_branches', function (Blueprint $table) {
+        Schema::create('inv_inventories', function (Blueprint $table) {
             $table->id();
-            $table->string('name_branch',255);
-            $table->string('direction',255);
-            $table->enum('status', ['active','inactive'])->default('active');
+            $table->smallInteger('quantity'); //-32768 and 32767
+            $table->decimal('unit_cost', 8, 2)->default(0.00);
+            $table->foreignId('inv_warehouse_id')->constrained();
+            $table->foreignId('inv_product_id')->constrained();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inv_branches');
+        Schema::dropIfExists('inv_inventories');
     }
 };

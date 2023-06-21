@@ -21,5 +21,9 @@ class DatabaseSeeder extends Seeder
         $this->call(AdmUserSeeder::class);
         $this->call(InvCategorySeeder::class);
         $this->call(InvProductSeeder::class);
+        $this->call(InvBranchSeeder::class);
+        $this->call(InvWarehouseSeeder::class);
+        $this->call(InvInventorySeeder::class);
+        $this->call(AdmUserBranchSeeder::class);
     }
 }

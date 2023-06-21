@@ -5,7 +5,7 @@
 <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Home Version One || limupa - Digital Products Store eCommerce Bootstrap 4 Template</title>
+        <title>Sistema POS</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Favicon -->
@@ -60,7 +60,7 @@
                             <div class="col-lg-3 col-md-4">
                                 <div class="header-top-left">
                                     <ul class="phone-wrap">
-                                        <li><span>Telephone Enquiry:</span><a href="landing/#">(+123) 123 321 345</a></li>
+                                        <li><span>Teléfono Empresa:</span><a href="landing/#">(+591) 71787966</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                     <ul class="ht-menu">
                                         <!-- Begin Setting Area -->
                                         <li>
-                                            <div class="ht-setting-trigger"><span>Setting</span></div>
+                                            <div class="ht-setting-trigger"><span>Ajustes</span></div>
                                             <div class="setting ht-setting">
                                                 <ul class="ht-setting-list">
                                                     <li><a href="landing/login-register.html">My Account</a></li>
@@ -83,8 +83,8 @@
                                         <!-- Setting Area End Here -->
                                         <!-- Begin Currency Area -->
                                         <li>
-                                            <span class="currency-selector-wrapper">Currency :</span>
-                                            <div class="ht-currency-trigger"><span>USD $</span></div>
+                                            <span class="currency-selector-wrapper">Tipo de Cambio :</span>
+                                            <div class="ht-currency-trigger"><span>Bs</span></div>
                                             <div class="currency ht-currency">
                                                 <ul class="ht-setting-list">
                                                     <li><a href="landing/#">EUR €</a></li>
@@ -95,8 +95,8 @@
                                         <!-- Currency Area End Here -->
                                         <!-- Begin Language Area -->
                                         <li>
-                                            <span class="language-selector-wrapper">Language :</span>
-                                            <div class="ht-language-trigger"><span>English</span></div>
+                                            <span class="language-selector-wrapper">    Idioma :</span>
+                                            <div class="ht-language-trigger"><span>Español</span></div>
                                             <div class="language ht-language">
                                                 <ul class="ht-setting-list">
                                                     <li class="active"><a href="landing/#"><img src="landing/images/menu/flag-icon/1.jpg" alt="">English</a></li>
@@ -131,7 +131,7 @@
                                 <!-- Begin Header Middle Searchbox Area -->
                                 <form action="#" class="hm-searchbox">
                                     <select class="nice-select select-search-category">
-                                        <option value="0">All</option>                         
+                                        <option value="0">Todas</option>                         
                                         <option value="10">Laptops</option>                     
                                         <option value="17">- -  Prime Video</option>                    
                                         <option value="20">- - - -  All Videos</option>                     
@@ -202,7 +202,7 @@
                                         <option value="15">Smartwatch</option>                           
                                         <option value="16">Accessories</option>
                                     </select>
-                                    <input type="text" placeholder="Enter your search key ...">
+                                    <input type="text" placeholder="Buscar Productos ...">
                                     <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                                 </form>
                                 <!-- Header Middle Searchbox Area End Here -->
@@ -221,7 +221,7 @@
                                         <li class="hm-minicart">
                                             <div class="hm-minicart-trigger">
                                                 <span class="item-icon"></span>
-                                                <span class="item-text">£80.00
+                                                <span class="item-text">100,00 Bs
                                                     <span class="cart-item-count">2</span>
                                                 </span>
                                             </div>
@@ -283,7 +283,7 @@
                                 <div class="hb-menu">
                                     <nav>
                                         <ul>
-                                            <li class="dropdown-holder"><a href="landing/index.html">Home</a>
+                                            <li class="dropdown-holder"><a href="landing/index.html">Inicio</a>
                                                 <ul class="hb-dropdown">
                                                     <li class="active"><a href="landing/index.html">Home One</a></li>
                                                     <li><a href="landing/index-2.html">Home Two</a></li>
@@ -291,7 +291,7 @@
                                                     <li><a href="landing/index-4.html">Home Four</a></li>
                                                 </ul>
                                             </li>
-                                            <li class="megamenu-holder"><a href="landing/shop-left-sidebar.html">Shop</a>
+                                            <li class="megamenu-holder"><a href="landing/shop-left-sidebar.html">Catálogo</a>
                                                 <ul class="megamenu hb-megamenu">
                                                     <li><a href="landing/shop-left-sidebar.html">Shop Page Layout</a>
                                                         <ul>
@@ -325,7 +325,7 @@
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li class="dropdown-holder"><a href="landing/blog-left-sidebar.html">Blog</a>
+                                            <li class="dropdown-holder"><a href="landing/blog-left-sidebar.html">Nuestra Ubicación</a>
                                                 <ul class="hb-dropdown">
                                                     <li class="sub-dropdown-holder"><a href="landing/blog-left-sidebar.html">Blog Grid View</a>
                                                         <ul class="hb-dropdown hb-sub-dropdown">
@@ -357,7 +357,7 @@
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li class="megamenu-static-holder"><a href="landing/index.html">Pages</a>
+                                            <li class="megamenu-static-holder"><a href="landing/index.html">Sobre Nosotros</a>
                                                 <ul class="megamenu hb-megamenu">
                                                     <li><a href="landing/blog-left-sidebar.html">Blog Layouts</a>
                                                         <ul>
@@ -398,10 +398,10 @@
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li><a href="landing/about-us.html">About Us</a></li>
-                                            <li><a href="landing/contact.html">Contact</a></li>
+                                            <li><a href="landing/about-us.html">Nuestras Redes</a></li>
+                                            <li><a href="landing/contact.html">Contáctanos</a></li>
                                             <li><a href="landing/shop-left-sidebar.html">Smartwatch</a></li>
-                                            <li><a href="landing/shop-left-sidebar.html">Accessories</a></li>
+                                            <li><a href="landing/shop-left-sidebar.html">Accesorios</a></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -435,7 +435,7 @@
                                     <div class="single-slide align-center-left  animation-style-01 bg-1">
                                         <div class="slider-progress"></div>
                                         <div class="slider-content">
-                                            <h5>Sale Offer <span>-20% Off</span> This Week</h5>
+                                            <h5>En Oferta <span>-20% Off</span> Este Verano</h5>
                                             <h2>Chamcham Galaxy S9 | S9+</h2>
                                             <h3>Starting at <span>$1209.00</span></h3>
                                             <div class="default-btn slide-btn">
@@ -852,15 +852,15 @@
                             <!-- Li's Static Home Image Area End Here -->
                             <!-- Begin Li's Static Home Content Area -->
                             <div class="li-static-home-content">
-                                <p>Sale Offer<span>-20% Off</span>This Week</p>
-                                <h2>Featured Product</h2>
-                                <h2>Meito Accessories 2018</h2>
+                                <p>Descuentos del <span>-20% en oferta</span> Este Verano</p>
+                                <h2>Productos Destacados</h2>
+                                <h2>Todos los Accesorios 2023</h2>
                                 <p class="schedule">
                                     Starting at
                                     <span> $1209.00</span>
                                 </p>
                                 <div class="default-btn">
-                                    <a href="landing/shop-left-sidebar.html" class="links">Shopping Now</a>
+                                    <a href="landing/shop-left-sidebar.html" class="links">Compra Ahora</a>
                                 </div>
                             </div>
                             <!-- Li's Static Home Content Area End Here -->
