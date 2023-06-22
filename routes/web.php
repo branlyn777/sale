@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Livewire\AdmUserController;
 use App\Http\Livewire\LandingCatalogueController;
 use App\Http\Livewire\HomeController;
-use App\Http\Livewire\InvCategorieController;
+use App\Http\Livewire\InvCategoryController;
 use App\Http\Livewire\InvProductController;
 use App\Http\Livewire\LandingHomeController;
-use App\Http\Livewire\SaleController;
+use App\Http\Livewire\InvSaleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,12 +45,13 @@ Route::middleware('auth')->group(function () {
     // Route of Home
     Route::get('inicio', HomeController::class);
 
-    // Inventories
-    Route::get('categoriaproducto', InvCategorieController::class);
-    Route::get('listaproducto', InvProductController::class);
+    // Administration
+    Route::get('usuarios', AdmUserController::class);
 
-    // Sale
-    Route::get('vender', SaleController::class);
+    // Inventories
+    Route::get('categorias', InvCategoryController::class);
+    Route::get('productos', InvProductController::class);
+    Route::get('vender', InvSaleController::class);
 });
 
 require __DIR__.'/auth.php';

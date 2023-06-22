@@ -1,4 +1,5 @@
-<div class="row">
+<div class="pc-content">
+  <div class="row">
     <!-- [ sample-page ] start -->
     <div class="col-xl-4 col-md-6">
       <div class="card bg-secondary-dark dashnum-card text-white overflow-hidden">
@@ -257,7 +258,9 @@
       </div>
     </div>
     <!-- [ sample-page ] end -->
-  </div>
+</div>
+</div>
+
   @section('javascript')
     <!-- Apex Chart -->
     <script src="template/js/plugins/apexcharts.min.js"></script>

@@ -70,7 +70,7 @@
         }
     </style>
 @endsection
-<div>
+<div class="pc-content">
     <div class="row">
         <!-- [ sample-page ] start -->
         <div class="col-sm-12">
@@ -112,7 +112,9 @@
                         <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
                             <label>Almacén</label>
                             <select wire:model="warehouse_id" class="form-select">
-                                <option value="inactive">Depósito</option>
+                                @foreach($list_warehouses as $w)
+                                <option value="{{ $w->id }}">{{ $w->name_warehouse }}</option>
+                                @endforeach
                                 <option value="all">Todos</option>
                             </select>
                         </div>
@@ -189,7 +191,7 @@
         <!-- [ sample-page ] end -->
     
         <!-- [ Modal ] start -->
-            @include('livewire.inventories.products.modal_product')
+            @include('livewire.template.inventory.product.modal_product')
         <!-- [ Modal ] end -->
     </div>
 </div>

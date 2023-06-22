@@ -3,7 +3,7 @@
 <!-- [Head] start -->
 
 <head>
-    <title>Venta</title>
+    <title>Sistema POS</title>
     <!-- [Meta] -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
@@ -36,11 +36,7 @@
     <!-- [ Sidebar Menu ] end -->
     <!-- [ Main Content ] start -->
     <div class="pc-container">
-        <div class="pc-content">
-            <!-- [ Main Content ] start -->
-            @yield('content')
-            <!-- [ Main Content ] end -->
-        </div>
+        @yield('content')
     </div>
     <!-- [ Main Content ] end -->
     @include('layouts.theme.footer')

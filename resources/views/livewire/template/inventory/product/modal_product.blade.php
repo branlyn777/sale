@@ -13,15 +13,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row mb-2">
-                    <div class="col-12 col-sm-6 col-md-8">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-8 mb-2">
                         <label class="form-label">Nombre Producto</label> <span class="text-danger">*</span>
                         <input wire:model.lazy="name_product" type="text" class="form-control">
                         @error('name_product')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-12 col-sm-6 col-md-4">
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
                         <label class="form-label">Precio</label> <span class="text-danger">*</span>
                         <input wire:model.lazy="price" type="text" class="form-control">
                         @error('price')
@@ -29,8 +29,8 @@
                         @enderror
                     </div>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-12 col-sm-12 col-md-12">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 mb-2">
                         <label class="form-label">Categoría</label> <span class="text-danger">*</span>
                         <select wire:model="category_id" class="form-select" >
                             <option value="0">Seleccionar</option>
@@ -43,8 +43,8 @@
                         @enderror
                     </div>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-12 col-sm-12 col-md-12">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 mb-2">
                         <label class="form-label">Descripción</label>
                         <textarea wire:model.lazy="description" class="form-control" placeholder="Destalles del producto" rows="3"></textarea>
                         @error('description')
@@ -52,8 +52,8 @@
                         @enderror
                     </div>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-6 col-sm-6 col-md-6">
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-6 mb-2">
                         <label class="form-label">Código</label>
                         <div class="tooltip-container">
                             <i class="bi bi-info-circle text-info"></i>
@@ -66,7 +66,7 @@
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-6 col-sm-6 col-md-6">
+                    <div class="col-6 col-sm-6 col-md-6 mb-2">
                         <label class="form-label">Garantía</label>
                         <div class="tooltip-container">
                             <i class="bi bi-info-circle text-info"></i>
@@ -80,7 +80,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="row mb-2">
+                <div class="row">
                     <div class="col-12 col-sm-6 col-md-6 mb-2">
                         <label class="form-label">Stock Mínimo</label>
                         <div class="tooltip-container">

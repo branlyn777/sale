@@ -1,22 +1,4 @@
-<div>
-    <!-- [ breadcrumb ] start -->
-    {{-- <div class="page-header">
-        <div class="page-block">
-          <div class="row align-items-center">
-            <div class="col-md-12">
-              <div class="page-header-title">
-                <h5 class="m-b-10">Categoría Producto</h5>
-              </div>
-              <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
-                <li class="breadcrumb-item" aria-current="page">Sample Page</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div> --}}
-      <!-- [ breadcrumb ] end -->
+<div class="pc-content">
     <div class="row">
         <!-- [ sample-page ] start -->
         <div class="col-sm-12">
@@ -29,7 +11,7 @@
                         <div class="col-12 col-sm-6 col-md-4 text-center mb-3">
                             <h5>CATEGORÍA PRODUCTO</h5>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 text-end">
+                        <div class="col-12 col-sm-6 col-md-4 text-end mb-3">
                             <button wire:click.prevent="showModalCategorie(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
                                 Nueva Categor&Iacute;a
@@ -37,7 +19,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-sm-6 col-md-4 text-center mb-3">
                             <label>Buscar</label>
                             <div class="input-group">
                                 <span class="input-group-text">
@@ -46,7 +28,10 @@
                                 <input wire:model="search" type="text" class="form-control" placeholder="Buscar Categoría...">
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-sm-6 col-md-4 text-center">
+
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 text-center">
                             <label>Estado</label>
                             <select wire:model="status" class="form-select">
                                 <option value="active">Activos</option>
@@ -106,7 +91,7 @@
         <!-- [ sample-page ] end -->
     
         <!-- [ Modal ] start -->
-            @include('livewire.inventories.categories.modal_categories')
+            @include('livewire.template.inventory.category.modal_category')
         <!-- [ Modal ] end -->
     </div>
 </div>

@@ -35,7 +35,7 @@
                       </a>
                     <ul class="pc-submenu">
                         <li class="pc-item">
-                          <a class="pc-link" href="#">
+                          <a class="pc-link" href="{{ url('usuarios') }}">
                             Usuarios
                           </a>
                         </li>
@@ -82,12 +82,12 @@
                       </a>
                     <ul class="pc-submenu">
                         <li class="pc-item">
-                          <a class="pc-link" href="{{ url('categoriaproducto') }}">
+                          <a class="pc-link" href="{{ url('categorias') }}">
                             Categorias
                           </a>
                         </li>
                         <li class="pc-item">
-                          <a class="pc-link" href="{{ url('listaproducto') }}">
+                          <a class="pc-link" href="{{ url('productos') }}">
                           Lista Productos
                         </a>
                       </li>

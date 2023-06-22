@@ -4,12 +4,12 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 
-class SaleController extends Component
+class InvSaleController extends Component
 {
     public function render()
     {
         $products = "";
-        return view('livewire.sale.pos.sale', [
+        return view('livewire.template.sale.sale.sale', [
             'products' => $products
         ])
         ->extends('layouts.theme.app')

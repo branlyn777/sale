@@ -32,7 +32,7 @@ class LandingCatalogueController extends Component
 
 
 
-        return view('livewire.landing.catalogue', [
+        return view('livewire.landing.catalogue.catalogue', [
             'products' => $products,
         ])
         ->extends('layouts.landing.app')

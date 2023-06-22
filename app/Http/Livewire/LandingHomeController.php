@@ -9,7 +9,7 @@ class LandingHomeController extends Component
     public function render()
     {
         $data = "";
-        return view('livewire.landing.home', [
+        return view('livewire.landing.home.home', [
             'data' => $data,
         ])
         ->extends('layouts.landing.app')

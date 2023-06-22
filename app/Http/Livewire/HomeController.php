@@ -9,7 +9,7 @@ class HomeController extends Component
     public function render()
     {
         $data = "";
-        return view('livewire.home.home', [
+        return view('livewire.template.home.home', [
             'data' => $data,
         ])
         ->extends('layouts.theme.app')

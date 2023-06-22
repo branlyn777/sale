@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\InvCategory;
 use App\Models\InvInventory;
 use App\Models\InvProduct;
+use App\Models\InvWarehouse;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -28,6 +29,8 @@ class InvProductController extends MethodsController
     public $list_categories;
     // Guarda las sucursales activas
     public $list_branches;
+    // Guarda los almacenes activos
+    public $list_warehouses;
 
     use WithPagination;
     use WithFileUploads;
@@ -44,6 +47,18 @@ class InvProductController extends MethodsController
     }
     public function render()
     {
+        // Listando los almacenes dependiendo de la sucursal seleccionada
+        if ($this->branch_id != "all")
+        {
+            $this->list_warehouses = InvWarehouse::where("status", "active")
+            ->where("inv_branch_id", $this->branch_id)
+            ->get();
+        }
+        else
+        {
+            $this->list_warehouses = InvWarehouse::where("status", "active")->get();
+        }
+
         if (strlen($this->search) == 0)
         {
             $products = InvProduct::select("inv_products.*", DB::raw('0 as quantity'))
@@ -60,12 +75,13 @@ class InvProductController extends MethodsController
             ->paginate(10);
         }
 
+        // Obteniendo la cantidad del producto
         foreach($products as $p)
         {
             $p->quantity = $this->get_quantity($p->id);
         }
 
-        return view('livewire.inventories.products.invproduct', [
+        return view('livewire.template.inventory.product.product', [
             'products' => $products
         ])
         ->extends('layouts.theme.app')

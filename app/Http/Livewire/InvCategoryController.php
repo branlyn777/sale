@@ -8,7 +8,7 @@ use Livewire\WithPagination;
 
 use App\Http\Livewire\MethodsController;
 
-class InvCategorieController extends MethodsController
+class InvCategoryController extends MethodsController
 {
     // Guarda los terminos de busqueda para encontrar una categoria
     public $search;
@@ -62,7 +62,7 @@ class InvCategorieController extends MethodsController
             ->orderBy("created_at","desc")
             ->paginate(10);
         }
-        return view('livewire.inventories.categories.categorie', [
+        return view('livewire.template.inventory.category.category', [
             'categories' => $categories
         ])
         ->extends('layouts.theme.app')
