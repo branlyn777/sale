@@ -21,25 +21,6 @@ class InvCategoryController extends MethodsController
     // Guarda true o false para mostrar categorias activas o inactivas
     public $status;
 
-    // Guardan un mensaje para una notificación de tipo toast
-    public $toast_message;
-
-    // Variable que almacena parametros para una alerta
-    public $alert = [
-        'title' => '',
-        'text' => '',
-        'icon' => '',
-        'confirmButtonText' => '',
-        'cancelButtonText' => '',
-    ];
-
-    // Variable que almacena parametros para un mensaje de tipo toast
-    public $toast = [
-        'text' => '',
-        'timer' => '',
-        'icon' => '',
-    ];
-
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public function mount()
@@ -112,10 +93,12 @@ class InvCategoryController extends MethodsController
         ]);
         // Texto que se verá en el mensaje de tipo toast
         $text = "Categoría '" . $category->name_category . "' creada exitosamente";
-        // Actualizando parámetros del mensaje toast
-        $this->toast = $this->update_toast($text, "3000", "success");
-        // Muestra el mensaje de tipo toast
-        $this->emit("toast");
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
         // Cierra la ventana modal
         $this->emit("hide-modal-categorie");
     }
@@ -131,10 +114,12 @@ class InvCategoryController extends MethodsController
         $category->save();
         // Texto que se verá en el mensaje de tipo toast
         $text = "Categoriá '" . $category->name_category . "' actualizada exitosamente";
-        // Actualiza parámetros del mensaje toast
-        $this->toast = $this->update_toast($text, "3000", "success");
-        // Muestra el mensaje de tipo toast
-        $this->emit("toast");
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
         // Cierra la ventana modal
         $this->emit("hide-modal-categorie");
     }
@@ -157,15 +142,19 @@ class InvCategoryController extends MethodsController
             $alert_title = "¿Eliminar Categoría?";
             $alert_text = "La categoría '" . $category->name_category . "' no es usado por ningún producto por lo cual puede ser eliminado.";
             $alert_confirmButtonText = "Eliminar";
-            $alert_icon = "info";
+            $alert_icon = "question";
             $this->delete_cancel = true;
         }
         // Actualizando la variable category_id
         $this->category_id = $category->id;
-        // Actualizando parámetros de la alerta
-        // $this->update_alert($alert_title, $alert_text,$alert_icon, $alert_confirmButtonText, "Cancelar");
-        $this->alert = $this->update_alert($alert_title, $alert_text,$alert_icon, $alert_confirmButtonText, "Cancelar");
-        $this->emit("alert-category");
+        // Emite un mensaje de tipo alerta
+        $this->emit("alert", [
+            'title' => $alert_title,
+            'text' => $alert_text,
+            'icon' => $alert_icon,
+            'confirmButtonText' => $alert_confirmButtonText,
+            'cancelButtonText' => "Cancelar"
+        ]);
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
@@ -189,9 +178,11 @@ class InvCategoryController extends MethodsController
             $category->save();
             $text = "¡Categoria '" . $name_category . "' inactivada exitósamente!";
         }
-        // Actualiza parámetros del mensaje toast
-        $this->toast = $this->update_toast($text, "3000", "success");
-        // Muestra el mensaje de tipo toast
-        $this->emit("toast");
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
     }
 }

@@ -15,20 +15,23 @@ class InvInventorySeeder extends Seeder
     {
         InvInventory::create([
             'quantity' => 5,
-            'unit_cost' => 1200,
+            'cost' => 1000,
+            'price' => 1200,
             'inv_warehouse_id' => 1,
             'inv_product_id' => 1,
         ]);
         InvInventory::create([
             'quantity' => 5,
-            'unit_cost' => 1100,
+            'cost' => 1100,
+            'price' => 700,
             'inv_warehouse_id' => 1,
             'inv_product_id' => 1,
         ]);
 
         InvInventory::create([
             'quantity' => 7,
-            'unit_cost' => 900,
+            'cost' => 900,
+            'price' => 1000,
             'inv_warehouse_id' => 1,
             'inv_product_id' => 2,
         ]);

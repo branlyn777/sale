@@ -111,16 +111,16 @@
             });
 
             // Muestra una alerta
-            window.livewire.on('alert-category', msg => {
+            window.livewire.on('alert', msg => {
                 Swal.fire({
-                    title: @this.alert.title,
-                    text: @this.alert.text,
-                    icon: @this.alert.icon,
+                    title: msg.title,
+                    text: msg.text,
+                    icon: msg.icon,
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: @this.alert.confirmButtonText,
-                    cancelButtonText: @this.alert.cancelButtonText,
+                    confirmButtonText: msg.confirmButtonText,
+                    cancelButtonText: msg.cancelButtonText,
                     }).then((result) => {
                     if (result.isConfirmed)
                     {
@@ -133,12 +133,12 @@
             window.livewire.on('toast', msg => {
                 Swal.fire({
                     toast: true,
-                    text: @this.toast.text,
+                    text: msg.text,
                     showConfirmButton: false,
                     position: 'top-right',
-                    timer: @this.toast.timer,
+                    timer: msg.timer,
                     timerProgressBar: true,
-                    icon: @this.toast.icon
+                    icon: msg.icon
                 })
             });
 
