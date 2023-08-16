@@ -40,7 +40,7 @@ class InvProductController extends MethodsController
         $this->product_id = 0;
         $this->status = "active";
         $this->category_id = 0;
-        $this->list_categories = InvCategory::where("status","active")->get();
+        $this->list_categories = InvCategory::where("status","active")->orderBy("name_category")->get();
         $this->branch_id = $this->get_branch_id(Auth()->user()->id);
         $this->warehouse_id = "all";
         $this->list_branches = $this->get_branches();
@@ -53,10 +53,30 @@ class InvProductController extends MethodsController
             $this->list_warehouses = InvWarehouse::where("status", "active")
             ->where("inv_branch_id", $this->branch_id)
             ->get();
+
+            // Verifica que el id seleccionado del almacen exista en la lista de almacenes
+            $check_warehouse = false;
+            // Buscando que el id alamcen seleccionado exista en la lista de almacenes
+            if ($this->warehouse_id != "all")
+            {
+                foreach ($this->list_warehouses as $w)
+                {
+                    if ($w->id == $this->warehouse_id)
+                    {
+                        $check_warehouse = true;
+                    }
+                }
+                // Si el id almacen no existe en la lista de almacenes se pondrá la selección Todos
+                if (!$check_warehouse)
+                {
+                    $this->warehouse_id = "all";
+                }
+            }
         }
         else
         {
-            $this->list_warehouses = InvWarehouse::where("status", "active")->get();
+            $this->list_warehouses = InvWarehouse::where("status", "active")
+            ->get();
         }
 
         if (strlen($this->search) == 0)
@@ -94,12 +114,33 @@ class InvProductController extends MethodsController
         {
             $this->product_id = 0;
             $this->name_product = "";
+            $this->description = "";
+            $this->price = "";
+            $this->barcode = "";
+            $this->guarantee = null;
+            $this->minimum_stock = null;
+            $this->category_id = 0;
         }
         else
         {
             $product = InvProduct::find($id);
             $this->name_product = $product->name_product;
+            $this->description = $product->description;
             $this->price = $product->price;
+            $this->barcode = $product->barcode;
+            $this->guarantee = $product->guarantee;
+            $this->minimum_stock = $product->minimum_stock;
+            // Verificando que la categoría del producto no esté inactivada
+            $category = InvCategory::find($product->inv_categorie_id);
+            // Si la categoría esta inactivada se añade a la lista de categorias
+            if ($category->status == "inactive")
+            {
+                $this->list_categories->push($category);
+            }
+            else
+            {
+                $this->list_categories = InvCategory::where("status","active")->orderBy("name_category")->get();
+            }
             $this->category_id = $product->inv_categorie_id;
             $this->product_id = $id;
         }
@@ -114,7 +155,7 @@ class InvProductController extends MethodsController
         $rules = [
             'name_product' => 'required|min:2|max:255|unique:inv_products,name_product',
             'category_id' => 'not_in:0',
-            'price' => 'required',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
         ];
         $messages = [
             'name_product.required' => 'El nombre del producto es requerido',
@@ -152,6 +193,63 @@ class InvProductController extends MethodsController
             $product->save();
         }
         $this->resetUi();
+        $this->emit("hide-modal-product");
+    }
+    // Actualiza un producto
+    public function update_product()
+    {
+        $rules = [
+            'name_product' => 'required|min:2|max:255',
+            'category_id' => 'not_in:0',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+        ];
+        $messages = [
+            'name_product.required' => 'El nombre del producto es requerido',
+            'name_product.min' => 'El nombre del producto debe tener al menos 2 caracteres',
+            'name_product.max' => 'El nombre del producto no debe pasar los 255 caracteres',
+            'category_id.not_in' => 'Seleccione categoría',
+            'price.required' => 'Precio requerido'
+        ];
+        $this->validate($rules, $messages);
+
+        // Elimina espacios en blanco extras y reemplaza multiples espacios por un solo espacio
+        $this->name_product = trim(preg_replace('/\s+/', ' ', $this->name_product));
+        // Busca el producto y lo guarda en una variable
+        $product = InvProduct::find($this->product_id);
+        // Actualiza el producto
+        $product->update([
+            'name_product' =>  $this->name_product,
+            'description' =>  $this->description,
+            'price' =>  $this->price,
+            'image' =>  $this->image,
+            'barcode' =>  $this->barcode,
+            'guarantee' =>  $this->guarantee,
+            'minimum_stock' =>  $this->minimum_stock,
+            'inv_categorie_id' =>  $this->category_id
+        ]);
+        $product->save();
+         // Verificando si se selecciono una imagen
+         if($this->image)
+         {
+             $customFileName = uniqid() . '_.' . $this->image->extension();
+             $this->image->storeAs('public/invProducts', $customFileName);
+             $product->image  = $customFileName;
+             $product->save();
+         }
+         else
+         {
+             $product->image  = "no-image.png";
+             $product->save();
+         }
+        // Texto que se verá en el mensaje de tipo toast
+        $text = "Categoriá '" . $product->name_category . "' actualizada exitosamente";
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
+        // Cierra la ventana modal
         $this->emit("hide-modal-product");
     }
     // Obtiene la cantidad disponoble de un determinado producto (Dependiendo de la sucursal y el almacen)

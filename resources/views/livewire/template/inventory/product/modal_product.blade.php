@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 mb-2">
                         <label class="form-label">Precio</label> <span class="text-danger">*</span>
-                        <input wire:model.lazy="price" type="text" class="form-control">
+                        <input wire:model.lazy="price" type="number" class="form-control">
                         @error('price')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -96,6 +96,12 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-6">
                         <label class="form-label">Imagen</label>
+                        <div class="tooltip-container">
+                            <i class="bi bi-info-circle text-info"></i>
+                            <span class="tooltip">
+                                Se recomienda seleccinar una imagen cuadrada (1x1)
+                            </span>
+                        </div>
                         <input wire:model.lazy="image" type="file" class="form-control" accept="image/x-png, image/gif, image/jpeg">
                         @error('image')
                             <div class="form-text text-danger">{{ $message }}</div>

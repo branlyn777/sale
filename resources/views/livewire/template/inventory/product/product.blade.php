@@ -118,7 +118,7 @@
                                 <option value="all">Todos</option>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-3 text-center">
+                        <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
                             <label>Estado</label>
                             <select wire:model="status" class="form-select">
                                 <option value="active">Activos</option>
