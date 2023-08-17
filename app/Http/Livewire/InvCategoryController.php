@@ -145,15 +145,14 @@ class InvCategoryController extends MethodsController
             $alert_icon = "question";
             $this->delete_cancel = true;
         }
-        // Actualizando la variable category_id
-        $this->category_id = $category->id;
         // Emite un mensaje de tipo alerta
         $this->emit("alert", [
             'title' => $alert_title,
             'text' => $alert_text,
             'icon' => $alert_icon,
             'confirmButtonText' => $alert_confirmButtonText,
-            'cancelButtonText' => "Cancelar"
+            'cancelButtonText' => "Cancelar",
+            'id' => $category->id
         ]);
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
@@ -161,9 +160,9 @@ class InvCategoryController extends MethodsController
         'deleteCategory' => 'delete_category'
     ];
     // Elimina o inactiva una categoría
-    public function delete_category()
+    public function delete_category($category_id)
     {
-        $category = InvCategory::find($this->category_id);
+        $category = InvCategory::find($category_id);
         $name_category = $category->name_category;
         if ($this->delete_cancel)
         {

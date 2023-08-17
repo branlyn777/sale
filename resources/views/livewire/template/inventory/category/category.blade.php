@@ -124,7 +124,7 @@
                     }).then((result) => {
                     if (result.isConfirmed)
                     {
-                        window.livewire.emit('deleteCategory')
+                        window.livewire.emit('deleteCategory', msg.id)
                         Swal.close()
                     }
                 })

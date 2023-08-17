@@ -31,6 +31,8 @@ class InvProductController extends MethodsController
     public $list_branches;
     // Guarda los almacenes activos
     public $list_warehouses;
+    // Guarda true o false para eliminar o inactivar un producto
+    public $delete_cancel;
 
     use WithPagination;
     use WithFileUploads;
@@ -130,9 +132,9 @@ class InvProductController extends MethodsController
             $this->barcode = $product->barcode;
             $this->guarantee = $product->guarantee;
             $this->minimum_stock = $product->minimum_stock;
-            // Verificando que la categoría del producto no esté inactivada
+            // Verificando que el producto del producto no esté inactivada
             $category = InvCategory::find($product->inv_categorie_id);
-            // Si la categoría esta inactivada se añade a la lista de categorias
+            // Si el producto esta inactivada se añade a la lista de categorias
             if ($category->status == "inactive")
             {
                 $this->list_categories->push($category);
@@ -252,6 +254,40 @@ class InvProductController extends MethodsController
         // Cierra la ventana modal
         $this->emit("hide-modal-product");
     }
+    // Verifica si un producto tiene registros con su id y muestra una alerta para inactivar o eliminar el producto
+    public function check_product(InvProduct $product)
+    {
+        // Buscando productos que tengan el id del producto en los inventarios
+        $productCount = InvInventory::where('inv_product_id', $product->id)->exists();
+        // Buscando que el producto no tenga ventas a su nombre
+        // ------------------------------------
+        // Cambia los parámetros de la alerta dependiendo si la variable productCount tiene registros
+        if ($productCount)
+        {
+            $alert_title = "¿Inactivar Producto?";
+            $alert_text = "El producto '" . $product->name_product . "' tiene registros que usan su nombre, por lo cual no puede ser eliminada, pero puede ser inactivada para que ya no pueda ser usado.";
+            $alert_confirmButtonText = "Inactivar";
+            $alert_icon = "warning";
+            $this->delete_cancel = false;
+        }
+        else
+        {
+            $alert_title = "¿Eliminar Producto?";
+            $alert_text = "El producto '" . $product->name_product . "' no es usado en ningun registro por lo cual puede ser eliminado.";
+            $alert_confirmButtonText = "Eliminar";
+            $alert_icon = "question";
+            $this->delete_cancel = true;
+        }
+        // Emite un mensaje de tipo alerta
+        $this->emit("alert", [
+            'title' => $alert_title,
+            'text' => $alert_text,
+            'icon' => $alert_icon,
+            'confirmButtonText' => $alert_confirmButtonText,
+            'cancelButtonText' => "Cancelar",
+            'id' => $product->id
+        ]);
+    }
     // Obtiene la cantidad disponoble de un determinado producto (Dependiendo de la sucursal y el almacen)
     public function get_quantity($product_id)
     {
@@ -307,5 +343,34 @@ class InvProductController extends MethodsController
     public function resetUi()
     {
         $this->image = null;
+    }
+    // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
+    protected $listeners = [
+        'deleteProduct' => 'delete_product'
+    ];
+    // Elimina o inactiva una categoría
+    public function delete_product($product_id)
+    {
+        $product = InvProduct::find($product_id);
+        $name_product = $product->name_product;
+        if ($this->delete_cancel)
+        {
+            $product->delete();
+            $text = "¡Producto '" . $name_product . "' eliminado exitósamente!";
+        }
+        else
+        {
+            $product->update([
+                'status' => "inactive"
+            ]);
+            $product->save();
+            $text = "¡Producto '" . $name_product . "' inactivado exitósamente!";
+        }
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
     }
 }

@@ -175,7 +175,7 @@
                                             </button>
                                         </td>
                                         <td class="text-center">
-                                            <button wire:click.prevent="check_category({{ $p->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                            <button wire:click.prevent="check_product({{ $p->id }})" type="button" class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                         </td>
@@ -222,36 +222,37 @@
         });
 
         // Muestra una alerta
-        window.livewire.on('alert-category', msg => {
-            Swal.fire({
-                title: @this.parameters_alert.title,
-                text: @this.parameters_alert.message,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: @this.parameters_alert.button,
-                cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                if (result.isConfirmed)
-                {
-                    window.livewire.emit('deleteCategory')
-                    Swal.close()
-                }
-            })
-        });
+        window.livewire.on('alert', msg => {
+                Swal.fire({
+                    title: msg.title,
+                    text: msg.text,
+                    icon: msg.icon,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: msg.confirmButtonText,
+                    cancelButtonText: msg.cancelButtonText,
+                    }).then((result) => {
+                    if (result.isConfirmed)
+                    {
+                        window.livewire.emit('deleteProduct', msg.id)
+                        Swal.close()
+                    }
+                })
+            });
+
         // Muestra un mensaje de tipo toast arriba a la derecha
-        window.livewire.on('message-toast', msg => {
-            Swal.fire({
-                toast: true,
-                text: @this.parameters_message_toast.text,
-                showConfirmButton: false,
-                position: 'top-right',
-                timer: @this.parameters_message_toast.timer,
-                timerProgressBar: true,
-                icon: @this.parameters_message_toast.icon
-            })
-        });
+        window.livewire.on('toast', msg => {
+                Swal.fire({
+                    toast: true,
+                    text: msg.text,
+                    showConfirmButton: false,
+                    position: 'top-right',
+                    timer: msg.timer,
+                    timerProgressBar: true,
+                    icon: msg.icon
+                })
+            });
 
     });
 </script>

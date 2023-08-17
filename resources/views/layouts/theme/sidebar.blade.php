@@ -81,14 +81,19 @@
                         </span>
                       </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item">
-                          <a class="pc-link" href="{{ url('categorias') }}">
-                            Categorias
-                          </a>
-                        </li>
-                        <li class="pc-item">
+                      <li class="pc-item">
                           <a class="pc-link" href="{{ url('productos') }}">
                           Lista Productos
+                        </a>
+                      </li>
+                      <li class="pc-item">
+                        <a class="pc-link" href="{{ url('categorias') }}">
+                          Categorias
+                        </a>
+                      </li>
+                      <li class="pc-item">
+                        <a class="pc-link" href="{{ url('compras') }}">
+                          Compras
                         </a>
                       </li>
                     </ul>
