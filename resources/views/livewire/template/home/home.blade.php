@@ -141,14 +141,14 @@
         <div class="card-body">
           <div class="row mb-3 align-items-center">
             <div class="col">
-              <small>Total Growth</small>
-              <h3>$2,324.00</h3>
+              <small>Crecimiento total</small>
+              <h3>Bs2,324.00</h3>
             </div>
             <div class="col-auto">
               <select class="form-select p-r-35">
-                <option>Today</option>
-                <option selected>This Month</option>
-                <option>This Year</option>
+                <option>Hoy</option>
+                <option selected>Este mes</option>
+                <option>Este año</option>
               </select>
             </div>
           </div>
@@ -161,7 +161,7 @@
         <div class="card-body">
           <div class="row mb-3 align-items-center">
             <div class="col">
-              <h4>Popular Stocks</h4>
+              <h4>Productos Populares</h4>
             </div>
             <div class="col-auto"> </div>
           </div>

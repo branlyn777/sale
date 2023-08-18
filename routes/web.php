@@ -5,6 +5,7 @@ use App\Http\Livewire\AdmSupplierController;
 use App\Http\Livewire\AdmUserController;
 use App\Http\Livewire\LandingCatalogueController;
 use App\Http\Livewire\HomeController;
+use App\Http\Livewire\InvBuyController;
 use App\Http\Livewire\InvCategoryController;
 use App\Http\Livewire\InvProductController;
 use App\Http\Livewire\LandingHomeController;
@@ -53,6 +54,7 @@ Route::middleware('auth')->group(function () {
     // Inventories
     Route::get('categorias', InvCategoryController::class);
     Route::get('productos', InvProductController::class);
+    Route::get('comprar', InvBuyController::class);
     Route::get('vender', InvSaleController::class);
 });
 

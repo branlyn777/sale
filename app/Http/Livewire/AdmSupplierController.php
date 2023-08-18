@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\AdmSupplier;
+use App\Models\invBuy;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -83,6 +84,9 @@ class AdmSupplierController extends Component
     // Crea una nuevo proveedor
     public function create_supplier()
     {
+        // Elimina espacios en blanco extras y reemplaza multiples espacios en blanco por un solo espacio
+        $this->name_supplier = trim(preg_replace('/\s+/', ' ', $this->name_supplier));
+        $this->mail = trim(preg_replace('/\s+/', ' ', $this->mail));
         $rules = [
             'name_supplier' => 'required|min:2|max:255|unique:adm_suppliers,name_supplier',
             'address' => 'max:255',
@@ -104,12 +108,14 @@ class AdmSupplierController extends Component
             'name_supplier.max' => 'El nombre del proveedor no debe pasar los 500 caracteres',
         ];
         $this->validate($rules, $messages);
-        // Elimina espacios en blanco extras y reemplaza multiples espacios en blanco por un solo espacio
-        $this->name_supplier = trim(preg_replace('/\s+/', ' ', $this->name_supplier));
-        $this->mail = trim(preg_replace('/\s+/', ' ', $this->mail));
-        // Crea la categoría y guarda el objeto creado en una variable
+        // Crea al proveedor y guarda el objeto creado en una variable
         $supplier = AdmSupplier::create([
-            'name_supplier' =>  $this->name_supplier
+            'name_supplier' =>  $this->name_supplier,
+            'address' =>  $this->address,
+            'phone_number_a' =>  $this->phone_number_a,
+            'phone_number_b' =>  $this->phone_number_b,
+            'mail' =>  $this->mail,
+            'other_details' =>  $this->other_details
         ]);
         // Texto que se verá en el mensaje de tipo toast
         $text = "Proveedor '" . $supplier->name_supplier . "' creado exitosamente";
@@ -125,21 +131,21 @@ class AdmSupplierController extends Component
     // Verifica si un proveedor tiene registros con su id y muestra una alerta para inactivar o eliminar el proveedor
     public function check_supplier(AdmSupplier $supplier)
     {
-        // Buscando productos que tengan el id del proveedor
-        $productCount = InvProduct::where('inv_categorie_id', $supplier->id)->exists();
-        // Cambia los parámetros de la alerta dependiendo si la variable productCount tiene registros
-        if ($productCount)
+        // Buscando compras que tengan el id del proveedor
+        $supplierCount = invBuy::where('adm_supplier_id', $supplier->id)->exists();
+        // Cambia los parámetros de la alerta dependiendo si la variable supplierCount tiene registros
+        if ($supplierCount)
         {
-            $alert_title = "¿Inactivar Categoría?";
-            $alert_text = "La categoría '" . $supplier->name_supplier . "' tiene productos que usan su nombre, por lo cual no puede ser eliminada, pero puede ser inactivada para que ya no pueda ser usada.";
+            $alert_title = "¿Inactivar Proveedor?";
+            $alert_text = "El proveedor '" . $supplier->name_supplier . "' tiene compras a su nombre, por lo cual no puede ser eliminado, pero puede ser inactivado para que ya no pueda ser usado.";
             $alert_confirmButtonText = "Inactivar";
             $alert_icon = "warning";
             $this->delete_cancel = false;
         }
         else
         {
-            $alert_title = "¿Eliminar Categoría?";
-            $alert_text = "La categoría '" . $supplier->name_supplier . "' no es usado por ningún producto por lo cual puede ser eliminado.";
+            $alert_title = "¿Eliminar Proveedor?";
+            $alert_text = "El proveedor '" . $supplier->name_supplier . "' no es usado en ninguna compra por lo cual puede ser eliminado.";
             $alert_confirmButtonText = "Eliminar";
             $alert_icon = "question";
             $this->delete_cancel = true;
@@ -152,6 +158,35 @@ class AdmSupplierController extends Component
             'confirmButtonText' => $alert_confirmButtonText,
             'cancelButtonText' => "Cancelar",
             'id' => $supplier->id
+        ]);
+    }
+     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
+     protected $listeners = [
+        'deleteSupplier' => 'delete_supplier'
+    ];
+    // Elimina o inactiva un proveedor
+    public function delete_supplier($supplier_id)
+    {
+        $supplier = AdmSupplier::find($supplier_id);
+        $name_supplier = $supplier->name_supplier;
+        if ($this->delete_cancel)
+        {
+            $supplier->delete();
+            $text = "¡Proveedor '" . $name_supplier . "' eliminado exitósamente!";
+        }
+        else
+        {
+            $supplier->update([
+                'status' => "inactive"
+            ]);
+            $supplier->save();
+            $text = "¡Proveedor '" . $name_supplier . "' inactivado exitósamente!";
+        }
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
         ]);
     }
 }

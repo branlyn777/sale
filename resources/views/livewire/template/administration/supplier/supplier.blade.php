@@ -136,7 +136,7 @@
                     }).then((result) => {
                     if (result.isConfirmed)
                     {
-                        window.livewire.emit('deleteCategory', msg.id)
+                        window.livewire.emit('deleteSupplier', msg.id)
                         Swal.close()
                     }
                 })

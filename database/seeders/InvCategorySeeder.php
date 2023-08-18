@@ -65,7 +65,7 @@ class InvCategorySeeder extends Seeder
 
         // 11
         InvCategory::create([
-            'name_category' => 'Accesorios para Dispositivos Electrónicos'
+            'name_category' => 'Accesorios para Dispositivos Móviles'
         ]);
         
         // 12

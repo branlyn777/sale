@@ -223,7 +223,6 @@ class InvProductController extends MethodsController
             'name_product' =>  $this->name_product,
             'description' =>  $this->description,
             'price' =>  $this->price,
-            'image' =>  $this->image,
             'barcode' =>  $this->barcode,
             'guarantee' =>  $this->guarantee,
             'minimum_stock' =>  $this->minimum_stock,
@@ -233,15 +232,10 @@ class InvProductController extends MethodsController
          // Verificando si se selecciono una imagen
          if($this->image)
          {
-             $customFileName = uniqid() . '_.' . $this->image->extension();
-             $this->image->storeAs('public/invProducts', $customFileName);
-             $product->image  = $customFileName;
-             $product->save();
-         }
-         else
-         {
-             $product->image  = "no-image.png";
-             $product->save();
+            $customFileName = uniqid() . '_.' . $this->image->extension();
+            $this->image->storeAs('public/invProducts', $customFileName);
+            $product->image  = $customFileName;
+            $product->save();
          }
         // Texto que se verá en el mensaje de tipo toast
         $text = "Categoriá '" . $product->name_category . "' actualizada exitosamente";
@@ -357,6 +351,16 @@ class InvProductController extends MethodsController
         {
             $product->delete();
             $text = "¡Producto '" . $name_product . "' eliminado exitósamente!";
+
+            // Eliminando la imagen del producto (si lo tuviera)
+            $imageTemp = $product->image;
+            if ($imageTemp != null)
+            {
+                if (file_exists('storage/invProducts/' . $imageTemp))
+                {
+                    unlink('storage/invProducts/' . $imageTemp);
+                }
+            }
         }
         else
         {

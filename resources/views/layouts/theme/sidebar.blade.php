@@ -92,8 +92,8 @@
                         </a>
                       </li>
                       <li class="pc-item">
-                        <a class="pc-link" href="{{ url('compras') }}">
-                          Compras
+                        <a class="pc-link" href="{{ url('comprar') }}">
+                          Comprar
                         </a>
                       </li>
                     </ul>
