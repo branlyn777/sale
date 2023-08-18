@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Livewire\AdmSupplierController;
 use App\Http\Livewire\AdmUserController;
 use App\Http\Livewire\LandingCatalogueController;
 use App\Http\Livewire\HomeController;
@@ -47,6 +48,7 @@ Route::middleware('auth')->group(function () {
 
     // Administration
     Route::get('usuarios', AdmUserController::class);
+    Route::get('proveedores', AdmSupplierController::class);
 
     // Inventories
     Route::get('categorias', InvCategoryController::class);

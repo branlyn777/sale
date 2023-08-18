@@ -46,7 +46,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 mb-2">
                         <label class="form-label">Descripción</label>
-                        <textarea wire:model.lazy="description" class="form-control" placeholder="Destalles del producto" rows="3"></textarea>
+                        <textarea wire:model.lazy="description" class="form-control" placeholder="Detalles del producto" rows="3"></textarea>
                         @error('description')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror

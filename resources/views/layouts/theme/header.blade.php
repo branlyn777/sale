@@ -52,18 +52,18 @@
         </a>
         <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
           <div class="dropdown-header">
-            <a href="#!" class="link-primary float-end text-decoration-underline">Mark as all read</a>
-            <h5>All Notification <span class="badge bg-warning rounded-pill ms-1">01</span></h5>
+            <a href="#!" class="link-primary float-end text-decoration-underline">Todo como leidos</a>
+            <h5>Todas las notificaciones <span class="badge bg-warning rounded-pill ms-1">01</span></h5>
           </div>
           <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
             style="max-height: calc(100vh - 215px)">
             <div class="list-group list-group-flush w-100">
               <div class="list-group-item">
                 <select class="form-select">
-                  <option value="all">All Notification</option>
-                  <option value="new">New</option>
-                  <option value="unread">Unread</option>
-                  <option value="other">Other</option>
+                  <option value="all">Todas las notificaciones</option>
+                  <option value="new">Nuevos</option>
+                  <option value="unread">No leidos</option>
+                  <option value="other">Otros</option>
                 </select>
               </div>
               <a class="list-group-item list-group-item-action">
@@ -139,7 +139,7 @@
           </div>
           <div class="dropdown-divider"></div>
           <div class="text-center py-2">
-            <a href="#!" class="link-primary">Mark as all read</a>
+            <a href="#!" class="link-primary">Marcar todo como leido</a>
           </div>
         </div>
       </li>

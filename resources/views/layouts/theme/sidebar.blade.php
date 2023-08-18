@@ -65,8 +65,8 @@
                           </a>
                         </li>
                         <li class="pc-item">
-                          <a class="pc-link" href="">
-                            Asignar Permisos
+                          <a class="pc-link" href="{{ url('proveedores') }}">
+                            Proveedores
                           </a>
                         </li>
                     </ul>
@@ -76,14 +76,14 @@
                       <span class="pc-micon">
                         <i class="ti ti-archive"></i>
                       </span>
-                        <span class="pc-mtext">Productos</span>
+                        <span class="pc-mtext">Inventarios</span>
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i>
                         </span>
                       </a>
                     <ul class="pc-submenu">
                       <li class="pc-item">
                           <a class="pc-link" href="{{ url('productos') }}">
-                          Lista Productos
+                          Productos
                         </a>
                       </li>
                       <li class="pc-item">
