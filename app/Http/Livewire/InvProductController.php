@@ -157,7 +157,9 @@ class InvProductController extends MethodsController
         $rules = [
             'name_product' => 'required|min:2|max:255|unique:inv_products,name_product',
             'category_id' => 'not_in:0',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|max:10',
+            'barcode' => 'nullable|max:50',
+            'guarantee' => 'nullable|numeric|max:1000'
         ];
         $messages = [
             'name_product.required' => 'El nombre del producto es requerido',
@@ -165,7 +167,11 @@ class InvProductController extends MethodsController
             'name_product.min' => 'El nombre del producto debe tener al menos 2 caracteres',
             'name_product.max' => 'El nombre del producto no debe pasar los 255 caracteres',
             'category_id.not_in' => 'Seleccione categoría',
-            'price.required' => 'Precio requerido'
+            'price.required' => 'Precio requerido',
+            'price.max' => 'Máximo 10 caracteres',
+            'barcode.max' => 'Máximo 50 caracteres',
+            'guarantee.numeric' => 'Debe ser un numero',
+            'guarantee.max' => 'Máximo 1000 caracteres',
         ];
         $this->validate($rules, $messages);
 
@@ -203,14 +209,20 @@ class InvProductController extends MethodsController
         $rules = [
             'name_product' => 'required|min:2|max:255',
             'category_id' => 'not_in:0',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|max:10',
+            'barcode' => 'nullable|max:50',
+            'guarantee' => 'nullable|numeric|max:1000'
         ];
         $messages = [
             'name_product.required' => 'El nombre del producto es requerido',
             'name_product.min' => 'El nombre del producto debe tener al menos 2 caracteres',
             'name_product.max' => 'El nombre del producto no debe pasar los 255 caracteres',
             'category_id.not_in' => 'Seleccione categoría',
-            'price.required' => 'Precio requerido'
+            'price.required' => 'Precio requerido',
+            'price.max' => 'Máximo 10 caracteres',
+            'barcode.max' => 'Máximo 50 caracteres',
+            'guarantee.numeric' => 'Debe ser un numero',
+            'guarantee.max' => 'Máximo 1000 caracteres',
         ];
         $this->validate($rules, $messages);
 

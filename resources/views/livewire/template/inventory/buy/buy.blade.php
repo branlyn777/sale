@@ -64,7 +64,7 @@
                                         <td>
                                         {{ $p->name_product }}
                                             <p class="text-muted text-sm">
-                                                <button class="btn btn-primary btn-sm">
+                                                <button wire:click.prevent="cart_add()" class="btn btn-primary btn-sm">
                                                     +
                                                 </button>
                                                 {{ number_format($p->price, 2, ',', '.') }} Bs | Cantidad: 8
@@ -117,3 +117,23 @@
         </div>
     </div>
 </div>
+@section('javascript')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Muestra un mensaje de tipo toast arriba a la derecha
+            window.livewire.on('toast', msg => {
+                Swal.fire({
+                    toast: true,
+                    text: msg.text,
+                    showConfirmButton: false,
+                    position: 'top-right',
+                    timer: msg.timer,
+                    timerProgressBar: true,
+                    icon: msg.icon
+                })
+            });
+
+        });
+    </script>
+@endsection
