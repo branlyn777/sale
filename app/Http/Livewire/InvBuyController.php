@@ -29,6 +29,9 @@ class InvBuyController extends MethodsController
     // Guarda el id del proveedor seleccionado
     public $supplier_id;
 
+    // Datos para crear o actualizar un proveedor
+    public $name_supplier, $address, $phone_number_a, $phone_number_b, $mail, $other_details;
+
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public function mount()
@@ -37,16 +40,17 @@ class InvBuyController extends MethodsController
         $this->shoppingCart = collect([]);
         // Listando todas las sucursales
         $this->list_branches = $this->get_branches();
-        $this->branch_id = $this->get_branch_id(Auth()->user()->id);
-        $this->warehouse_id = "all";
-        $this->list_suppliers = AdmSupplier::where("status", "active")->get();
-        $this->supplier_id = 0;
+        $this->branch_id = 0;
+        $this->warehouse_id = 0;
+        // Estableciendo el id del proveedor No definido
+        $this->supplier_id = 1;
     }
 
     public function render()
     {
+        $this->list_suppliers = AdmSupplier::where("status", "active")->get();
         // Listando los almacenes dependiendo de la sucursal seleccionada
-        if ($this->branch_id != "all")
+        if ($this->branch_id != 0)
         {
             $this->list_warehouses = InvWarehouse::where("status", "active")
             ->where("inv_branch_id", $this->branch_id)
@@ -55,7 +59,7 @@ class InvBuyController extends MethodsController
             // Verifica que el id seleccionado del almacen exista en la lista de almacenes
             $check_warehouse = false;
             // Buscando que el id alamcen seleccionado exista en la lista de almacenes
-            if ($this->warehouse_id != "all")
+            if ($this->warehouse_id != 0)
             {
                 foreach ($this->list_warehouses as $w)
                 {
@@ -67,7 +71,7 @@ class InvBuyController extends MethodsController
                 // Si el id almacen no existe en la lista de almacenes se pondrá la selección Todos
                 if (!$check_warehouse)
                 {
-                    $this->warehouse_id = "all";
+                    $this->warehouse_id = 0;
                 }
             }
         }
@@ -76,19 +80,27 @@ class InvBuyController extends MethodsController
             $this->list_warehouses = InvWarehouse::where("status", "active")
             ->get();
         }
+        // Mostrando los productos dependiendo los términos de búsqueda
+        $products = [];
         if (strlen($this->search) > 0)
         {
             $products = InvProduct::where("status", "active")
             ->where('name_product', 'like', '%' . $this->search . '%')
-            ->paginate(5);
+            ->paginate(10);
         }
-        else
+        // Obteniendo el total cantidad y total bs del Shopping Cart
+        $total_items = 0;
+        $total_money = 0;
+        foreach ($this->shoppingCart as $c)
         {
-            $products = InvProduct::where("status", "activo")->paginate(5);
+            $total_items = $total_items + $c['quantity'];
+            $total_money = $total_money + ($c['quantity'] * $c['cost']);
         }
 
         return view('livewire.template.inventory.buy.buy', [
-            'products' => $products
+            'products' => $products,
+            'total_items' => $total_items,
+            'total_money' => $total_money
         ])
         ->extends('layouts.theme.app')
         ->section('content');
@@ -177,5 +189,65 @@ class InvBuyController extends MethodsController
             ]);
         }
            
+    }
+
+
+
+    // Crea una nuevo proveedor
+    public function create_supplier()
+    {
+        // Elimina espacios en blanco extras y reemplaza multiples espacios en blanco por un solo espacio
+        $this->name_supplier = trim(preg_replace('/\s+/', ' ', $this->name_supplier));
+        $this->mail = trim(preg_replace('/\s+/', ' ', $this->mail));
+        $rules = [
+            'name_supplier' => 'required|min:2|max:255|unique:adm_suppliers,name_supplier',
+            'address' => 'max:255',
+            'phone_number_a' => 'max:100',
+            'phone_number_b' => 'max:100',
+            'mail' => 'nullable|email|max:100',
+            'other_details' => 'max:500'
+        ];
+        $messages = [
+            'name_supplier.required' => 'El nombre del proveedor es requerido',
+            'name_supplier.unique' => 'Ya existe el nombre del proveedor',
+            'name_supplier.min' => 'El nombre del proveedor debe tener al menos 2 caracteres',
+            'name_supplier.max' => 'El nombre del proveedor no debe pasar los 255 caracteres',
+            'address.max' => 'El nombre del proveedor no debe pasar los 255 caracteres',
+            'phone_number_a.max' => 'El nombre del proveedor no debe pasar los 100 caracteres',
+            'phone_number_b.max' => 'El nombre del proveedor no debe pasar los 100 caracteres',
+            'mail.email' => 'Inserte un correo válido',
+            'mail.max' => 'El nombre del proveedor no debe pasar los 100 caracteres',
+            'name_supplier.max' => 'El nombre del proveedor no debe pasar los 500 caracteres',
+        ];
+        $this->validate($rules, $messages);
+        // Crea al proveedor y guarda el objeto creado en una variable
+        $supplier = AdmSupplier::create([
+            'name_supplier' =>  $this->name_supplier,
+            'address' =>  $this->address,
+            'phone_number_a' =>  $this->phone_number_a,
+            'phone_number_b' =>  $this->phone_number_b,
+            'mail' =>  $this->mail,
+            'other_details' =>  $this->other_details
+        ]);
+        // Seleccionando el proveedor que se acaba de crear
+        $this->supplier_id = $supplier->id;
+        // Texto que se verá en el mensaje de tipo toast
+        $text = "Proveedor '" . $supplier->name_supplier . "' creado y seleccionado exitosamente";
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
+        // Regresando las variables a su estado original
+        $this->name_supplier = "";
+        $this->address = null;
+        $this->phone_number_a = null;
+        $this->phone_number_b = null;
+        $this->mail = null;
+        $this->other_details = null;
+
+        // Cierra la ventana modal
+        $this->emit("hide-modal-supplier");
     }
 }

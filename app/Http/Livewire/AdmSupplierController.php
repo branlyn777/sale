@@ -32,12 +32,14 @@ class AdmSupplierController extends Component
         if (strlen($this->search) == 0)
         {
             $suppliers = AdmSupplier::where("status",$this->status)
+            ->where("id", "<>", 1)
             ->orderBy("created_at","desc")
             ->paginate(10);
         }
         else
         {
             $suppliers = AdmSupplier::where("status",$this->status)
+            ->where("id", "<>", 1)
             ->where('name_supplier', 'like', '%' . $this->search . '%')
             ->orderBy("created_at","desc")
             ->paginate(10);

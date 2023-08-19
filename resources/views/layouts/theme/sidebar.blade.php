@@ -96,6 +96,11 @@
                           Comprar
                         </a>
                       </li>
+                      <li class="pc-item">
+                        <a class="pc-link" href="">
+                          Depósitos
+                        </a>
+                      </li>
                     </ul>
                 </li>
                 <li class="pc-item pc-caption">
