@@ -103,7 +103,7 @@
                         <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
                             <label>Sucursal</label>
                             <select wire:model="branch_id" class="form-select">
-                                @foreach( $list_branches as $b )
+                                @foreach( $this->list_branches as $b )
                                     <option value="{{ $b->id }}">{{ $b->name_branch }}</option>
                                 @endforeach
                                 <option value="all">Todos</option>
@@ -112,7 +112,7 @@
                         <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
                             <label>Almacén</label>
                             <select wire:model="warehouse_id" class="form-select">
-                                @foreach($list_warehouses as $w)
+                                @foreach($this->list_warehouses as $w)
                                 <option value="{{ $w->id }}">{{ $w->name_warehouse }}</option>
                                 @endforeach
                                 <option value="all">Todos</option>
