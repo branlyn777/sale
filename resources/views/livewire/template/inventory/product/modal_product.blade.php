@@ -110,7 +110,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
                 @if($this->product_id == 0)
                     <button type="button" wire:click.prevent="create_product()" class="btn btn-primary">Crear</button>
                 @else

@@ -235,7 +235,7 @@
                                             <button type="button" class="btn btn-primary btn-sm" wire:click.prevent="cart_add({{ $c['id'] }})">
                                                +
                                             </button>
-                                            <button type="button" class="btn btn-secondary btn-sm">
+                                            <button type="button" class="btn btn-primary btn-sm">
                                                 -
                                             </button>
                                             <button type="button" class="btn btn-danger btn-sm" wire:click.prevent="cart_delete({{ $c['id'] }})">

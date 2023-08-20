@@ -6,7 +6,7 @@
         </a>
         <!-- ======= Menu collapse Icon ===== -->
         <div class="pc-h-item">
-            <a href="#" class="pc-head-link head-link-secondary m-0" id="sidebar-hide">
+            <a href="#" class="pc-head-link head-link-primary m-0" id="sidebar-hide">
                 <i class="ti ti-menu-2"></i>
             </a>
         </div>
@@ -15,12 +15,12 @@
         <div class="me-auto pc-mob-drp">
             <ul class="list-unstyled">
                 <li class="pc-h-item header-mobile-collapse">
-                    <a href="#" class="pc-head-link head-link-secondary ms-0" id="mobile-collapse">
+                    <a href="#" class="pc-head-link head-link-primary ms-0" id="mobile-collapse">
                         <i class="ti ti-menu-2"></i>
                     </a>
                 </li>
                 <li class="dropdown pc-h-item d-inline-flex d-md-none">
-                    <a class="pc-head-link head-link-secondary dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown"
+                    <a class="pc-head-link head-link-primary dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ti ti-search"></i>
                     </a>
@@ -38,7 +38,7 @@
                     <form class="header-search">
                         <i class="ti ti-search icon-search"></i>
                         <input type="search" class="form-control" placeholder="Buscar..." />
-                        <button class="btn btn-light-secondary btn-search"><i
+                        <button class="btn btn-light-primary btn-search"><i
                                 class="ti ti-adjustments-horizontal"></i></button>
                     </form>
                 </li>
@@ -48,7 +48,7 @@
         <div class="ms-auto">
             <ul class="list-unstyled">
                 <li class="dropdown pc-h-item">
-                    <a class="pc-head-link head-link-secondary dropdown-toggle arrow-none me-0"
+                    <a class="pc-head-link head-link-primary dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                         aria-expanded="false">
                         <i class="ti ti-bell"></i>
@@ -126,7 +126,7 @@
                                             <h5>John Doe</h5>
                                             <p class="text-body fs-6">Uploaded two file on &nbsp;<strong>21 Jan
                                                     2020</strong></p>
-                                            <div class="notification-file d-flex p-3 bg-light-secondary rounded">
+                                            <div class="notification-file d-flex p-3 bg-light-primary rounded">
                                                 <i class="ti ti-arrow-bar-to-down"></i>
                                                 <h5 class="m-0">demo.jpg</h5>
                                             </div>

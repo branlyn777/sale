@@ -6,7 +6,7 @@
                 <div class="col-xxl-5">
                     <!-- Header text content-->
                     <div class="text-center text-xxl-start">
-                        <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Diseño &middot; Desarrollo &middot; Marketing</div></div>
+                        <div class="badge bg-gradient-primary-to-primary text-white mb-4"><div class="text-uppercase">Diseño &middot; Desarrollo &middot; Marketing</div></div>
                         <div class="fs-3 fw-light text-muted">
                             Ven y conoce nuestra empresa
                         </div>
@@ -20,7 +20,7 @@
                 <div class="col-xxl-7">
                     <!-- Header profile picture-->
                     <div class="d-flex justify-content-center mt-5 mt-xxl-0">
-                        <div class="profile bg-gradient-primary-to-secondary">
+                        <div class="profile bg-gradient-primary-to-primary">
                             <!-- TIP: For best results, use a photo with a transparent background like the demo example below-->
                             <!-- Watch a tutorial on how to do this on YouTube (link)-->
                             <img class="profile-img" src="landing/assets/profile.png" alt="..." />

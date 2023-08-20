@@ -2,7 +2,7 @@
   <div class="row">
     <!-- [ sample-page ] start -->
     <div class="col-xl-4 col-md-6">
-      <div class="card bg-secondary-dark dashnum-card text-white overflow-hidden">
+      <div class="card bg-primary-dark dashnum-card text-white overflow-hidden">
         <span class="round small"></span>
         <span class="round big"></span>
         <div class="card-body">
@@ -16,7 +16,7 @@
               <div class="btn-group">
                 <a
                   type="button"
-                  class="avtar bg-secondary dropdown-toggle arrow-none"
+                  class="avtar bg-primary dropdown-toggle arrow-none"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
@@ -165,11 +165,11 @@
             </div>
             <div class="col-auto"> </div>
           </div>
-          <div class="rounded bg-light-secondary overflow-hidden mb-3">
+          <div class="rounded bg-light-primary overflow-hidden mb-3">
             <div class="px-3 pt-3">
               <div class="row mb-1 align-items-start">
                 <div class="col">
-                  <h5 class="text-secondary mb-0">Bajaj Finery</h5>
+                  <h5 class="text-primary mb-0">Bajaj Finery</h5>
                   <small class="text-muted">10% Profit</small>
                 </div>
                 <div class="col-auto">
