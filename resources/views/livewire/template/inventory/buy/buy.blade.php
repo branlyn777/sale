@@ -9,11 +9,16 @@
         }
 
         /* Quitar Spinner Input */
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
+        input[type="number"]
+        {
+            -webkit-appearance: textfield !important;
             margin: 0;
+            -moz-appearance:textfield !important;
         }
+
+
+        
+
         /* Estilos para las tablas con thead estáticas */
         .table-static {
             height: 500px;
@@ -161,8 +166,20 @@
         <div class="col-12 col-sm-12 col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <div class="text-center mb-4">
-                        <h4>Carrito de Compras</h4>
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6">
+                            <div class="mb-4">
+                                <h4>Carrito de Compras</h4>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 text-end">
+                            @if ($total_money > 0)
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-danger" wire:click="$emit('alert-clean-cart')">Vaciar</button>
+                                    <button type="button" class="btn btn-success">Finalizar Compra</button>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     <div class="table-responsive table-static">
                         <table class="table table-hover">
@@ -218,10 +235,10 @@
                                             <button type="button" class="btn btn-primary btn-sm" wire:click.prevent="cart_add({{ $c['id'] }})">
                                                +
                                             </button>
-                                            <button type="button" class="btn btn-danger btn-sm">
+                                            <button type="button" class="btn btn-secondary btn-sm">
                                                 -
                                             </button>
-                                            <button type="button" class="btn btn-secondary btn-sm" wire:click.prevent="cart_delete({{ $c['id'] }})">
+                                            <button type="button" class="btn btn-danger btn-sm" wire:click.prevent="cart_delete({{ $c['id'] }})">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                           </div>
@@ -264,6 +281,26 @@
                     timer: msg.timer,
                     timerProgressBar: true,
                     icon: msg.icon
+                })
+            });
+
+            // Muestra una alerta
+            window.livewire.on('alert-clean-cart', msg => {
+                Swal.fire({
+                    title: "¿Vaciar Todo?",
+                    text: "Se descartarán todos los productos del carrito de compras",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "Vaciar",
+                    cancelButtonText: "Cancelar",
+                    }).then((result) => {
+                    if (result.isConfirmed)
+                    {
+                        window.livewire.emit('deleteSupplier', msg.id)
+                        Swal.close()
+                    }
                 })
             });
 
