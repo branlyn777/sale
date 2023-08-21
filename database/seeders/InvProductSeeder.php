@@ -143,5 +143,104 @@ class InvProductSeeder extends Seeder
             'minimum_stock' => 2,
             'inv_categorie_id' => '2'
         ]);
+
+
+
+
+
+
+        InvProduct::create([
+            'name_product' => 'Nubia Z50 Ultra',
+            'description' => '
+            Pantalla: 6.8", 1116 x 2480 pixels
+            Procesador: Snapdragon 8 Gen 2 3.2GHz
+            RAM: 8GB/12GB/16GB
+            Almacenamiento: 256GB/512GB/1TB
+            Expansión: sin microSD
+            Cámara: Triple, 64MP+50MP+64MP
+            ',
+            'price' => 7000.00,
+            'image' => 'Nubia Z50 Ultra.png',
+            'barcode' => 7456874,
+            'minimum_stock' => 2,
+            'inv_categorie_id' => '1'
+        ]);
+        InvProduct::create([
+            'name_product' => 'Sony Xperia M4 Aqua',
+            'description' => '
+            DIMENSIONES FÍSICAS	145,5 x 72,6 x 7,3 mm, 136 gramos
+            PANTALLA	IPS 5 pulgadas
+            RESOLUCIÓN	1280x720 píxeles (294 ppp)
+            PROCESADOR	Snapdragon 615 8 núcleos (4 a 1,5 GHz y 4 a 1 GHz
+            RAM	2 GB
+            MEMORIA	8/16 GB (ampliable con tarjetas microSD de hasta 128 GB)
+            VERSIÓN SOFTWARE	Android 5.0
+            ',
+            'price' => 1450.00,
+            'image' => 'Sony Xperia M4 Aqua.png',
+            'barcode' => 4564589,
+            'minimum_stock' => 2,
+            'inv_categorie_id' => '1'
+        ]);
+        InvProduct::create([
+            'name_product' => 'Xiaomi Poco F2 Pro',
+            'description' => '
+            Pantalla: 6.67", 1080 x 2400 pixels
+            Procesador: Snapdragon 865 2.84GHz
+            RAM: 6GB/8GB
+            Almacenamiento: 128GB/256GB
+            Expansión: sin microSD
+            Cámara: Cuádruple, 64MP+5MP +13MP+2MP
+            ',
+            'price' => 3500.00,
+            'image' => 'Xiaomi Poco F2 Pro.png',
+            'barcode' => 78532645,
+            'minimum_stock' => 2,
+            'inv_categorie_id' => '1'
+        ]);
+        InvProduct::create([
+            'name_product' => 'OnePlus 7 Pro',
+            'description' => '
+            PANTALLA	6,67 pulgadas 1.440 x 3.120 px AMOLED
+            90 Hz, 516 ppp
+            PROCESADOR	Snapdragon 855
+            MEMORIA RAM	12 GB
+            ALMACENAMIENTO	256 GB UFS 3.0
+            SISTEMA OPERATIVO	Android 9 Pie + OxygenOS
+            CÁMARAS TRASERAS	48 Mpx f/1.6 OIS+EIS
+            + 8 Mpx tele f/2.4 OIS
+            + ultra gran angular f/2.2 117º
+            ',
+            'price' => 3700.00,
+            'image' => 'OnePlus 7 Pro.png',
+            'barcode' => 78474645,
+            'minimum_stock' => 2,
+            'inv_categorie_id' => '1'
+        ]);
+        InvProduct::create([
+            'name_product' => 'Xiaomi Mi 9T Pro',
+            'description' => '
+            PANTALLA
+            AMOLED 6,39" FullHD+
+            2.340 x 1.080 píxeles (403 ppp), 19,5:9
+            PROCESADOR
+            Snapdragon 855
+            MEMORIA RAM
+            6 GB
+            ALMACENAMIENTO
+            64/128 GB
+            BATERÍA
+            4.000 mAh + carga rápida 27 W
+            CÁMARA TRASERA
+            48 MP, f/1.75
+            13 MP ultra gran angular, f/2.4
+            8 MP, f/2.4, telefoto zoom 2x
+            ',
+            'price' => 3400.00,
+            'image' => 'Xiaomi Mi 9T Pro.png',
+            'barcode' => 71234645,
+            'minimum_stock' => 2,
+            'inv_categorie_id' => '1'
+        ]);
     }
 }
