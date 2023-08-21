@@ -159,7 +159,8 @@ class InvProductController extends MethodsController
             'category_id' => 'not_in:0',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|max:10',
             'barcode' => 'nullable|max:50',
-            'guarantee' => 'nullable|numeric|max:1000'
+            'guarantee' => 'nullable|numeric|max:1000|not_in:0',
+            'minimum_stock' => 'nullable|numeric|max:30000|not_in:0'
         ];
         $messages = [
             'name_product.required' => 'El nombre del producto es requerido',
@@ -171,7 +172,11 @@ class InvProductController extends MethodsController
             'price.max' => 'Máximo 10 caracteres',
             'barcode.max' => 'Máximo 50 caracteres',
             'guarantee.numeric' => 'Debe ser un numero',
-            'guarantee.max' => 'Máximo 1000 caracteres',
+            'guarantee.max' => 'Máximo 1000 dias',
+            'guarantee.not_in' => '0 no es un dato válido',
+            'minimum_stock.numeric' => 'Debe ser un numero',
+            'minimum_stock.max' => 'Máximo 30000 unidades',
+            'minimum_stock.not_in' => '0 no es un dato válido',
         ];
         $this->validate($rules, $messages);
 
@@ -211,7 +216,8 @@ class InvProductController extends MethodsController
             'category_id' => 'not_in:0',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|max:10',
             'barcode' => 'nullable|max:50',
-            'guarantee' => 'nullable|numeric|max:1000'
+            'guarantee' => 'nullable|numeric|max:1000|not_in:0',
+            'minimum_stock' => 'nullable|numeric|max:30000|not_in:0'
         ];
         $messages = [
             'name_product.required' => 'El nombre del producto es requerido',
@@ -222,10 +228,23 @@ class InvProductController extends MethodsController
             'price.max' => 'Máximo 10 caracteres',
             'barcode.max' => 'Máximo 50 caracteres',
             'guarantee.numeric' => 'Debe ser un numero',
-            'guarantee.max' => 'Máximo 1000 caracteres',
+            'guarantee.max' => 'Máximo 1000 dias',
+            'guarantee.not_in' => '0 no es un dato válido',
+            'minimum_stock.numeric' => 'Debe ser un numero',
+            'minimum_stock.max' => 'Máximo 30000 unidades',
+            'minimum_stock.not_in' => '0 no es un dato válido',
         ];
         $this->validate($rules, $messages);
-
+        // En caso de quitar los dias de garantia el valor de guarantee pasará a ser nulo
+        if ($this->guarantee == "")
+        {
+            $this->guarantee = null;
+        }
+        // En caso de quitar las unidades de stock mínimo el valor pasará a ser nulo
+        if ($this->minimum_stock == "")
+        {
+            $this->minimum_stock = null;
+        }
         // Elimina espacios en blanco extras y reemplaza multiples espacios por un solo espacio
         $this->name_product = trim(preg_replace('/\s+/', ' ', $this->name_product));
         // Busca el producto y lo guarda en una variable
@@ -250,7 +269,7 @@ class InvProductController extends MethodsController
             $product->save();
          }
         // Texto que se verá en el mensaje de tipo toast
-        $text = "Categoriá '" . $product->name_category . "' actualizada exitosamente";
+        $text = "Producto '" . $product->name_category . "' actualizado exitosamente";
         // Emite un mensaje de tipo toast
         $this->emit("toast", [
             'text' => $text,

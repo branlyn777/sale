@@ -40,7 +40,7 @@ class InvBuyController extends MethodsController
         $this->shoppingCart = collect([]);
         // Listando todas las sucursales
         $this->list_branches = $this->get_branches();
-        $this->branch_id = 0;
+        $this->branch_id = $this->get_branch_id(Auth()->user()->id);
         $this->warehouse_id = 0;
         // Estableciendo el id del proveedor No definido
         $this->supplier_id = 1;

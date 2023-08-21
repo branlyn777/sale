@@ -17,6 +17,7 @@ class LandingCatalogueController extends Component
     {
         $products = InvProduct::select("inv_products.*", DB::raw("0 as description_catalogue"))
         ->where("status", "active")
+        ->orderBy("created_at", "desc")
         ->get();
         foreach($products as $p)
         {

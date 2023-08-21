@@ -89,7 +89,7 @@
                                 Cantidad minima que debe tener el producto en todos los lugares donde se encuentre 
                             </span>
                         </div>
-                        <input wire:model.lazy="minimum_stock" type="text" class="form-control">
+                        <input wire:model.lazy="minimum_stock" type="number" class="form-control">
                         @error('minimum_stock')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror

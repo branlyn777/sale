@@ -8,12 +8,17 @@
             width: 110px;
         }
 
-        /* Quitar Spinner Input */
-        input[type="number"]
-        {
-            -webkit-appearance: textfield !important;
+        /* Estilos para quitar el spinner de los input tipo number */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-clear-button {
+            -webkit-appearance: none;
+            appearance: none;
             margin: 0;
-            -moz-appearance:textfield !important;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
         }
 
 
@@ -74,10 +79,10 @@
                         <b>Sucursal</b>
                     </label>
                     <select wire:model="branch_id" class="form-select">
-                        <option value="0">Seleccionar</option>
                         @foreach( $this->list_branches as $b )
                             <option value="{{ $b->id }}">{{ $b->name_branch }}</option>
                         @endforeach
+                        <option value="0">Seleccionar</option>
                     </select>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3 text-center mb-3">
@@ -112,162 +117,183 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 col-sm-12 col-md-4">
-            <div class="card">
-                <div class="card-body">
+    @if ($this->warehouse_id > 0)
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-4">
+                <div class="card">
+                    <div class="card-body">
 
-                    <div class="input-group">
-                        <input wire:model="search" type="text" class="form-control" placeholder="Buscar Producto...">
-                        <button class="btn btn-primary" wire:click="$emit('show-modal-supplier')">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
-                    </div>
-                    <div class="table-responsive table-static">
-                        @if (strlen($this->search) > 0)
-                            <table class="table table-hover">
-                                <thead class="bg-white">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nombre</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($products as $p)
-                                        <tr>
-                                            <th scope="row">
-                                                {{ ($products->currentpage() - 1) * $products->perpage() + $loop->index + 1 }}
-                                            </th>
-                                            <td>
-                                            {{ $p->name_product }}
-                                                <p class="text-muted text-sm">
-                                                    <button wire:click.prevent="cart_add({{ $p->id }})" class="">
-                                                        +
-                                                    </button>
-                                                    {{ number_format($p->price, 2, ',', '.') }} Bs | Cantidad: 8
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @else
-                            <div class="text-center">
-                            
-                            </div>
-                        @endif
-                    </div>
-                    @if (strlen($this->search) > 0)
-                        {{ $products->links() }}
-                    @endif
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-12 col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-6">
-                            <div class="mb-4">
-                                <h4>Carrito de Compras</h4>
-                            </div>
+                        <div class="input-group">
+                            <input wire:model="search" type="text" class="form-control" placeholder="Buscar Producto...">
+                            <button class="btn btn-primary" wire:click="$emit('show-modal-supplier')">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-6 text-end">
-                            @if ($total_money > 0)
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-danger" wire:click="$emit('alert-clean-cart')">Vaciar</button>
-                                    <button type="button" class="btn btn-success">Finalizar Compra</button>
+                        <div class="table-responsive table-static">
+                            @if (strlen($this->search) > 0)
+                                <table class="table table-hover">
+                                    <thead class="bg-white">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nombre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($products as $p)
+                                            <tr>
+                                                <th scope="row">
+                                                    {{ ($products->currentpage() - 1) * $products->perpage() + $loop->index + 1 }}
+                                                </th>
+                                                <td>
+                                                {{ $p->name_product }}
+                                                    <p class="text-muted text-sm">
+                                                        <button wire:click.prevent="cart_add({{ $p->id }})" class="">
+                                                            +
+                                                        </button>
+                                                        {{ number_format($p->price, 2, ',', '.') }} Bs | Cantidad: 8
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <div class="text-center">
+                                
                                 </div>
                             @endif
                         </div>
+                        @if (strlen($this->search) > 0)
+                            {{ $products->links() }}
+                        @endif
                     </div>
-                    <div class="table-responsive table-static">
-                        <table class="table table-hover">
-                            <thead class="bg-white">
-                              <tr>
-                                <th class="text-center" scope="col">#</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Cantidad</th>
-                                <th scope="col">Costo</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Total</th>
-                                <th scope="col" class="text-center">Acciones</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @foreach ($this->shoppingCart->sortBy('created_at') as $c)
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <div class="mb-4">
+                                    <h4>Carrito de Compras</h4>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 text-end">
+                                @if ($total_money > 0)
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-danger" wire:click="$emit('alert-clean-cart')">Vaciar</button>
+                                        <button type="button" class="btn btn-success" wire:click="$emit('show-modal-finalize-buy')">Finalizar Compra</button>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="table-responsive table-static">
+                            <table class="table table-hover">
+                                <thead class="bg-white">
                                 <tr>
-                                    <th class="text-center" scope="row">
-                                        {{ $loop->iteration }}
-                                    </th>
-                                    <td>
-                                        {{ $c['name_product'] }}
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="input-group style-input-sm">
-                                            <input type="number" class="form-control" value="{{ $c['quantity'] }}">
-                                            <span class="input-group-text">
-                                                Uds
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="input-group style-input">
-                                            <input type="number" class="form-control" value="{{ $c['cost'] }}">
-                                            <span class="input-group-text">
-                                                Bs
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="input-group style-input">
-                                            <input type="number" class="form-control" value="{{ $c['price'] }}">
-                                            <span class="input-group-text">
-                                                Bs
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        {{ number_format($c['quantity'] * $c['cost'], 2, ',', '.') }}
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-primary btn-sm" wire:click.prevent="cart_add({{ $c['id'] }})">
-                                               +
-                                            </button>
-                                            <button type="button" class="btn btn-primary btn-sm">
-                                                -
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm" wire:click.prevent="cart_delete({{ $c['id'] }})">
-                                                <i class="bi bi-trash3"></i>
-                                            </button>
-                                          </div>
-                                    </td>
+                                    <th class="text-center" scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Costo</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col" class="text-center">Acciones</th>
                                 </tr>
-                              @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @foreach ($this->shoppingCart->sortBy('created_at') as $c)
+                                    <tr>
+                                        <th class="text-center" scope="row">
+                                            {{ $loop->iteration }}
+                                        </th>
+                                        <td>
+                                            {{ $c['name_product'] }}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group style-input-sm">
+                                                <input type="number" class="form-control" value="{{ $c['quantity'] }}">
+                                                <span class="input-group-text">
+                                                    Uds
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group style-input">
+                                                <input type="number" class="form-control" value="{{ $c['cost'] }}">
+                                                <span class="input-group-text">
+                                                    Bs
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group style-input">
+                                                <input type="number" class="form-control" value="{{ $c['price'] }}">
+                                                <span class="input-group-text">
+                                                    Bs
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($c['quantity'] * $c['cost'], 2, ',', '.') }}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-primary btn-sm" wire:click.prevent="cart_add({{ $c['id'] }})">
+                                                +
+                                                </button>
+                                                <button type="button" class="btn btn-dark btn-sm">
+                                                    -
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm" wire:click.prevent="cart_delete({{ $c['id'] }})">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @else
+        <div class="card">
+            <div class="card-body text-center">
+                Seleccione una sucursal y un almacén para realizar la compra
+            </div>
+        </div>
+    @endif
     <!-- [ Modal ] start -->
     @include('livewire.template.inventory.buy.modal_supplier')
+    @include('livewire.template.inventory.buy.modal_finalize_buy')
     <!-- [ Modal ] end -->
 </div>
 @section('javascript')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Muestra la ventana modal crear/actualizar categoria producto
+            // Muestra la ventana modal crear proveedor
             window.livewire.on('show-modal-supplier', msg => {
                 var supplierModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('supplier'));
                 supplierModal.show();
             });
-            // Oculta la ventana modal crear/actualizar categoria producto
+            // Oculta la ventana modal crear proveedor
             window.livewire.on('hide-modal-supplier', msg => {
                 var supplierModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('supplier'));
+                supplierModal.hide();
+            });
+
+
+            // Muestra la ventana modal finalizar compra
+            window.livewire.on('show-modal-finalize-buy', msg => {
+                var supplierModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('finalize_buy'));
+                supplierModal.show();
+            });
+            // Oculta la ventana modal finalizar compra
+            window.livewire.on('hide-modal-finalize-buy', msg => {
+                var supplierModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('finalize_buy'));
                 supplierModal.hide();
             });
 

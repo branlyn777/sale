@@ -38,7 +38,7 @@
                             </div>
                             <h4><a class="product_name" href="landing/single-product.html">{{ $p->name_product }}</a></h4>
                             <div class="price-box">
-                                <span class="new-price">50,00 Bs</span>
+                                <span class="new-price">{{ $p->price }} Bs</span>
                             </div>
                         </div>
                         <div class="add-actions">
