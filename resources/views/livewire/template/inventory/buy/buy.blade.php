@@ -35,6 +35,75 @@
             top: 0;
             left: 0;
         }
+        /* Estilos para el Tooltip */
+        .tooltip-container {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip {
+            opacity: 0;
+            z-index: 99;
+            color: #ffffff;
+            width: 200px;
+            display: block;
+            font-size: 12px;
+            padding: 5px 5px;
+            border-radius: 7px;
+            text-align: center;
+            /* text-shadow: 1px 1px 2px #111; */
+            background: rgba(40, 134, 221, 0.9);
+            border: 1px solid rgba(0, 100, 182, 0.9);
+            box-shadow: 0 0 3px rgba(0,0,0,0.5);
+            -webkit-transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+            -o-transition: all .2s ease-in-out;
+            -ms-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+            -webkit-transform: scale(0);
+            -moz-transform: scale(0);
+            -o-transform: scale(0);
+            -ms-transform: scale(0);
+            transform: scale(0);
+            position: absolute;
+            right: -95px;
+            bottom: 40px;
+        }
+
+        .tooltip:before,.tooltip:after {
+            content: '';
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(40, 134, 221, 0.9);
+            position: absolute;
+            bottom: -10px;
+            left: 43%;
+        }
+
+        .tooltip-container:hover .tooltip,a:hover .tooltip {
+            opacity: 90%;
+            -webkit-transform: scale(1);
+            -moz-transform: scale(1);
+            -o-transform: scale(1);
+            -ms-transform: scale(1);
+            transform: scale(1);
+        }
+        .style-price {
+            min-width: 90px;
+        }
+        .style-quantity {
+            min-width: 70px;
+            background-color: rgb(0, 78, 247);
+            color: white;
+            border-radius: 5px;
+        }
+        .style-quantity-alert {
+            min-width: 70px;
+            background-color: red;
+            color: white;
+            border-radius: 5px;
+        }
     </style>
 @endsection
 <div class="pc-content">
@@ -125,7 +194,7 @@
 
                         <div class="input-group">
                             <input wire:model="search" type="text" class="form-control" placeholder="Buscar Producto...">
-                            <button class="btn btn-primary" wire:click="$emit('show-modal-supplier')">
+                            <button class="btn btn-primary" wire:click="$emit('show-modal-product')">
                                 <i class="bi bi-plus-lg"></i>
                             </button>
                         </div>
@@ -267,6 +336,7 @@
     @endif
     <!-- [ Modal ] start -->
     @include('livewire.template.inventory.buy.modal_supplier')
+    @include('livewire.template.inventory.buy.modal_product')
     @include('livewire.template.inventory.buy.modal_finalize_buy')
     <!-- [ Modal ] end -->
 </div>
@@ -282,6 +352,17 @@
             // Oculta la ventana modal crear proveedor
             window.livewire.on('hide-modal-supplier', msg => {
                 var supplierModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('supplier'));
+                supplierModal.hide();
+            });
+
+            // Muestra la ventana modal crear proveedor
+            window.livewire.on('show-modal-product', msg => {
+                var supplierModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
+                supplierModal.show();
+            });
+            // Oculta la ventana modal crear proveedor
+            window.livewire.on('hide-modal-product', msg => {
+                var supplierModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('product'));
                 supplierModal.hide();
             });
 

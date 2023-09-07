@@ -3,11 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\AdmSupplier;
+use App\Models\InvCategory;
 use App\Models\InvProduct;
 use App\Models\InvWarehouse;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class InvBuyController extends MethodsController
@@ -28,11 +30,18 @@ class InvBuyController extends MethodsController
     public $list_suppliers;
     // Guarda el id del proveedor seleccionado
     public $supplier_id;
+    // Guarda el id de un producto
+    public $product_id;
+    // Guarda las categorias para los productos
+    public $list_categories;
 
-    // Datos para crear o actualizar un proveedor
+    // Variables para crear un proveedor
     public $name_supplier, $address, $phone_number_a, $phone_number_b, $mail, $other_details;
+    // Variables para crear un producto
+    public $name_product, $description, $price, $image, $barcode, $guarantee, $minimum_stock, $category_id;
 
     use WithPagination;
+    use WithFileUploads;
     protected $paginationTheme = 'bootstrap';
     public function mount()
     {
@@ -44,6 +53,10 @@ class InvBuyController extends MethodsController
         $this->warehouse_id = 0;
         // Estableciendo el id del proveedor No definido
         $this->supplier_id = 1;
+        // Estableciendo el id del proveedor No definido
+        $this->product_id = 0;
+        // Obtiniendo todas las categorias para crear un producto
+        $this->list_categories = InvCategory::where("status","active")->orderBy("name_category")->get();
     }
 
     public function render()
@@ -190,9 +203,6 @@ class InvBuyController extends MethodsController
         }
            
     }
-
-
-
     // Crea una nuevo proveedor
     public function create_supplier()
     {
@@ -249,5 +259,64 @@ class InvBuyController extends MethodsController
 
         // Cierra la ventana modal
         $this->emit("hide-modal-supplier");
+    }
+    // Crea un producto
+    public function create_product()
+    {
+        $rules = [
+            'name_product' => 'required|min:2|max:255|unique:inv_products,name_product',
+            'category_id' => 'not_in:0',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|max:10',
+            'barcode' => 'nullable|max:50',
+            'guarantee' => 'nullable|numeric|max:1000|not_in:0',
+            'minimum_stock' => 'nullable|numeric|max:30000|not_in:0'
+        ];
+        $messages = [
+            'name_product.required' => 'El nombre del producto es requerido',
+            'name_product.unique' => 'Ya existe el nombre del producto',
+            'name_product.min' => 'El nombre del producto debe tener al menos 2 caracteres',
+            'name_product.max' => 'El nombre del producto no debe pasar los 255 caracteres',
+            'category_id.not_in' => 'Seleccione categoría',
+            'price.required' => 'Precio requerido',
+            'price.max' => 'Máximo 10 caracteres',
+            'barcode.max' => 'Máximo 50 caracteres',
+            'guarantee.numeric' => 'Debe ser un numero',
+            'guarantee.max' => 'Máximo 1000 dias',
+            'guarantee.not_in' => '0 no es un dato válido',
+            'minimum_stock.numeric' => 'Debe ser un numero',
+            'minimum_stock.max' => 'Máximo 30000 unidades',
+            'minimum_stock.not_in' => '0 no es un dato válido',
+        ];
+        $this->validate($rules, $messages);
+
+        // Elimina espacios en blanco extras y reemplaza multiples espacios por un solo espacio
+        $this->name_product = trim(preg_replace('/\s+/', ' ', $this->name_product));
+        $product = InvProduct::create([
+            'name_product' =>  $this->name_product,
+            'description' =>  $this->description,
+            'price' =>  $this->price,
+            'image' =>  $this->image,
+            'barcode' =>  $this->barcode,
+            'guarantee' =>  $this->guarantee,
+            'minimum_stock' =>  $this->minimum_stock,
+            'inv_categorie_id' =>  $this->category_id
+        ]);
+        // Verificando si se selecciono una imagen
+        if($this->image)
+        {
+            $customFileName = uniqid() . '_.' . $this->image->extension();
+            $this->image->storeAs('public/invProducts', $customFileName);
+            $product->image  = $customFileName;
+            $product->save();
+        }
+        else
+        {
+            $product->image  = "no-image.png";
+            $product->save();
+        }
+        $this->image = null;
+        // Añadiendo el producto al Shopping Cart
+        $this->cart_add($product->id);
+        $this->emit("hide-modal-product");
     }
 }
