@@ -172,13 +172,13 @@
                         <div class="col-6">
                             <label>
                                 <b>Cantidad</b>
-                                <h2>{{ $total_items }}</h2>
+                                <h2>{{ $this->total_items }}</h2>
                             </label>
                         </div>
                         <div class="col-6">
                             <label>
                                 <b>Dinero</b>
-                                <h2>{{ number_format($total_money, 2, ',', '.') }} Bs</h2>
+                                <h2>{{ number_format($this->total_money, 2, ',', '.') }} Bs</h2>
                             </label>
                         </div>
                     </div>

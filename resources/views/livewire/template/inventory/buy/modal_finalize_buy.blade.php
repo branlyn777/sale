@@ -30,7 +30,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" wire:click.prevent="create_supplier()" class="btn btn-primary">Comprar</button>
+                <button type="button" wire:click.prevent="buy()" class="btn btn-primary">Comprar</button>
             </div>
         </div>
     </div>

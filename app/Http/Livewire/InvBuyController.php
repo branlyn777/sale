@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\AdmSupplier;
+use App\Models\invBuy;
+use App\Models\invBuyDetail;
 use App\Models\InvCategory;
 use App\Models\InvProduct;
 use App\Models\InvWarehouse;
@@ -39,6 +41,9 @@ class InvBuyController extends MethodsController
     public $name_supplier, $address, $phone_number_a, $phone_number_b, $mail, $other_details;
     // Variables para crear un producto
     public $name_product, $description, $price, $image, $barcode, $guarantee, $minimum_stock, $category_id;
+
+    // Variables para el total cantidad y total bs del Shopping Cart
+    public $total_items, $total_money;
 
     use WithPagination;
     use WithFileUploads;
@@ -102,18 +107,16 @@ class InvBuyController extends MethodsController
             ->paginate(10);
         }
         // Obteniendo el total cantidad y total bs del Shopping Cart
-        $total_items = 0;
-        $total_money = 0;
+        $this->total_items = 0;
+        $this->total_money = 0;
         foreach ($this->shoppingCart as $c)
         {
-            $total_items = $total_items + $c['quantity'];
-            $total_money = $total_money + ($c['quantity'] * $c['cost']);
+            $this->total_items = $this->total_items + $c['quantity'];
+            $this->total_money = $this->total_money + ($c['quantity'] * $c['cost']);
         }
 
         return view('livewire.template.inventory.buy.buy', [
-            'products' => $products,
-            'total_items' => $total_items,
-            'total_money' => $total_money
+            'products' => $products
         ])
         ->extends('layouts.theme.app')
         ->section('content');
@@ -315,8 +318,41 @@ class InvBuyController extends MethodsController
             $product->save();
         }
         $this->image = null;
+        $this->product_id = 0;
+        $this->name_product = "";
+        $this->description = "";
+        $this->price = "";
+        $this->barcode = "";
+        $this->guarantee = null;
+        $this->minimum_stock = null;
+        $this->category_id = 0;
         // Añadiendo el producto al Shopping Cart
         $this->cart_add($product->id);
         $this->emit("hide-modal-product");
+    }
+    // Realiza la compra
+    public function buy()
+    {
+        // Creando la compra
+        $buy = invBuy::create([
+            'total' =>  $this->total_money,
+            'items' =>  $this->total_items,
+            'inv_branch_id' => $this->branch_id,
+            'adm_supplier_id' =>  $this->supplier_id,
+            'user_id' =>  Auth()->user()->id
+        ]);
+        foreach ($this->shoppingCart as $b)
+        {
+            // Creando detalle de la compra
+            $buy_details = invBuyDetail::create([
+                'cost' =>  $b['cost'],
+                'price' =>  $b['price'],
+                'quantity' =>  $b['quantity'],
+                'inv_product_id' =>  $b['id'],
+                'inv_buy_id' =>  $buy->id
+            ]);
+        }
+        // Cerrando la ventana modal
+        $this->emit("hide-modal-finalize-buy");
     }
 }
