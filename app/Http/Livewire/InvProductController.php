@@ -39,6 +39,7 @@ class InvProductController extends MethodsController
     public $delete_cancel;
     // Guarda el excel para importar productos
     public $excelFile;
+    public $importedProducts;
 
     use WithPagination;
     use WithFileUploads;
@@ -387,22 +388,35 @@ class InvProductController extends MethodsController
 
         try
         {
-            // Importar los datos del archivo Excel utilizando el modelo UsersImport
-            Excel::import(new ProductsImport(), $filePath);
+            // Importar los datos del archivo Excel utilizando el modelo ProductsImport
+            $import = new ProductsImport();
+            Excel::import($import, $filePath);
+
+            // Obtener los productos importados y almacenarlos en la propiedad $importedProducts
+            $this->importedProducts = $import->getImportedProducts();
+            // Después de dd, eliminar el archivo Excel temporal
+            if (file_exists($this->excelFile->getRealPath()))
+            {
+                unlink($this->excelFile->getRealPath());
+            }
+            dd($this->importedProducts);
             // Emite un mensaje de tipo toast
             $this->emit("toast", [
                 'text' => "Productos Importados Exitosamente",
                 'timer' => 3000,
                 'icon' => "success"
             ]);
+
             // Cerrando la ventana modal para importar productos
             $this->emit("hide-modal-import");
+
             // Limpiar el campo del archivo después de la importación
             $this->excelFile = null;
 
         }
         catch (\Exception $e)
         {
+            dd("Error");
             // Manejar cualquier excepción que pueda ocurrir durante la importación (por ejemplo, un formato de archivo incorrecto).
             // Puedes mostrar un mensaje de error o realizar cualquier acción necesaria.
             // ...
