@@ -7,10 +7,11 @@ use App\Models\InvProductphp;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ProductsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
+class ProductsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading, WithCalculatedFormulas
 {
     protected $importedProducts;
     /**

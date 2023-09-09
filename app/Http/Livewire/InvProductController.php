@@ -394,12 +394,12 @@ class InvProductController extends MethodsController
 
             // Obtener los productos importados y almacenarlos en la propiedad $importedProducts
             $this->importedProducts = $import->getImportedProducts();
-            // Después de dd, eliminar el archivo Excel temporal
+            // eliminar el archivo Excel temporal
             if (file_exists($this->excelFile->getRealPath()))
             {
                 unlink($this->excelFile->getRealPath());
             }
-            dd($this->importedProducts);
+            // dd($this->importedProducts);
             // Emite un mensaje de tipo toast
             $this->emit("toast", [
                 'text' => "Productos Importados Exitosamente",
@@ -408,11 +408,10 @@ class InvProductController extends MethodsController
             ]);
 
             // Cerrando la ventana modal para importar productos
-            $this->emit("hide-modal-import");
+            // $this->emit("hide-modal-import");
 
             // Limpiar el campo del archivo después de la importación
-            $this->excelFile = null;
-
+            // $this->excelFile = null;
         }
         catch (\Exception $e)
         {

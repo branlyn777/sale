@@ -10,6 +10,22 @@
             </div>
             <div class="modal-body">
                 <input type="file" class="form-control" wire:model="excelFile">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nombre</th>
+                            <th>Características</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" data-bs-dismiss="modal">Cerrar</button>
