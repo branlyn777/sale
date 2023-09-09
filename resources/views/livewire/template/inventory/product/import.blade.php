@@ -9,10 +9,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <input type="file" class="form-control" wire:model="excelFile">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" wire:click.prevent="create_product()" class="btn btn-primary">Importar</button>
+                <button type="button" wire:click.prevent="import_excel()" class="btn btn-primary">Importar</button>
             </div>
         </div>
     </div>

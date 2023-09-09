@@ -233,6 +233,11 @@
             var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('import'));
             productModal.show();
         });
+        // Oculta la ventana modal para importar productos por excel
+        window.livewire.on('hide-modal-import', msg => {
+            var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('import'));
+            productModal.hide();
+        });
 
         // Muestra una alerta
         window.livewire.on('alert', msg => {

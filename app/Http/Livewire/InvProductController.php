@@ -2,14 +2,18 @@
 
 namespace App\Http\Livewire;
 
+use App\Imports\ProductsImport;
+use App\Imports\UsersImport;
 use App\Models\InvCategory;
 use App\Models\InvInventory;
 use App\Models\InvProduct;
 use App\Models\InvWarehouse;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvProductController extends MethodsController
 {
@@ -33,6 +37,8 @@ class InvProductController extends MethodsController
     public $list_warehouses;
     // Guarda true o false para eliminar o inactivar un producto
     public $delete_cancel;
+    // Guarda el excel para importar productos
+    public $excelFile;
 
     use WithPagination;
     use WithFileUploads;
@@ -368,6 +374,39 @@ class InvProductController extends MethodsController
     public function resetUi()
     {
         $this->image = null;
+    }
+    // Importa productos a traves de un excel
+    public function import_excel()
+    {
+        // Validar que se haya cargado un archivo
+        $this->validate([
+            'excelFile' => 'required|mimes:xlsx',
+        ]);
+        // Obtener la ruta temporal del archivo cargado
+        $filePath = $this->excelFile->getRealPath();
+
+        try
+        {
+            // Importar los datos del archivo Excel utilizando el modelo UsersImport
+            Excel::import(new ProductsImport(), $filePath);
+            // Emite un mensaje de tipo toast
+            $this->emit("toast", [
+                'text' => "Productos Importados Exitosamente",
+                'timer' => 3000,
+                'icon' => "success"
+            ]);
+            // Cerrando la ventana modal para importar productos
+            $this->emit("hide-modal-import");
+            // Limpiar el campo del archivo después de la importación
+            $this->excelFile = null;
+
+        }
+        catch (\Exception $e)
+        {
+            // Manejar cualquier excepción que pueda ocurrir durante la importación (por ejemplo, un formato de archivo incorrecto).
+            // Puedes mostrar un mensaje de error o realizar cualquier acción necesaria.
+            // ...
+        }
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
