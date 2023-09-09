@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class invBuy extends Model
 {
     use HasFactory;
-    protected $fillable = ['total','items','status','inv_branch_id','adm_supplier_id','user_id'];
+    protected $fillable = ['total','items','observation','status','inv_branch_id','adm_supplier_id','user_id'];
 }

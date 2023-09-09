@@ -6,6 +6,7 @@ use App\Models\AdmSupplier;
 use App\Models\invBuy;
 use App\Models\invBuyDetail;
 use App\Models\InvCategory;
+use App\Models\InvInventory;
 use App\Models\InvProduct;
 use App\Models\InvWarehouse;
 use Carbon\Carbon;
@@ -36,7 +37,8 @@ class InvBuyController extends MethodsController
     public $product_id;
     // Guarda las categorias para los productos
     public $list_categories;
-
+    // Guarda si existe alguna observación en la compra
+    public $observation;
     // Variables para crear un proveedor
     public $name_supplier, $address, $phone_number_a, $phone_number_b, $mail, $other_details;
     // Variables para crear un producto
@@ -138,7 +140,7 @@ class InvBuyController extends MethodsController
             {
                 // $productIndex contiene el índice (array key) del producto en la colección
                 $product_backup = $this->shoppingCart[$productIndex];
-                
+                // Eliminando el producto
                 $this->shoppingCart->forget($productIndex);
 
                 $new_quantity = $product_backup['quantity'] + 1;
@@ -182,6 +184,52 @@ class InvBuyController extends MethodsController
             'timer' => 3000,
             'icon' => "success"
         ]);
+    }
+    // Decrementa la cantidad de un producto del Shopping Cart
+    public function cart_decrease($id)
+    {
+        // Verificando que el producto esté en el Shopping Cart
+        $existingProduct = $this->shoppingCart->firstWhere('id', $id);
+        // Si el producto existe se actualizará la cantidad
+        if ($existingProduct)
+        {
+            $productIndex = $this->shoppingCart->search(function ($item) use ($id)
+            {
+                return $item['id'] === $id;
+            });
+        
+            if ($productIndex !== false)
+            {
+                // $productIndex contiene el índice (array key) del producto en la colección
+                $product_backup = $this->shoppingCart[$productIndex];
+                // Eliminando el producto
+                $this->shoppingCart->forget($productIndex);
+
+                $new_quantity = $product_backup['quantity'] - 1;
+                // El producto no se añadirá si la cantidad es menor a 1
+                if ($new_quantity > 0)
+                {
+                    // Añadiendo el producto al Shopping Cart
+                    $this->shoppingCart->push([
+                        'id' => $product_backup['id'],
+                        'name_product' => $product_backup['name_product'],
+                        'quantity' => $new_quantity,
+                        'cost' => $product_backup['cost'],
+                        'price' => $product_backup['price'],
+                        'image' => $product_backup['image'],
+                        'created_at' => $product_backup['created_at'],
+                    ]);
+                }
+            }
+            // Texto que se mostrará en un mensaje toast
+            $text = "Se decremento 1 unidad";
+            // Emite un mensaje de tipo toast
+            $this->emit("toast", [
+                'text' => $text,
+                'timer' => 3000,
+                'icon' => "success"
+            ]);
+        }
     }
     // Eliminsa un producto del Shopping Cart
     public function cart_delete($id)
@@ -337,6 +385,7 @@ class InvBuyController extends MethodsController
         $buy = invBuy::create([
             'total' =>  $this->total_money,
             'items' =>  $this->total_items,
+            'observation' => $this->observation,
             'inv_branch_id' => $this->branch_id,
             'adm_supplier_id' =>  $this->supplier_id,
             'user_id' =>  Auth()->user()->id
@@ -344,15 +393,181 @@ class InvBuyController extends MethodsController
         foreach ($this->shoppingCart as $b)
         {
             // Creando detalle de la compra
-            $buy_details = invBuyDetail::create([
+            invBuyDetail::create([
                 'cost' =>  $b['cost'],
                 'price' =>  $b['price'],
                 'quantity' =>  $b['quantity'],
                 'inv_product_id' =>  $b['id'],
                 'inv_buy_id' =>  $buy->id
             ]);
+            // Incrementando los inventarios
+            InvInventory::create([
+                'quantity' =>  $b['quantity'],
+                'cost' =>  $b['cost'],
+                'price' =>  $b['price'],
+                'inv_warehouse_id' =>  $this->warehouse_id,
+                'inv_product_id' => $b['id']
+            ]);
+
         }
+        // Elimina todos los productos del Shopping Cart
+        $this->shoppingCart = collect([]);
+        // Elimina todos los caracteres escritos en el buscador de productos
+        $this->search = "";
+        // Elimina lo que este escrito en la observación
+        $this->observation = null;
+        // Desselecciona el almacén
+        $this->warehouse_id = 0;
+        // Selecciona un proveedor no definido
+        $this->supplier_id = 1;
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => "Compra N°:" . $buy->id . " realizada con éxito",
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
         // Cerrando la ventana modal
         $this->emit("hide-modal-finalize-buy");
+    }
+    // Cambia la cantidad de un producto del Shopping Cart
+    public function change_quantity($id, $new_quantity)
+    {
+        // Verificando que el valor recibido sea mayor a 0
+        if ($new_quantity > 0)
+        {
+            // Verificando que el producto esté en el Shopping Cart
+            $existingProduct = $this->shoppingCart->firstWhere('id', $id);
+            // Si el producto existe se actualizará la cantidad
+            if ($existingProduct)
+            {
+                $productIndex = $this->shoppingCart->search(function ($item) use ($id)
+                {
+                    return $item['id'] === $id;
+                });
+            
+                if ($productIndex !== false)
+                {
+                    // $productIndex contiene el índice (array key) del producto en la colección
+                    $product_backup = $this->shoppingCart[$productIndex];
+                    // Eliminando el producto
+                    $this->shoppingCart->forget($productIndex);
+                    // Añadiendo el producto al Shopping Cart
+                    $this->shoppingCart->push([
+                        'id' => $product_backup['id'],
+                        'name_product' => $product_backup['name_product'],
+                        'quantity' => $new_quantity,
+                        'cost' => $product_backup['cost'],
+                        'price' => $product_backup['price'],
+                        'image' => $product_backup['image'],
+                        'created_at' => $product_backup['created_at'],
+                    ]);
+                    // Emite un mensaje de tipo toast
+                    $this->emit("toast", [
+                        'text' => "¡Cantidad Actualizada! Producto: " . $product_backup['name_product'],
+                        'timer' => 3000,
+                        'icon' => "success"
+                    ]);
+                }
+            }
+        }
+    }
+    // Cambia el costo de un producto del Shopping Cart
+    public function change_cost($id, $new_cost)
+    {
+        // Verificando que el valor recibido sea mayor a 0
+        if ($new_cost > 0)
+        {
+            // Verificando que el producto esté en el Shopping Cart
+            $existingProduct = $this->shoppingCart->firstWhere('id', $id);
+            // Si el producto existe se actualizará la cantidad
+            if ($existingProduct)
+            {
+                $productIndex = $this->shoppingCart->search(function ($item) use ($id)
+                {
+                    return $item['id'] === $id;
+                });
+
+                if ($productIndex !== false)
+                {
+                    // $productIndex contiene el índice (array key) del producto en la colección
+                    $product_backup = $this->shoppingCart[$productIndex];
+                    // Eliminando el producto
+                    $this->shoppingCart->forget($productIndex);
+                    // Añadiendo el producto al Shopping Cart
+                    $this->shoppingCart->push([
+                        'id' => $product_backup['id'],
+                        'name_product' => $product_backup['name_product'],
+                        'quantity' => $product_backup['quantity'],
+                        'cost' => $new_cost,
+                        'price' => $product_backup['price'],
+                        'image' => $product_backup['image'],
+                        'created_at' => $product_backup['created_at'],
+                    ]);
+                    // Emite un mensaje de tipo toast
+                    $this->emit("toast", [
+                        'text' => "Costo Actualizado! Producto: " . $product_backup['name_product'],
+                        'timer' => 3000,
+                        'icon' => "success"
+                    ]);
+                }
+            }
+        }
+    }
+    // Cambia el precio de un producto del Shopping Cart
+    public function change_price($id, $new_price)
+    {
+        // Verificando que el valor recibido sea mayor a 0
+        if ($new_price > 0)
+        {
+            // Verificando que el producto esté en el Shopping Cart
+            $existingProduct = $this->shoppingCart->firstWhere('id', $id);
+            // Si el producto existe se actualizará la cantidad
+            if ($existingProduct)
+            {
+                $productIndex = $this->shoppingCart->search(function ($item) use ($id)
+                {
+                    return $item['id'] === $id;
+                });
+
+                if ($productIndex !== false)
+                {
+                    // $productIndex contiene el índice (array key) del producto en la colección
+                    $product_backup = $this->shoppingCart[$productIndex];
+                    // Eliminando el producto
+                    $this->shoppingCart->forget($productIndex);
+                    // Añadiendo el producto al Shopping Cart
+                    $this->shoppingCart->push([
+                        'id' => $product_backup['id'],
+                        'name_product' => $product_backup['name_product'],
+                        'quantity' => $product_backup['quantity'],
+                        'cost' => $product_backup['cost'],
+                        'price' => $new_price,
+                        'image' => $product_backup['image'],
+                        'created_at' => $product_backup['created_at'],
+                    ]);
+                    // Emite un mensaje de tipo toast
+                    $this->emit("toast", [
+                        'text' => "Precio Actualizado! Producto: " . $product_backup['name_product'],
+                        'timer' => 3000,
+                        'icon' => "success"
+                    ]);
+                }
+            }
+        }
+    }
+    // Escucha eventos javascript de la vista
+    protected $listeners = [
+        'clean-cart' => 'cart_clean',
+    ];
+    // Vacia el Shopping Cart
+    public function cart_clean()
+    {
+        $this->shoppingCart = collect([]);
+         // Emite un mensaje de tipo toast
+         $this->emit("toast", [
+            'text' => "¡Carrito de Compras vaciado exitósamente!",
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
     }
 }

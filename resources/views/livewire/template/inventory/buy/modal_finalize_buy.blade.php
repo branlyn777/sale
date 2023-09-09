@@ -7,22 +7,10 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 text-center mb-2">
-                        <p>Sucursal</p>
-                        <h3>Sucursal Central</h3>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 text-center mb-2">
-                        <p>Almacen</p>
-                        <h3>Sucursal Central</h3>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 mb-2">
                         <label class="form-label">Observación</label>
-                        <textarea wire:model.lazy="description" class="form-control" placeholder="Puede escribir detalles adicionales de esta compra aqui..." rows="3"></textarea>
-                        @error('description')
+                        <textarea wire:model.lazy="observation" class="form-control" placeholder="Puede escribir detalles adicionales de esta compra aqui..." rows="3"></textarea>
+                        @error('observation')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>

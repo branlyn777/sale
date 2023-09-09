@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('total', 12,2);
             $table->integer('items');
+            $table->text('observation')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
             $table->foreignId('inv_branch_id')->constrained();
             $table->foreignId('adm_supplier_id')->constrained();

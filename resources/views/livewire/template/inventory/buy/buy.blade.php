@@ -203,20 +203,17 @@
                                 <table class="table table-hover">
                                     <thead class="bg-white">
                                         <tr>
-                                            <th scope="col">#</th>
                                             <th scope="col">Nombre</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($products as $p)
                                             <tr>
-                                                <th scope="row">
-                                                    {{ ($products->currentpage() - 1) * $products->perpage() + $loop->index + 1 }}
-                                                </th>
                                                 <td>
-                                                {{ $p->name_product }}
+                                                    {{ ($products->currentpage() - 1) * $products->perpage() + $loop->index + 1 }} - 
+                                                    {{ $p->name_product }}
                                                     <p class="text-muted text-sm">
-                                                        <button wire:click.prevent="cart_add({{ $p->id }})" class="">
+                                                        <button wire:click.prevent="cart_add({{ $p->id }})" class="btn btn-primary btn-sm">
                                                             +
                                                         </button>
                                                         {{ number_format($p->price, 2, ',', '.') }} Bs | Cantidad: 8
@@ -264,13 +261,13 @@
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Cantidad</th>
                                     <th scope="col">Costo</th>
-                                    <th scope="col">Precio</th>
+                                    <th scope="col">Precio Venta</th>
                                     <th scope="col">Total</th>
                                     <th scope="col" class="text-center">Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($this->shoppingCart->sortBy('created_at') as $c)
+                                @foreach ($this->shoppingCart->sortBy('name_product') as $c)
                                     <tr>
                                         <th class="text-center" scope="row">
                                             {{ $loop->iteration }}
@@ -280,7 +277,12 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="input-group style-input-sm">
-                                                <input type="number" class="form-control" value="{{ $c['quantity'] }}">
+                                                <input type="number" class="form-control"
+
+                                                id="q{{ $c['id'] }}"
+                                                wire:change="change_quantity({{ $c['id'] }}, $event.target.value)"
+
+                                                value="{{ $c['quantity'] }}">
                                                 <span class="input-group-text">
                                                     Uds
                                                 </span>
@@ -288,7 +290,12 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="input-group style-input">
-                                                <input type="number" class="form-control" value="{{ $c['cost'] }}">
+                                                <input type="number" class="form-control"
+
+                                                id="c{{ $c['id'] }}"
+                                                wire:change="change_cost({{ $c['id'] }}, $event.target.value)"
+                                                
+                                                value="{{ $c['cost'] }}">
                                                 <span class="input-group-text">
                                                     Bs
                                                 </span>
@@ -296,7 +303,12 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="input-group style-input">
-                                                <input type="number" class="form-control" value="{{ $c['price'] }}">
+                                                <input type="number" class="form-control"
+
+                                                id="p{{ $c['id'] }}"
+                                                wire:change="change_price({{ $c['id'] }}, $event.target.value)"
+                                                
+                                                value="{{ $c['price'] }}">
                                                 <span class="input-group-text">
                                                     Bs
                                                 </span>
@@ -308,9 +320,9 @@
                                         <td class="text-center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                 <button type="button" class="btn btn-primary btn-sm" wire:click.prevent="cart_add({{ $c['id'] }})">
-                                                +
+                                                    +
                                                 </button>
-                                                <button type="button" class="btn btn-dark btn-sm">
+                                                <button type="button" class="btn btn-dark btn-sm" wire:click.prevent="cart_decrease({{ $c['id'] }})">
                                                     -
                                                 </button>
                                                 <button type="button" class="btn btn-danger btn-sm" wire:click.prevent="cart_delete({{ $c['id'] }})">
@@ -405,7 +417,7 @@
                     }).then((result) => {
                     if (result.isConfirmed)
                     {
-                        window.livewire.emit('deleteSupplier', msg.id)
+                        window.livewire.emit('clean-cart')
                         Swal.close()
                     }
                 })
