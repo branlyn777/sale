@@ -84,6 +84,12 @@
                             <h5>LISTA PRODUCTOS</h5>
                         </div>
                         <div class="col-12 col-sm-12 col-md-4 text-end mb-3">
+                            <button wire:click="$emit('show-modal-import')" type="button" class="btn btn-outline-secondary btn-sm">
+                                Importar
+                            </button>
+                            <button wire:click.prevent="showModalProduct(0)" type="button" class="btn btn-outline-success btn-sm">
+                                Exportar
+                            </button>
                             <button wire:click.prevent="showModalProduct(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
                                 Nuevo Producto
@@ -192,6 +198,7 @@
     
         <!-- [ Modal ] start -->
             @include('livewire.template.inventory.product.modal_product')
+            @include('livewire.template.inventory.product.import')
         <!-- [ Modal ] end -->
     </div>
 </div>
@@ -219,6 +226,12 @@
                 icon: 'success'
             })
 
+        });
+
+        // Muestra la ventana modal para importar productos por excel
+        window.livewire.on('show-modal-import', msg => {
+            var productModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('import'));
+            productModal.show();
         });
 
         // Muestra una alerta
