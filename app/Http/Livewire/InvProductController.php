@@ -9,6 +9,7 @@ use App\Models\InvInventory;
 use App\Models\InvProduct;
 use App\Models\InvWarehouse;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -39,6 +40,7 @@ class InvProductController extends MethodsController
     public $delete_cancel;
     // Guarda el excel para importar productos
     public $excelFile;
+
     public $importedProducts;
 
     use WithPagination;
@@ -46,6 +48,8 @@ class InvProductController extends MethodsController
     protected $paginationTheme = 'bootstrap';
     public function mount()
     {
+        // Inicializa la colección como una instancia de Illuminate\Support\Collection
+        $this->importedProducts = collect([]);
         $this->product_id = 0;
         $this->status = "active";
         $this->category_id = 0;
@@ -391,15 +395,32 @@ class InvProductController extends MethodsController
             // Importar los datos del archivo Excel utilizando el modelo ProductsImport
             $import = new ProductsImport();
             Excel::import($import, $filePath);
-
-            // Obtener los productos importados y almacenarlos en la propiedad $importedProducts
-            $this->importedProducts = $import->getImportedProducts();
-            // eliminar el archivo Excel temporal
+            // Eliminando el archivo Excel temporal
             if (file_exists($this->excelFile->getRealPath()))
             {
                 unlink($this->excelFile->getRealPath());
             }
-            // dd($this->importedProducts);
+            // Obteniendo los productos del excel importado
+            foreach ($import->getImportedProducts() as $p)
+            {
+                // Añadiendo el producto a importedProducts
+                $this->importedProducts->push([
+                    'name_product' => $p['name_product'],
+                    'description' => $p['description'],
+                    'image' => $p['image'],
+                    'barcode' => $p['barcode'],
+                    'guarantee' => $p['guarantee'],
+                    'minimum_stock' => $p['minimum_stock'],
+                    'inv_categorie_id' => $p['inv_categorie_id'],
+                ]);
+            }
+
+
+            
+
+
+
+            
             // Emite un mensaje de tipo toast
             $this->emit("toast", [
                 'text' => "Productos Importados Exitosamente",

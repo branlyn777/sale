@@ -68,6 +68,21 @@
             color: white;
             border-radius: 5px;
         }
+         /* Estilos para las tablas con thead estáticas */
+         .table-static {
+            height: 400px;
+        }
+        .table-static table thead {
+            position: -webkit-sticky;
+            /* Safari... */
+            position: sticky;
+            top: 0;
+            left: 0;
+            background-color: white;
+        }
+
+
+
     </style>
 @endsection
 <div class="pc-content">
