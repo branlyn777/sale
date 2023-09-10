@@ -407,11 +407,11 @@ class InvProductController extends MethodsController
                 $this->importedProducts->push([
                     'name_product' => $p['name_product'],
                     'description' => $p['description'],
-                    'image' => $p['image'],
+                    'price' => $p['price'],
                     'barcode' => $p['barcode'],
-                    'guarantee' => $p['guarantee'],
-                    'minimum_stock' => $p['minimum_stock'],
-                    'inv_categorie_id' => $p['inv_categorie_id'],
+                    'category' => $p['category'],
+                    'warehouses' => $p['warehouses'],
+                    'quantity' => $p['quantity'],
                 ]);
             }
 

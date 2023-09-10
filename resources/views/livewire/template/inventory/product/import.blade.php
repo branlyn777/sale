@@ -24,8 +24,13 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th>Nombre Producto</th>
-                                    <th>Características</th>
+                                    <th>Producto</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Barcode</th>
+                                    <th>Categoría</th>
+                                    <th>Almacen</th>
+                                    <th>Cantidad</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,6 +44,21 @@
                                     </td>
                                     <td>
                                         {{ $p['description'] }}
+                                    </td>
+                                    <td class="text-end">
+                                        {{ number_format($p['price'], 2, ',', '.') }}
+                                    </td>
+                                    <td>
+                                        {{ $p['barcode'] }}
+                                    </td>
+                                    <td>
+                                        {{ $p['category'] }}
+                                    </td>
+                                    <td>
+                                        {{ $p['warehouses'] }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $p['quantity'] }}
                                     </td>
                                 </tr>
                                 @endforeach

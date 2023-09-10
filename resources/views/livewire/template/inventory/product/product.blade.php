@@ -69,9 +69,15 @@
             border-radius: 5px;
         }
          /* Estilos para las tablas con thead estáticas */
-         .table-static {
+        .table-static {
             height: 400px;
         }
+
+        .table-static table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
         .table-static table thead {
             position: -webkit-sticky;
             /* Safari... */
@@ -80,6 +86,17 @@
             left: 0;
             background-color: white;
         }
+
+        .table-static table tr:hover {
+            background-color: #d9edff; /* Cambia el color de fondo en hover a azul claro */
+        }
+
+        .table-static table td, .table-static table th {
+            border: 1px solid #1a98c2; /* Cambia el color de los bordes a azul claro */
+            padding: 8px; /* Añade un espaciado interior para celdas */
+            text-align: left; /* Alineación de texto izquierda */
+        }
+
 
 
 

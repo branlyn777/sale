@@ -30,11 +30,10 @@ class ProductsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithC
             'name_product' => $row['nombre'],
             'description' => $row['descripcion'],
             'price' => $row['precio'],
-            'image' => "sadf.png",
             'barcode' => $row['barcode'],
-            'guarantee' => 10,
-            'minimum_stock' => 10,
-            'inv_categorie_id' => $row['categoria']
+            'category' => $row['categoria'],
+            'warehouses' => $row['almacen'],
+            'quantity' => $row['cantidad']
         ]);
     }
     public function batchSize(): int
