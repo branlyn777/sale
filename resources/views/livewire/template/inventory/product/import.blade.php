@@ -14,7 +14,9 @@
                         <input type="file" class="form-control" wire:model="excelFile">
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 text-end">
+                        @if ($this->importedProducts->count() == 0)
                         <button type="button" wire:click.prevent="import_excel()" class="btn btn-primary">Cargar</button>
+                        @endif
                     </div>
                 </div>
                 @if ($this->importedProducts->count() > 0)
@@ -66,9 +68,64 @@
                         </table>
                     </div>
                 @endif
+                @if ($this->repeatedProducts->count() > 0)
+                    <br>
+                    <div class="text-center">
+                        <h5 class="text-danger">Productos Repetidos</h5>
+                    </div>
+                    <br>
+                    <div class="table-responsive table-static">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Producto Repetido</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Barcode</th>
+                                    <th>Categoría</th>
+                                    <th>Almacen</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($this->repeatedProducts as $ip)
+                                <tr>
+                                    <td class="text-center">
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td>
+                                        {{ $ip['name_product'] }}
+                                    </td>
+                                    <td>
+                                        {{ $ip['description'] }}
+                                    </td>
+                                    <td class="text-end">
+                                        {{ number_format($p['price'], 2, ',', '.') }}
+                                    </td>
+                                    <td>
+                                        {{ $ip['barcode'] }}
+                                    </td>
+                                    <td>
+                                        {{ $ip['category'] }}
+                                    </td>
+                                    <td>
+                                        {{ $ip['warehouses'] }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $ip['quantity'] }}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
             </div>
             <div class="modal-footer">
-                {{-- <button type="button" class="btn" data-bs-dismiss="modal">Cerrar</button> --}}
+                @if ($this->importedProducts->count() > 0)
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Importar</button>
+                @endif
             </div>
         </div>
     </div>

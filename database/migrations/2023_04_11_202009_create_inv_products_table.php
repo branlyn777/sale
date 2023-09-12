@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('inv_products', function (Blueprint $table) {
             $table->id();
-            $table->string('name_product',255);
+            $table->string('name_product',255)->unique();
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2)->default(0.00);
             $table->string('image', 100)->nullable();
-            $table->string('barcode', 50)->nullable();
+            $table->string('barcode', 50)->nullable()->unique();
             $table->smallInteger('guarantee')->nullable(); //-32768 and 32767
             $table->smallInteger('minimum_stock')->nullable(); // -32768 and 32767
             $table->enum('status', ['active','inactive'])->default('active');

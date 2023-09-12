@@ -40,8 +40,10 @@ class InvProductController extends MethodsController
     public $delete_cancel;
     // Guarda el excel para importar productos
     public $excelFile;
-
+    // Guarda los productos importados de un excel
     public $importedProducts;
+    // Guarda los productos con nombres o barcode ya exustentes en la base de datos
+    public $repeatedProducts;
 
     use WithPagination;
     use WithFileUploads;
@@ -50,6 +52,7 @@ class InvProductController extends MethodsController
     {
         // Inicializa la colección como una instancia de Illuminate\Support\Collection
         $this->importedProducts = collect([]);
+        $this->repeatedProducts = collect([]);
         $this->product_id = 0;
         $this->status = "active";
         $this->category_id = 0;
@@ -169,7 +172,7 @@ class InvProductController extends MethodsController
             'name_product' => 'required|min:2|max:255|unique:inv_products,name_product',
             'category_id' => 'not_in:0',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/|max:10',
-            'barcode' => 'nullable|max:50',
+            'barcode' => 'nullable|max:50|unique:inv_products,barcode',
             'guarantee' => 'nullable|numeric|max:1000|not_in:0',
             'minimum_stock' => 'nullable|numeric|max:30000|not_in:0'
         ];
@@ -182,6 +185,7 @@ class InvProductController extends MethodsController
             'price.required' => 'Precio requerido',
             'price.max' => 'Máximo 10 caracteres',
             'barcode.max' => 'Máximo 50 caracteres',
+            'barcode.unique' => 'Ya existe ese código en otro producto',
             'guarantee.numeric' => 'Debe ser un numero',
             'guarantee.max' => 'Máximo 1000 dias',
             'guarantee.not_in' => '0 no es un dato válido',
@@ -413,6 +417,25 @@ class InvProductController extends MethodsController
                     'warehouses' => $p['warehouses'],
                     'quantity' => $p['quantity'],
                 ]);
+            }
+            // Verificando que no se repitan nombres ni codigos en la tabla productos
+            foreach ($this->importedProducts as $ip)
+            {
+                $product = InvProduct::where("name_product", $ip["name_product"])
+                ->orWhere("barcode", $ip["barcode"])
+                ->first();
+                if ($product)
+                {
+                    $this->repeatedProducts->push([
+                        'name_product' => $ip['name_product'],
+                        'description' => $ip['description'],
+                        'price' => $ip['price'],
+                        'barcode' => $ip['barcode'],
+                        'category' => $ip['category'],
+                        'warehouses' => $ip['warehouses'],
+                        'quantity' => $ip['quantity'],
+                    ]);
+                }
             }
 
 
