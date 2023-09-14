@@ -42,8 +42,6 @@ class InvProductController extends MethodsController
     public $excelFile;
     // Guarda los productos importados de un excel
     public $importedProducts;
-    // Guarda los productos con nombres o barcode ya exustentes en la base de datos
-    public $repeatedProducts;
 
     use WithPagination;
     use WithFileUploads;
@@ -52,7 +50,6 @@ class InvProductController extends MethodsController
     {
         // Inicializa la colección como una instancia de Illuminate\Support\Collection
         $this->importedProducts = collect([]);
-        $this->repeatedProducts = collect([]);
         $this->product_id = 0;
         $this->status = "active";
         $this->category_id = 0;
@@ -407,6 +404,16 @@ class InvProductController extends MethodsController
             // Obteniendo los productos del excel importado
             foreach ($import->getImportedProducts() as $p)
             {
+                $status = 1;
+
+                $product = InvProduct::where("name_product", $p["name_product"])
+                ->orWhere("barcode", $p["barcode"])
+                ->first();
+                if ($product)
+                {
+                    $status = 0;
+                }
+
                 // Añadiendo el producto a importedProducts
                 $this->importedProducts->push([
                     'name_product' => $p['name_product'],
@@ -416,33 +423,9 @@ class InvProductController extends MethodsController
                     'category' => $p['category'],
                     'warehouses' => $p['warehouses'],
                     'quantity' => $p['quantity'],
+                    'status' => $status,
                 ]);
             }
-            // Verificando que no se repitan nombres ni codigos en la tabla productos
-            foreach ($this->importedProducts as $ip)
-            {
-                $product = InvProduct::where("name_product", $ip["name_product"])
-                ->orWhere("barcode", $ip["barcode"])
-                ->first();
-                if ($product)
-                {
-                    $this->repeatedProducts->push([
-                        'name_product' => $ip['name_product'],
-                        'description' => $ip['description'],
-                        'price' => $ip['price'],
-                        'barcode' => $ip['barcode'],
-                        'category' => $ip['category'],
-                        'warehouses' => $ip['warehouses'],
-                        'quantity' => $ip['quantity'],
-                    ]);
-                }
-            }
-
-
-            
-
-
-
             
             // Emite un mensaje de tipo toast
             $this->emit("toast", [
@@ -451,11 +434,6 @@ class InvProductController extends MethodsController
                 'icon' => "success"
             ]);
 
-            // Cerrando la ventana modal para importar productos
-            // $this->emit("hide-modal-import");
-
-            // Limpiar el campo del archivo después de la importación
-            // $this->excelFile = null;
         }
         catch (\Exception $e)
         {
@@ -464,6 +442,43 @@ class InvProductController extends MethodsController
             // Puedes mostrar un mensaje de error o realizar cualquier acción necesaria.
             // ...
         }
+    }
+    public function insert_products()
+    {
+        foreach ($this->importedProducts as $p)
+        {
+            $category = InvCategory::where("name_category", $p['category'])->first();
+
+            $category_id = 0;
+
+            if ($category)
+            {
+                $category_id = $category->id;
+            }
+            else
+            {
+                $new_category = InvCategory::create([
+                    'name_category' =>  $p['category']
+                ]);
+                $category_id = $new_category->id;
+            }
+
+            InvProduct::create([
+                'name_product' =>  $p['name_product'],
+                'description' =>  $p['description'],
+                'price' =>  $p['price'],
+                'image' =>  "no-image.png",
+                'barcode' =>  $p['barcode'],
+                'inv_categorie_id' =>  $category_id
+            ]);
+        }
+
+
+        // Cerrando la ventana modal para importar productos
+        $this->emit("hide-modal-import");
+
+        // Limpiar el campo del archivo después de la importación
+        // $this->excelFile = null;
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [

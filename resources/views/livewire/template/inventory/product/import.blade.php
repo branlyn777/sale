@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-8">
-                        <input type="file" class="form-control" wire:model="excelFile">
+                        <input type="file" class="form-control" wire:model="excelFile" accept=".xlsx, .xls">
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 text-end">
                         @if ($this->importedProducts->count() == 0)
@@ -37,38 +37,40 @@
                             </thead>
                             <tbody>
                                 @foreach ($this->importedProducts as $p)
-                                <tr>
-                                    <td class="text-center">
-                                        {{ $loop->iteration }}
-                                    </td>
-                                    <td>
-                                        {{ $p['name_product'] }}
-                                    </td>
-                                    <td>
-                                        {{ $p['description'] }}
-                                    </td>
-                                    <td class="text-end">
-                                        {{ number_format($p['price'], 2, ',', '.') }}
-                                    </td>
-                                    <td>
-                                        {{ $p['barcode'] }}
-                                    </td>
-                                    <td>
-                                        {{ $p['category'] }}
-                                    </td>
-                                    <td>
-                                        {{ $p['warehouses'] }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $p['quantity'] }}
-                                    </td>
-                                </tr>
+                                    @if ($p['status'] == 1)
+                                        <tr>
+                                            <td class="text-center">
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td>
+                                                {{ $p['name_product'] }}
+                                            </td>
+                                            <td>
+                                                {{ $p['description'] }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($p['price'], 2, ',', '.') }}
+                                            </td>
+                                            <td>
+                                                {{ $p['barcode'] }}
+                                            </td>
+                                            <td>
+                                                {{ $p['category'] }}
+                                            </td>
+                                            <td>
+                                                {{ $p['warehouses'] }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $p['quantity'] }}
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 @endif
-                @if ($this->repeatedProducts->count() > 0)
+                @if ($this->importedProducts->count() > 0)
                     <br>
                     <div class="text-center">
                         <h5 class="text-danger">Productos Repetidos</h5>
@@ -89,7 +91,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($this->repeatedProducts as $ip)
+                                @foreach ($this->importedProducts as $ip)
+                                @if ($ip['status'] == 0)
                                 <tr>
                                     <td class="text-center">
                                         {{ $loop->iteration }}
@@ -116,6 +119,7 @@
                                         {{ $ip['quantity'] }}
                                     </td>
                                 </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>
@@ -124,7 +128,7 @@
             </div>
             <div class="modal-footer">
                 @if ($this->importedProducts->count() > 0)
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Importar</button>
+                <button wire:click.prevent='insert_products()' type="button" class="btn btn-primary">Importar</button>
                 @endif
             </div>
         </div>
