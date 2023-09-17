@@ -15,7 +15,7 @@ class InvWarehouseSeeder extends Seeder
     {
         // 1
         InvWarehouse::create([
-            'name_warehouse' => 'Tienda',
+            'name_warehouse' => 'Tienda Sucusal 1',
             'description' => 'Lugar donde se venden los productos',
             'inv_branch_id' => 1,
         ]);
@@ -31,11 +31,9 @@ class InvWarehouseSeeder extends Seeder
             'description' => 'Lugar destinado recibir los productos devueltos',
             'inv_branch_id' => 1,
         ]);
-
-
         // 4
         InvWarehouse::create([
-            'name_warehouse' => 'Tienda',
+            'name_warehouse' => 'Tienda Sucursal 2',
             'description' => 'Lugar donde se venden los productos',
             'inv_branch_id' => 2,
         ]);
@@ -51,11 +49,9 @@ class InvWarehouseSeeder extends Seeder
             'description' => 'Lugar destinado a productos alimenticios',
             'inv_branch_id' => 2,
         ]);
-
-        
         // 7
         InvWarehouse::create([
-            'name_warehouse' => 'Tienda',
+            'name_warehouse' => 'Tienda Sucursal 3',
             'description' => 'Lugar donde se venden los productos',
             'inv_branch_id' => 3,
         ]);

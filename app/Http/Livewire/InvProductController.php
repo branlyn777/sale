@@ -381,7 +381,7 @@ class InvProductController extends MethodsController
     {
         $this->image = null;
     }
-    // Importa productos a traves de un excel
+    // Importa productos a traves de un Excel
     public function import_excel()
     {
         // Validar que se haya cargado un archivo
@@ -404,8 +404,9 @@ class InvProductController extends MethodsController
             // Obteniendo los productos del excel importado
             foreach ($import->getImportedProducts() as $p)
             {
+                // Variable que guardara el estado del producto (1=activo : 0=inactivo)
                 $status = 1;
-
+                // El producto será inactivo si ya existe el nombre o el barcode
                 $product = InvProduct::where("name_product", $p["name_product"])
                 ->orWhere("barcode", $p["barcode"])
                 ->first();
@@ -413,7 +414,12 @@ class InvProductController extends MethodsController
                 {
                     $status = 0;
                 }
-
+                // El producto será inactivo si no se encuentra el almacen en la base de datos
+                $warehouse = InvWarehouse::where("name_warehouse", $p["warehouses"])->first();
+                if (!$warehouse)
+                {
+                    $status = 0;
+                }
                 // Añadiendo el producto a importedProducts
                 $this->importedProducts->push([
                     'name_product' => $p['name_product'],
@@ -443,42 +449,74 @@ class InvProductController extends MethodsController
             // ...
         }
     }
-    public function insert_products()
+    // Creando los productos provenientes del Excel
+    public function create_products()
     {
+        // Iterando por todos los productos provenientes del Execel
         foreach ($this->importedProducts as $p)
         {
-            $category = InvCategory::where("name_category", $p['category'])->first();
-
-            $category_id = 0;
-
-            if ($category)
+            // Solo se importarán los productos activos (estado=1)
+            if ($p['status'] == 1)
             {
-                $category_id = $category->id;
-            }
-            else
-            {
-                $new_category = InvCategory::create([
-                    'name_category' =>  $p['category']
+                // Buscando la categoria descrita en el producto
+                $category = InvCategory::where("name_category", $p['category'])->first();
+                // Variable que guardara el id de la categoria a asignar al producto
+                $category_id = 0;
+                // Si se encuentra la categoría se obtiene el id si no se creará una nueva
+                if ($category)
+                {
+                    $category_id = $category->id;
+                }
+                else
+                {
+                    $new_category = InvCategory::create([
+                        'name_category' =>  $p['category']
+                    ]);
+                    $category_id = $new_category->id;
+                }
+                // Creando el producto
+                $product = InvProduct::create([
+                    'name_product' =>  $p['name_product'],
+                    'description' =>  $p['description'],
+                    'price' =>  $p['price'],
+                    'image' =>  "no-image.png",
+                    'barcode' =>  $p['barcode'],
+                    'inv_categorie_id' =>  $category_id
                 ]);
-                $category_id = $new_category->id;
+                // Buscando el almacen descrito en el producto
+                $warehouse = InvWarehouse::where("name_warehouse", $p['warehouses'])->first();
+                // Variable que guardara el id del almacen a asignar al producto
+                $warehouse_id = 0;
+                // Si se encuentra el almacen se obtiene el id si no se creará un nuevo
+                if ($warehouse)
+                {
+                    $warehouse_id = $warehouse->id;
+                }
+                else
+                {
+                    $new_warehouse = InvWarehouse::create([
+                        'name_category' =>  $p['category']
+                    ]);
+                    $warehouse_id = $new_warehouse->id;
+                }
+                // Creando el stock en inventarios
+                InvInventory::create([
+                    'quantity' =>  $p['quantity'],
+                    'cost' =>  $p['cost'],
+                    'price' =>  $p['price'],
+                    'inv_warehouse_id' =>  $warehouse_id,
+                    'inv_product_id' =>  $product->id
+                ]);
+
+
+
             }
-
-            InvProduct::create([
-                'name_product' =>  $p['name_product'],
-                'description' =>  $p['description'],
-                'price' =>  $p['price'],
-                'image' =>  "no-image.png",
-                'barcode' =>  $p['barcode'],
-                'inv_categorie_id' =>  $category_id
-            ]);
         }
-
-
         // Cerrando la ventana modal para importar productos
         $this->emit("hide-modal-import");
 
         // Limpiar el campo del archivo después de la importación
-        // $this->excelFile = null;
+        $this->excelFile = null;
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [

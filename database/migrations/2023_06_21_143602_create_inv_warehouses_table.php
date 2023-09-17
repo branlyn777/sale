@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('inv_warehouses', function (Blueprint $table) {
             $table->id();
-            $table->string('name_warehouse',255);
+            $table->string('name_warehouse',255)->unique();
             $table->text('description')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
             $table->foreignId('inv_branch_id')->constrained();
