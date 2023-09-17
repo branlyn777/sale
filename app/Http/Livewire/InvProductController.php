@@ -424,12 +424,13 @@ class InvProductController extends MethodsController
                 $this->importedProducts->push([
                     'name_product' => $p['name_product'],
                     'description' => $p['description'],
+                    'cost' => $p['cost'],
                     'price' => $p['price'],
                     'barcode' => $p['barcode'],
                     'category' => $p['category'],
                     'warehouses' => $p['warehouses'],
                     'quantity' => $p['quantity'],
-                    'status' => $status,
+                    'status' => $status
                 ]);
             }
             
@@ -443,7 +444,7 @@ class InvProductController extends MethodsController
         }
         catch (\Exception $e)
         {
-            dd("Error");
+            dd($e);
             // Manejar cualquier excepción que pueda ocurrir durante la importación (por ejemplo, un formato de archivo incorrecto).
             // Puedes mostrar un mensaje de error o realizar cualquier acción necesaria.
             // ...
@@ -485,31 +486,14 @@ class InvProductController extends MethodsController
                 ]);
                 // Buscando el almacen descrito en el producto
                 $warehouse = InvWarehouse::where("name_warehouse", $p['warehouses'])->first();
-                // Variable que guardara el id del almacen a asignar al producto
-                $warehouse_id = 0;
-                // Si se encuentra el almacen se obtiene el id si no se creará un nuevo
-                if ($warehouse)
-                {
-                    $warehouse_id = $warehouse->id;
-                }
-                else
-                {
-                    $new_warehouse = InvWarehouse::create([
-                        'name_category' =>  $p['category']
-                    ]);
-                    $warehouse_id = $new_warehouse->id;
-                }
                 // Creando el stock en inventarios
                 InvInventory::create([
                     'quantity' =>  $p['quantity'],
                     'cost' =>  $p['cost'],
                     'price' =>  $p['price'],
-                    'inv_warehouse_id' =>  $warehouse_id,
+                    'inv_warehouse_id' =>  $warehouse->id,
                     'inv_product_id' =>  $product->id
                 ]);
-
-
-
             }
         }
         // Cerrando la ventana modal para importar productos

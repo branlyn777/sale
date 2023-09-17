@@ -27,6 +27,7 @@
                                     <th class="text-center">No</th>
                                     <th>Producto</th>
                                     <th>Descripción</th>
+                                    <th>Costo</th>
                                     <th>Precio</th>
                                     <th>Barcode</th>
                                     <th>Categoría</th>
@@ -46,6 +47,9 @@
                                             </td>
                                             <td>
                                                 {{ $p['description'] }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($p['cost'], 2, ',', '.') }}
                                             </td>
                                             <td class="text-end">
                                                 {{ number_format($p['price'], 2, ',', '.') }}
@@ -82,6 +86,7 @@
                                     <th class="text-center">No</th>
                                     <th>Producto Repetido</th>
                                     <th>Descripción</th>
+                                    <th>Costo</th>
                                     <th>Precio</th>
                                     <th>Barcode</th>
                                     <th>Categoría</th>
@@ -101,6 +106,9 @@
                                     </td>
                                     <td>
                                         {{ $ip['description'] }}
+                                    </td>
+                                    <td class="text-end">
+                                        {{ number_format($p['cost'], 2, ',', '.') }}
                                     </td>
                                     <td class="text-end">
                                         {{ number_format($p['price'], 2, ',', '.') }}

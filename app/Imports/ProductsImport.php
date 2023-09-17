@@ -29,6 +29,7 @@ class ProductsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithC
         $this->importedProducts->push([
             'name_product' => $row['nombre'],
             'description' => $row['descripcion'],
+            'cost' => $row['costo'],
             'price' => $row['precio'],
             'barcode' => $row['barcode'],
             'category' => $row['categoria'],
