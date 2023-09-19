@@ -38,8 +38,7 @@
                     <form class="header-search">
                         <i class="ti ti-search icon-search"></i>
                         <input type="search" class="form-control" placeholder="Buscar..." />
-                        <button class="btn btn-light-primary btn-search"><i
-                                class="ti ti-adjustments-horizontal"></i></button>
+                        <button class="btn btn-light-primary btn-search"><i class="ti ti-adjustments-horizontal"></i></button>
                     </form>
                 </li>
             </ul>
