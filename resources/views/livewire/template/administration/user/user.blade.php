@@ -13,7 +13,7 @@
                         <h5>USUARIOS</h5>
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 text-end mb-3">
-                        <button wire:click.prevent="showModalCategorie(0)" type="button" class="btn btn-outline-primary">
+                        <button wire:click.prevent="showModalUser(0)" type="button" class="btn btn-outline-primary">
                             <i class="bi bi-plus-lg"></i>
                             Nuevo Usuario
                         </button>
@@ -26,7 +26,7 @@
                             <span class="input-group-text">
                                 <i class="bi bi-search"></i>
                             </span>
-                            <input wire:model="search" type="text" class="form-control" placeholder="Buscar Categoría...">
+                            <input wire:model="search" type="text" class="form-control" placeholder="Buscar Usuario...">
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 text-center">
@@ -71,12 +71,12 @@
                                         {{ \Carbon\Carbon::parse($u->updated_at)->format('d/m/Y H:i') }}
                                     </td>
                                     <td class="text-center">
-                                        <button wire:click.prevent="showModalCategorie({{ $u->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                        <button wire:click.prevent="showModalUser({{ $u->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
                                     </td>
                                     <td class="text-center">
-                                        <button wire:click.prevent="check_category({{ $u->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                        <button wire:click.prevent="check_user({{ $u->id }})" type="button" class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
@@ -85,11 +85,70 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- {{ $categories->links() }} --}}
+                {{-- {{ $users->links() }} --}}
             </div>
         </div>
       </div>
+
+
+      
+        <!-- [ Modal ] start -->
+        @include('livewire.template.administration.user.modal_user')
+        <!-- [ Modal ] end -->
+
+
+
       <!-- [ sample-page ] end -->
     </div>
     <!-- [ Main Content ] end -->
   </div>
+  @section('javascript')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Muestra la ventana modal crear/actualizar usuario producto
+            window.livewire.on('show-modal-user', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('user'));
+                modal.show();
+            });
+            // Oculta la ventana modal crear/actualizar usuario producto
+            window.livewire.on('hide-modal-user', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('user'));
+                modal.hide();
+            });
+
+            // Muestra una alerta
+            window.livewire.on('alert', msg => {
+                Swal.fire({
+                    title: msg.title,
+                    text: msg.text,
+                    icon: msg.icon,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: msg.confirmButtonText,
+                    cancelButtonText: msg.cancelButtonText,
+                    }).then((result) => {
+                    if (result.isConfirmed)
+                    {
+                        window.livewire.emit('deleteUser', msg.id)
+                        Swal.close()
+                    }
+                })
+            });
+            // Muestra un mensaje de tipo toast arriba a la derecha
+            window.livewire.on('toast', msg => {
+                Swal.fire({
+                    toast: true,
+                    text: msg.text,
+                    showConfirmButton: false,
+                    position: 'top-right',
+                    timer: msg.timer,
+                    timerProgressBar: true,
+                    icon: msg.icon
+                })
+            });
+
+        });
+    </script>
+@endsection

@@ -26,9 +26,9 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
                 @if($this->category_id == 0)
-                    <button type="button" wire:click.prevent="create_category()" class="btn btn-primary">Crear</button>
+                    <button type="button" wire:click.prevent="create_category()" class="btn btn-secondary">Crear</button>
                 @else
-                    <button type="button" wire:click.prevent="update_category()" class="btn btn-primary">Actualizar</button>
+                    <button type="button" wire:click.prevent="update_category()" class="btn btn-secondary">Actualizar</button>
                 @endif
             </div>
         </div>
