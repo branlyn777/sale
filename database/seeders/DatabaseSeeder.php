@@ -29,5 +29,10 @@ class DatabaseSeeder extends Seeder
         $this->call(AdmSupplierSeeder::class);
         $this->call(TxnCashRegisterSeeder::class);
         $this->call(TxnPaymensTypeSeeder::class);
+
+        // SIS - PETROL
+        $this->call(SisCisternSeeder::class);
+        $this->call(SisDriverSeeder::class);
+
     }
 }

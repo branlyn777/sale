@@ -10,6 +10,8 @@ use App\Http\Livewire\InvCategoryController;
 use App\Http\Livewire\InvProductController;
 use App\Http\Livewire\LandingHomeController;
 use App\Http\Livewire\InvSaleController;
+use App\Http\Livewire\SisCisternController;
+use App\Http\Livewire\SisDriverController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +58,10 @@ Route::middleware('auth')->group(function () {
     Route::get('productos', InvProductController::class);
     Route::get('comprar', InvBuyController::class);
     Route::get('vender', InvSaleController::class);
+
+    // SIS - PETROL
+    Route::get('cisternas', SisCisternController::class);
+    Route::get('conductores', SisDriverController::class);
 });
 
 require __DIR__.'/auth.php';
