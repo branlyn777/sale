@@ -5,6 +5,8 @@ namespace App\Http\Livewire;
 use App\Models\InvBranch;
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithPagination;
+
 
 class AdmUserController extends Component
 {
@@ -14,13 +16,24 @@ class AdmUserController extends Component
     public $user_name;
     // Guarda la lista de Sucursales
     public $list_branches;
+     // Guarda true o false para mostrar usuarios activos o inactivos
+     public $status;
+    
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public function mount()
     {
         $this->list_branches = InvBranch::where("status","active")->get();
+        $this->status = "active";
     }
     public function render()
     {
-        $users = User::all();
+        $users = User::where("status",$this->status)
+        ->orderBy("created_at","desc")
+        ->paginate(10);
+
+
         return view('livewire.template.administration.user.user', [
             'users' => $users,
         ])

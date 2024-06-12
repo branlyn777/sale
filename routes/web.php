@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Livewire\AdmAssignPermissionController;
+use App\Http\Livewire\AdmPermissionController;
+use App\Http\Livewire\AdmRoleController;
 use App\Http\Livewire\AdmSupplierController;
 use App\Http\Livewire\AdmUserController;
 use App\Http\Livewire\LandingCatalogueController;
@@ -12,6 +15,7 @@ use App\Http\Livewire\LandingHomeController;
 use App\Http\Livewire\InvSaleController;
 use App\Http\Livewire\SisCisternController;
 use App\Http\Livewire\SisDriverController;
+use App\Http\Livewire\SisOwnerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,6 +56,9 @@ Route::middleware('auth')->group(function () {
     // Administration
     Route::get('usuarios', AdmUserController::class);
     Route::get('proveedores', AdmSupplierController::class);
+    Route::get('roles', AdmRoleController::class);
+    Route::get('permisos', AdmPermissionController::class);
+    Route::get('asignarpermisos', AdmAssignPermissionController::class);
 
     // Inventories
     Route::get('categorias', InvCategoryController::class);
@@ -62,6 +69,7 @@ Route::middleware('auth')->group(function () {
     // SIS - PETROL
     Route::get('cisternas', SisCisternController::class);
     Route::get('conductores', SisDriverController::class);
+    Route::get('propietarios', SisOwnerController::class);
 });
 
 require __DIR__.'/auth.php';

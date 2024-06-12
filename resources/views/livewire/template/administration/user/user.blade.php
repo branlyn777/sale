@@ -13,10 +13,12 @@
                         <h5>USUARIOS</h5>
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 text-end mb-3">
-                        <button wire:click.prevent="showModalUser(0)" type="button" class="btn btn-outline-primary">
-                            <i class="bi bi-plus-lg"></i>
-                            Nuevo Usuario
-                        </button>
+                        @can('crear_usuarios')
+                            <button wire:click.prevent="showModalUser(0)" type="button" class="btn btn-outline-primary">
+                                <i class="bi bi-plus-lg"></i>
+                                Nuevo Usuario
+                            </button>
+                        @endcan
                     </div>
                 </div>
                 <div class="row">
@@ -51,39 +53,48 @@
                                 <th scope="col">Nombre</th>
                                 <th class="text-center" scope="col">Fecha Creación</th>
                                 <th class="text-center" scope="col">Fecha Actualización</th>
-                                <th class="text-center" scope="col">Editar</th>
-                                <th class="text-center" scope="col">Eliminar</th>
+                                @can('editar_usuarios')
+                                    <th class="text-center" scope="col">Editar</th>
+                                @endcan
+                                @can('eliminar_usuarios')
+                                    <th class="text-center" scope="col">Eliminar</th>
+                                @endcan
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($users as $u)
                                 <tr>
                                     <th class="text-center" scope="row">
-                                        {{-- {{ ($users->currentpage() - 1) * $users->perpage() + $loop->index + 1 }} --}}
+                                        {{ ($users->currentpage() - 1) * $users->perpage() + $loop->index + 1 }}
                                     </th>
                                     <td>
                                         {{$u->name}}
                                     </td>
                                     <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($u->created_at)->format('d/m/Y H:i') }}
+                                        {{ \Carbon\Carbon::parse($u->created_at)->format('d/m/Y g:i A') }}
                                     </td>
                                     <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($u->updated_at)->format('d/m/Y H:i') }}
+                                        {{ \Carbon\Carbon::parse($u->updated_at)->format('d/m/Y g:i A') }}
                                     </td>
-                                    <td class="text-center">
-                                        <button wire:click.prevent="showModalUser({{ $u->id }})" type="button" class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                    </td>
-                                    <td class="text-center">
-                                        <button wire:click.prevent="check_user({{ $u->id }})" type="button" class="btn btn-outline-danger btn-sm">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </td>
+                                    @can('editar_usuarios')
+                                        <td class="text-center">
+                                            <button wire:click.prevent="showModalUser({{ $u->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+                                    @can('eliminar_usuarios')
+                                        <td class="text-center">
+                                            <button wire:click.prevent="check_user({{ $u->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    
                 </div>
                 {{-- {{ $users->links() }} --}}
             </div>

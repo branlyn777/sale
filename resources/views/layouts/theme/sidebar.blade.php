@@ -19,8 +19,12 @@
             </span>
             <span class="pc-mtext">Inicio</span></a>
         </li>
+
+
+
+
         <li class="pc-item pc-caption">
-          <label>Inventarios</label>
+          <label>Gestion</label>
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
@@ -40,18 +44,18 @@
               </a>
             </li>
             <li class="pc-item">
-              <a class="pc-link" href="">
+              <a class="pc-link" href="{{ url('roles') }}">
+                Roles
+              </a>
+            </li>
+            <li class="pc-item">
+              <a class="pc-link" href="{{ url('asignarpermisos') }}">
                 Asignar Permisos
               </a>
             </li>
             <li class="pc-item">
-              <a class="pc-link" href="">
-                Empresa
-              </a>
-            </li>
-            <li class="pc-item">
-              <a class="pc-link" href="">
-                Sucursales
+              <a class="pc-link" href="{{ url('permisos') }}">
+                Permisos
               </a>
             </li>
             <li class="pc-item">
@@ -71,7 +75,12 @@
             </li>
           </ul>
         </li>
-        <li class="pc-item pc-hasmenu">
+
+
+
+
+
+        {{-- <li class="pc-item pc-hasmenu">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
               <i class="ti ti-archive"></i>
@@ -103,7 +112,11 @@
               </a>
             </li>
           </ul>
-        </li>
+        </li> --}}
+
+
+
+
         <li class="pc-item pc-hasmenu">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
@@ -121,7 +134,7 @@
               </a>
             </li>
             <li class="pc-item">
-              <a class="pc-link" href="{{ url('categorias') }}">
+              <a class="pc-link" href="{{ url('propietarios') }}">
                 Propietarios
               </a>
             </li>
@@ -142,40 +155,6 @@
             </li>
           </ul>
         </li>
-        <li class="pc-item pc-caption">
-          <label>Ventas</label>
-          <i class="ti ti-apps"></i>
-        </li>
-        <li class="pc-item">
-          <a href="{{ url('vender') }}" class="pc-link">
-            <span class="pc-micon">
-              <i class="ti ti-shopping-cart"></i>
-            </span>
-            <span class="pc-mtext">
-              Vender
-            </span>
-          </a>
-        </li>
-        <li class="pc-item">
-          <a href="../elements/bc_color.html" class="pc-link">
-            <span class="pc-micon">
-              <i class="ti ti-list"></i>
-            </span>
-            <span class="pc-mtext">
-              Lista de Ventas 1
-            </span>
-          </a>
-        </li>
-        <li class="pc-item">
-          <a href="https://tablericons.com" class="pc-link">
-            <span class="pc-micon">
-              <i class="ti ti-list"></i>
-            </span>
-            <span class="pc-mtext">
-              Lista de Ventas 2
-            </span>
-          </a>
-        </li>
 
         <li class="pc-item pc-caption">
           <label>Reportes</label>
@@ -186,7 +165,7 @@
             <span class="pc-micon">
               <i class="ti ti-brand-chrome"></i>
             </span>
-            <span class="pc-mtext">Movimientos</span>
+            <span class="pc-mtext">Reporte 1</span>
           </a>
         </li>
         <li class="pc-item">
@@ -194,7 +173,7 @@
             <span class="pc-micon">
               <i class="ti ti-vocabulary"></i>
             </span>
-            <span class="pc-mtext">Estadísticas</span>
+            <span class="pc-mtext">Reporte 2</span>
           </a>
         </li>
       </ul>
