@@ -16,6 +16,7 @@ use App\Http\Livewire\InvSaleController;
 use App\Http\Livewire\SisCisternController;
 use App\Http\Livewire\SisDriverController;
 use App\Http\Livewire\SisOwnerController;
+use App\Http\Livewire\SisRuatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,6 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::get('cisternas', SisCisternController::class);
     Route::get('conductores', SisDriverController::class);
     Route::get('propietarios', SisOwnerController::class);
+    Route::get('ruat', SisRuatController::class);
 });
 
 require __DIR__.'/auth.php';
