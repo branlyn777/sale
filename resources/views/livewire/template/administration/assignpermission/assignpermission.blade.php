@@ -31,7 +31,6 @@
                         <div class="col-12 col-sm-6 col-md-4 text-center">
                             <label>Roles</label>
                             <select wire:model="role_id" class="form-select">
-                                <option value="select">Seleccionar</option>
                                 @foreach ($this->list_roles as $r)
                                     <option value="{{ $r->id }}">{{ $r->name }}</option>
                                 @endforeach
@@ -49,7 +48,7 @@
                                     <th>Asignar</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Seccion</th>
-                                    <th class="text-center" scope="col">Fecha de Creacion</th>
+                                    {{-- <th class="text-center" scope="col">Fecha de Creacion</th> --}}
                                     <th class="text-center" scope="col">Fecha de Actualizacion</th>
                                 </tr>                                
                             </thead>
@@ -74,9 +73,9 @@
                                         <td>
                                             {{$p->section}}
                                         </td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             {{ \Carbon\Carbon::parse($p->created_at)->format('d/m/Y g:i A') }}
-                                        </td>
+                                        </td> --}}
                                         <td class="text-center">
                                             {{ \Carbon\Carbon::parse($p->updated_at)->format('d/m/Y g:i A') }}
                                         </td>

@@ -49,7 +49,7 @@
                                     <th class="text-center"scope="col">#</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Seccion</th>
-                                    <th class="text-center" scope="col">Fecha de Creacion</th>
+                                    {{-- <th class="text-center" scope="col">Fecha de Creacion</th> --}}
                                     <th class="text-center" scope="col">Fecha de Actualizacion</th>
                                     <th class="text-center" scope="col">Editar</th>
                                     <th class="text-center" scope="col">Eliminar</th>
@@ -67,9 +67,9 @@
                                         <td>
                                             {{$p->section}}
                                         </td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             {{ \Carbon\Carbon::parse($p->created_at)->format('d/m/Y g:i A') }}
-                                        </td>
+                                        </td> --}}
                                         <td class="text-center">
                                             {{ \Carbon\Carbon::parse($p->updated_at)->format('d/m/Y g:i A') }}
                                         </td>

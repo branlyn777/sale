@@ -51,7 +51,8 @@
                             <tr>
                                 <th class="text-center" scope="col">#</th>
                                 <th scope="col">Nombre</th>
-                                <th class="text-center" scope="col">Fecha Creación</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Rol</th>
                                 <th class="text-center" scope="col">Fecha Actualización</th>
                                 @can('editar_usuarios')
                                     <th class="text-center" scope="col">Editar</th>
@@ -70,8 +71,11 @@
                                     <td>
                                         {{$u->name}}
                                     </td>
-                                    <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($u->created_at)->format('d/m/Y g:i A') }}
+                                    <td>
+                                        {{$u->email}}
+                                    </td>
+                                    <td>
+                                        {{ $u->getRoleNames()->join(', ') }}
                                     </td>
                                     <td class="text-center">
                                         {{ \Carbon\Carbon::parse($u->updated_at)->format('d/m/Y g:i A') }}
@@ -96,7 +100,7 @@
                     </table>
                     
                 </div>
-                {{-- {{ $users->links() }} --}}
+                {{ $users->links() }}
             </div>
         </div>
       </div>

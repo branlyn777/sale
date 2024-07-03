@@ -13,11 +13,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-
-
-
-
                 <div class="row mb-3">
                     <div class="col-sm-12">
                         <div class="card">
@@ -31,10 +26,7 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
+            
                 <div class="row mb-3">
                     <div class="col-12">
                         <label class="form-label">Placa</label>
@@ -44,7 +36,7 @@
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-12">
                         <label class="form-label">
@@ -66,7 +58,7 @@
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Marca</label>
@@ -83,7 +75,7 @@
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Tipo de Vehículo</label>
@@ -100,7 +92,7 @@
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Subtipo de Vehículo</label>
@@ -110,7 +102,7 @@
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Número de Motor</label>
@@ -120,8 +112,7 @@
                         @enderror
                     </div>
                 </div>
-
-
+            
                 <div class="row mb-3">
                     <div class="col-12">
                         <label class="form-label">
@@ -143,7 +134,7 @@
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Fecha de Póliza</label>
@@ -154,13 +145,13 @@
                     </div>
                     <div class="col-6">
                         <label class="form-label">Año Inicio Impuestos</label>
-                        <input wire:model.lazy="tax_start_year" type="text" class="form-control">
+                        <input wire:model.lazy="tax_start_year" type="number" class="form-control">
                         @error('tax_start_year')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">País</label>
@@ -177,7 +168,7 @@
                         @enderror
                     </div>
                 </div>
-
+            
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Aduana Importación</label>
@@ -186,23 +177,8 @@
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-6">
-
-                    </div>
                 </div>
-
-
-
-
-
-
-                
-
-
-
-
-
-
+            
                 <div class="row mb-3">
                     <div class="col-12">
                         <label class="form-label">
@@ -211,7 +187,7 @@
                     </div>
                     <div class="col-6">
                         <label class="form-label">Cilindrada</label>
-                        <input wire:model.lazy="displacement" type="text" class="form-control">
+                        <input wire:model.lazy="displacement" type="number" step="0.01" class="form-control">
                         @error('displacement')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -243,7 +219,7 @@
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Número de Ruedas</label>
-                        <input wire:model.lazy="number_of_wheels" type="text" class="form-control">
+                        <input wire:model.lazy="number_of_wheels" type="number" class="form-control">
                         @error('number_of_wheels')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -262,14 +238,14 @@
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label">Número de Puertas</label>
-                        <input wire:model.lazy="number_of_doors" type="text" class="form-control">
+                        <input wire:model.lazy="number_of_doors" type="number" class="form-control">
                         @error('number_of_doors')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-6">
                         <label class="form-label">Peso</label>
-                        <input wire:model.lazy="weight" type="text" class="form-control">
+                        <input wire:model.lazy="weight" type="number" step="0.01" class="form-control">
                         @error('weight')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -277,25 +253,16 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-6">
-                        <label class="form-label">Color</label>
-                        <input wire:model.lazy="color" type="text" class="form-control">
-                        @error('color')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-6">
-                        <label class="form-label">Capacidad Remolque</label>
-                        <input wire:model.lazy="towing_capacity" type="text" class="form-control">
-                        @error('towing_capacity')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-6">
                         <label class="form-label">Número de Plazas</label>
-                        <input wire:model.lazy="number_of_places" type="text" class="form-control">
+                        <input wire:model.lazy="number_of_places" type="number" class="form-control">
                         @error('number_of_places')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Capacidad de Arrastre</label>
+                        <input wire:model.lazy="towing_capacity" type="number" step="0.01" class="form-control">
+                        @error('towing_capacity')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -308,25 +275,23 @@
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
-                <div class="row mb-3">
                     <div class="col-6">
-                        <label class="form-label">Tipo de Carrocería</label>
+                        <label class="form-label">Carrocería</label>
                         <input wire:model.lazy="bodywork_type" type="text" class="form-control">
                         @error('bodywork_type')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="form-label">Color</label>
+                        <input wire:model.lazy="color" type="text" class="form-control">
+                        @error('color')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
                 <div class="row mb-3">
                     <div class="col-12">
                         <label class="form-label">Observaciones</label>
@@ -336,24 +301,13 @@
                         @enderror
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
                 @if($this->ruat_id == 0)
-                    <button type="button" wire:click.prevent="create_driver()" class="btn btn-secondary">Crear</button>
+                    <button type="button" wire:click.prevent="create_ruat()" class="btn btn-secondary">Crear</button>
                 @else
-                    <button type="button" wire:click.prevent="update_driver()" class="btn btn-secondary">Actualizar</button>
+                    <button type="button" wire:click.prevent="update_ruat()" class="btn btn-secondary">Actualizar</button>
                 @endif
             </div>
         </div>

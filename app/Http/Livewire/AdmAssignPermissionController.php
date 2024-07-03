@@ -23,9 +23,11 @@ class AdmAssignPermissionController extends Component
     protected $paginationTheme = 'bootstrap';
     public function mount()
     {
-        $this->role_id = 1;
+        $this->role_id = 2;
         $this->status = "active";
-        $this->list_roles = Role::orderBy("name")->get();
+        $this->list_roles = Role::orderBy("name")
+        ->where('id', '!=', 1)
+        ->get();
     }
     public function render()
     {

@@ -111,7 +111,7 @@
         <!-- [ sample-page ] end -->
     
         <!-- [ Modal ] start -->
-            @include('livewire.template.sis.drivers.modal_driver')
+            {{-- @include('livewire.template.sis.drivers.modal_driver') --}}
         <!-- [ Modal ] end -->
     </div>
 </div>

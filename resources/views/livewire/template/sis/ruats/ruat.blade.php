@@ -61,7 +61,7 @@
                                 <tr>
                                     <th class="text-center" scope="col">#</th>
                                     <th class="text-center" scope="col">Placa</th>
-                                    <th class="text-center" scope="col">Clase</th>
+                                    {{-- <th class="text-center" scope="col">Clase</th>
                                     <th class="text-center" scope="col">Marca</th>
                                     <th class="text-center" scope="col">Tipo Vehículo</th>
                                     <th class="text-center" scope="col">Subtipo Vehículo</th>
@@ -90,7 +90,7 @@
                                     <th class="text-center" scope="col">Peso</th>
                                     <th class="text-center" scope="col">Capacidad Arrastre</th>
                                     <th class="text-center" scope="col">Observaciones</th>
-                                    <th class="text-center" scope="col">Estado</th>
+                                    <th class="text-center" scope="col">Estado</th> --}}
                                     <th class="text-center" scope="col">Editar</th>
                                     <th class="text-center" scope="col">Eliminar</th>
                                 </tr>
@@ -102,7 +102,7 @@
                                             {{ ($ruats->currentpage() - 1) * $ruats->perpage() + $loop->index + 1 }}
                                         </th>
                                         <td class="text-center">{{ $r->class }}</td>
-                                        <td class="text-center">{{ $r->mark }}</td>
+                                        {{-- <td class="text-center">{{ $r->mark }}</td>
                                         <td class="text-center">{{ $r->vehicle_type }}</td>
                                         <td class="text-center">{{ $r->vehicle_subtype }}</td>
                                         <td class="text-center">{{ $r->engine_number }}</td>
@@ -131,7 +131,7 @@
                                         <td class="text-center">{{ $r->weight }}</td>
                                         <td class="text-center">{{ $r->towing_capacity }}</td>
                                         <td class="text-center">{{ $r->observations }}</td>
-                                        <td class="text-center">{{ $r->status }}</td>
+                                        <td class="text-center">{{ $r->status }}</td> --}}
                                         <td class="text-center">
                                             <button wire:click.prevent="showModalEdit({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>

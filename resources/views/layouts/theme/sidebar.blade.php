@@ -58,21 +58,6 @@
                 Permisos
               </a>
             </li>
-            <li class="pc-item">
-              <a class="pc-link" href="">
-                Carteras
-              </a>
-            </li>
-            <li class="pc-item">
-              <a class="pc-link" href="">
-                Clientes
-              </a>
-            </li>
-            <li class="pc-item">
-              <a class="pc-link" href="{{ url('proveedores') }}">
-                Proveedores
-              </a>
-            </li>
           </ul>
         </li>
 
@@ -122,7 +107,7 @@
             <span class="pc-micon">
               <i class="ti ti-archive"></i>
             </span>
-            <span class="pc-mtext">Sis Petrol</span>
+            <span class="pc-mtext">Trans Alvama</span>
             <span class="pc-arrow">
               <i class="ti ti-chevron-right"></i>
             </span>
@@ -138,30 +123,25 @@
                 Ruat
               </a>
             </li>
-            <li class="pc-item">
+            {{-- <li class="pc-item">
               <a class="pc-link" href="{{ url('propietarios') }}">
                 Propietarios
               </a>
-            </li>
+            </li> --}}
             <li class="pc-item">
               <a class="pc-link" href="{{ url('cisternas') }}">
                 Cisternas
               </a>
             </li>
-            <li class="pc-item">
+            {{-- <li class="pc-item">
               <a class="pc-link" href="">
                 Planillas
               </a>
-            </li>
-            <li class="pc-item">
-              <a class="pc-link" href="">
-                Gastos
-              </a>
-            </li>
+            </li> --}}
           </ul>
         </li>
 
-        <li class="pc-item pc-caption">
+        {{-- <li class="pc-item pc-caption">
           <label>Reportes</label>
           <i class="ti ti-brand-chrome"></i>
         </li>
@@ -180,7 +160,7 @@
             </span>
             <span class="pc-mtext">Reporte 2</span>
           </a>
-        </li>
+        </li> --}}
       </ul>
       {{-- <div class="pc-navbar-card bg-primary rounded">
         <h4 class="text-white">Accesos</h4>
