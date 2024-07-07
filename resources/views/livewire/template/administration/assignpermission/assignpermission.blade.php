@@ -1,4 +1,5 @@
 <div class="pc-content">
+    @can('asignar_permisos_index')
     <div class="row">
         <!-- [ sample-page ] start -->
         <div class="col-sm-12">
@@ -95,6 +96,14 @@
             {{-- @include('livewire.template.sis.$permission.modal_cistern') --}}
         <!-- [ Modal ] end -->
     </div>
+    @endcan
+
+    @php
+        $user = auth()->user();
+    @endphp
+    @unless ($user->can('asignar_permisos_index'))
+        <p>El usuario no tiene el permiso deseado.</p>
+    @endunless
 </div>
 @section('javascript')
     <script>

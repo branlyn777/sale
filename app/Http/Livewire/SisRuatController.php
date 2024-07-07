@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\SisRuat;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class SisRuatController extends Component
@@ -37,16 +38,53 @@ class SisRuatController extends Component
     $number_of_doors, 
     $color, 
     $number_of_places, 
-    $fuel, 
-    $bodywork_type, 
+    $fuel,
     $chassis_type, 
     $motor_type, 
     $motor_turbo, 
     $weight, 
     $towing_capacity, 
-    $observations;
+    $observations,
+    $image,
+    $file;
 
-    use WithPagination;
+    public $d_license_plate,
+    $d_class,
+    $d_mark,
+    $d_vehicle_type,
+    $d_vehicle_subtype,
+    $d_engine_number,
+    $d_chassis_number,
+    $d_model,
+    $d_service,
+    $d_policy_type,
+    $d_policy_date,
+    $d_country,
+    $d_customs_import,
+    $d_policy_number,
+    $d_tax_start_year,
+    $d_origin,
+    $d_displacement,
+    $d_traction,
+    $d_number_of_wheels,
+    $d_number_of_doors,
+    $d_color,
+    $d_number_of_places,
+    $d_fuel,
+    $d_chassis_type,
+    $d_motor_type,
+    $d_motor_turbo,
+    $d_weight,
+    $d_towing_capacity,
+    $d_observations,
+    $d_image,
+    $d_file;
+
+
+
+
+
+    use WithPagination, WithFileUploads;
     protected $paginationTheme = 'bootstrap';
     public function mount()
     {
@@ -88,7 +126,7 @@ class SisRuatController extends Component
         if ($id == 0)
         {
             // Restablecer los campos de entrada después de guardar
-            $this->reset(['class', 'mark', 'vehicle_type', 'vehicle_subtype', 'engine_number', 'chassis_number', 'model', 'service', 'license_plate', 'policy_type', 'policy_date', 'country', 'customs_import', 'policy_number', 'tax_start_year', 'origin', 'displacement', 'traction', 'number_of_wheels', 'number_of_doors', 'color', 'number_of_places', 'fuel', 'bodywork_type', 'chassis_type', 'motor_type', 'motor_turbo', 'weight', 'towing_capacity', 'observations']);
+            $this->reset(['class', 'mark', 'vehicle_type', 'vehicle_subtype', 'engine_number', 'chassis_number', 'model', 'service', 'license_plate', 'policy_type', 'policy_date', 'country', 'customs_import', 'policy_number', 'tax_start_year', 'origin', 'displacement', 'traction', 'number_of_wheels', 'number_of_doors', 'color', 'number_of_places', 'fuel', 'chassis_type', 'motor_type', 'motor_turbo', 'weight', 'towing_capacity', 'observations']);
 
             $this->ruat_id = 0;
         }
@@ -122,7 +160,6 @@ class SisRuatController extends Component
             $this->color = $ruat->color;
             $this->number_of_places = $ruat->number_of_places;
             $this->fuel = $ruat->fuel;
-            $this->bodywork_type = $ruat->bodywork_type;
             $this->chassis_type = $ruat->chassis_type;
             $this->motor_type = $ruat->motor_type;
             $this->motor_turbo = $ruat->motor_turbo;
@@ -144,6 +181,8 @@ class SisRuatController extends Component
     public function create_ruat()
     {
         $rules = [
+            'image' => 'required|image|max:2048', // 2MB Max
+            'file' => 'max:5000', // 5MB Max
             'license_plate' => 'required|min:2|max:255|unique:sis_ruats,license_plate',
             'class' => 'required|min:2|max:255',
             'mark' => 'required|min:2|max:255',
@@ -167,7 +206,6 @@ class SisRuatController extends Component
             'color' => 'nullable|min:2|max:255',
             'number_of_places' => 'nullable|integer|min:0',
             'fuel' => 'nullable|min:2|max:255',
-            'bodywork_type' => 'nullable|min:2|max:255',
             'chassis_type' => 'nullable|min:2|max:255',
             'motor_type' => 'nullable|min:2|max:255',
             'motor_turbo' => 'nullable|boolean',
@@ -177,6 +215,12 @@ class SisRuatController extends Component
         ];
         
         $messages = [
+            'image.required' => 'La imagen es requerida',
+            'image.image' => 'Debe ser un archivo tipo imagen',
+            'image.max' => 'El tamaño no debe pasar de 1MB',
+
+            'file.max' => 'El tamaño no debe pasar de 5MB',
+
             'license_plate.required' => 'La placa es requerida',
             'license_plate.unique' => 'Ya existe una placa con ese nombre',
             'license_plate.min' => 'La placa debe tener al menos 2 caracteres',
@@ -252,9 +296,6 @@ class SisRuatController extends Component
             'fuel.min' => 'El combustible debe tener al menos 2 caracteres',
             'fuel.max' => 'El combustible no debe pasar los 255 caracteres',
         
-            'bodywork_type.min' => 'El tipo de carrocería debe tener al menos 2 caracteres',
-            'bodywork_type.max' => 'El tipo de carrocería no debe pasar los 255 caracteres',
-        
             'chassis_type.min' => 'El tipo de chasis debe tener al menos 2 caracteres',
             'chassis_type.max' => 'El tipo de chasis no debe pasar los 255 caracteres',
         
@@ -273,44 +314,57 @@ class SisRuatController extends Component
         ];
         
         $this->validate($rules, $messages);
-        
-        // Limpia espacios en blanco extras para todos los campos
-        $this->license_plate = trim(preg_replace('/\s+/', ' ', $this->license_plate));
-        $this->class = trim(preg_replace('/\s+/', ' ', $this->class));
-        $this->mark = trim(preg_replace('/\s+/', ' ', $this->mark));
-        $this->vehicle_type = trim(preg_replace('/\s+/', ' ', $this->vehicle_type));
-        $this->vehicle_subtype = trim(preg_replace('/\s+/', ' ', $this->vehicle_subtype));
-        $this->engine_number = trim(preg_replace('/\s+/', ' ', $this->engine_number));
-        $this->chassis_number = trim(preg_replace('/\s+/', ' ', $this->chassis_number));
-        $this->model = trim(preg_replace('/\s+/', ' ', $this->model));
-        $this->service = trim(preg_replace('/\s+/', ' ', $this->service));
-        $this->policy_type = trim(preg_replace('/\s+/', ' ', $this->policy_type));
-        $this->policy_date = trim(preg_replace('/\s+/', ' ', $this->policy_date));
-        $this->country = trim(preg_replace('/\s+/', ' ', $this->country));
-        $this->customs_import = trim(preg_replace('/\s+/', ' ', $this->customs_import));
-        $this->policy_number = trim(preg_replace('/\s+/', ' ', $this->policy_number));
-        $this->tax_start_year = trim(preg_replace('/\s+/', ' ', $this->tax_start_year));
-        $this->origin = trim(preg_replace('/\s+/', ' ', $this->origin));
-        $this->displacement = trim(preg_replace('/\s+/', ' ', $this->displacement));
-        $this->traction = trim(preg_replace('/\s+/', ' ', $this->traction));
-        $this->number_of_wheels = trim(preg_replace('/\s+/', ' ', $this->number_of_wheels));
-        $this->number_of_doors = trim(preg_replace('/\s+/', ' ', $this->number_of_doors));
-        $this->color = trim(preg_replace('/\s+/', ' ', $this->color));
-        $this->number_of_places = trim(preg_replace('/\s+/', ' ', $this->number_of_places));
-        $this->fuel = trim(preg_replace('/\s+/', ' ', $this->fuel));
-        $this->bodywork_type = trim(preg_replace('/\s+/', ' ', $this->bodywork_type));
-        $this->chassis_type = trim(preg_replace('/\s+/', ' ', $this->chassis_type));
-        $this->motor_type = trim(preg_replace('/\s+/', ' ', $this->motor_type));
-        $this->motor_turbo = trim(preg_replace('/\s+/', ' ', $this->motor_turbo));
-        $this->weight = trim(preg_replace('/\s+/', ' ', $this->weight));
-        $this->towing_capacity = trim(preg_replace('/\s+/', ' ', $this->towing_capacity));
-        $this->observations = trim(preg_replace('/\s+/', ' ', $this->observations));
-        // Crea la categoría y guarda el objeto creado en una variable
-        $category = InvCategory::create([
-            'name_category' =>  $this->name_category
+
+        $path = $this->image->store('ruats', 'public');
+
+        $path_file = $this->file->store('ruats/pdf', 'public');
+
+
+        // Crea el Ruat y guarda el objeto creado en una variable
+        $ruat = SisRuat::create([
+            'image' => $path,
+            'file' => $path_file,
+            'license_plate' => $this->license_plate,
+            'class' => $this->class,
+            'chassis_number' => $this->chassis_number,
+            'mark' => $this->mark,
+            'model' => $this->model,
+            'vehicle_type' => $this->vehicle_type,
+            'service' => $this->service,
+            'vehicle_subtype' => $this->vehicle_subtype,
+            'engine_number' => $this->engine_number,
+            'policy_type' => $this->policy_type,
+            'policy_number' => $this->policy_number,
+            'policy_date' => $this->policy_date,
+            'tax_start_year' => $this->tax_start_year,
+            'country' => $this->country,
+            'origin' => $this->origin,
+            'customs_import' => $this->customs_import,
+            'displacement' => $this->displacement,
+            'chassis_type' => $this->chassis_type,
+            'traction' => $this->traction,
+            'motor_type' => $this->motor_type,
+            'number_of_wheels' => $this->number_of_wheels,
+            'motor_turbo' => $this->motor_turbo,
+            'number_of_doors' => $this->number_of_doors,
+            'weight' => $this->weight,
+            'number_of_places' => $this->number_of_places,
+            'towing_capacity' => $this->towing_capacity,
+            'fuel' => $this->fuel,
+            'color' => $this->color,
+            'observations' => $this->observations,
         ]);
+        
+        // Aquí $ruat contendrá el objeto SisRuat recién creado con los datos proporcionados.
+        
+
+
+
+
+
+
         // Texto que se verá en el mensaje de tipo toast
-        $text = "Categoría '" . $category->name_category . "' creada exitosamente";
+        $text = "Ruat con placa: '" . $ruat->license_plate . "' creada exitosamente";
         // Emite un mensaje de tipo toast
         $this->emit("toast", [
             'text' => $text,
@@ -318,6 +372,81 @@ class SisRuatController extends Component
             'icon' => "success"
         ]);
         // Cierra la ventana modal
-        $this->emit("hide-modal-categorie");
+        $this->emit("hide-modal-ruat");
+    }
+    // Muestra la ventana modal ruat para mostrar detalles de ese Ruat
+    public function showModalRuatDetail($id)
+    {
+        // Obtiene el RUAT
+        
+        // $this->ruat_id = $ruat->id;
+        
+        $ruat = SisRuat::find($id);
+
+        $this->d_license_plate = $ruat->license_plate;
+        $this->d_class = $ruat->class;
+        $this->d_mark = $ruat->mark;
+        $this->d_vehicle_type = $ruat->vehicle_type;
+        $this->d_vehicle_subtype = $ruat->vehicle_subtype;
+        $this->d_engine_number = $ruat->engine_number;
+        $this->d_chassis_number = $ruat->chassis_number;
+        $this->d_model = $ruat->model;
+        $this->d_service = $ruat->service;
+        $this->d_policy_type = $ruat->policy_type;
+        $this->d_policy_date = $ruat->policy_date;
+        $this->d_country = $ruat->country;
+        $this->d_customs_import = $ruat->customs_import;
+        $this->d_policy_number = $ruat->policy_number;
+        $this->d_tax_start_year = $ruat->tax_start_year;
+        $this->d_origin = $ruat->origin;
+        $this->d_displacement = $ruat->displacement;
+        $this->d_traction = $ruat->traction;
+        $this->d_number_of_wheels = $ruat->number_of_wheels;
+        $this->d_number_of_doors = $ruat->number_of_doors;
+        $this->d_color = $ruat->color;
+        $this->d_number_of_places = $ruat->number_of_places;
+        $this->d_fuel = $ruat->fuel;
+        $this->d_chassis_type = $ruat->chassis_type;
+        $this->d_motor_type = $ruat->motor_type;
+        $this->d_motor_turbo = $ruat->motor_turbo;
+        $this->d_weight = $ruat->weight;
+        $this->d_towing_capacity = $ruat->towing_capacity;
+        $this->d_observations = $ruat->observations;
+        $this->d_image = $ruat->image;
+        $this->d_file = $ruat->file;
+
+
+            
+        // Lanza el evento para mostrar la ventana modal
+        $this->emit("show-modal-ruat-detail");
+    }
+    // Añade o quita opcion para mandar a imprimir un Ruat
+    public function addRemovePrint($value, $id)
+    {
+        $ruat = SisRuat::find($id);
+
+        if ($ruat->is_print == "true")
+        {
+            $ruat->is_print = "false";
+            $ruat->save();
+        }
+        else
+        {
+            // dd("es: " . $ruat->is_print);
+            $ruat->is_print = "true";
+            $ruat->save();
+        }
+    }
+    // Descargar File
+    public function downloadaaa($filename)
+    {
+        dd("fasdf");
+        $filePath = storage_path('app/' . $filename);
+
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        } else {
+            abort(404, 'Archivo no encontrado');
+        }
     }
 }

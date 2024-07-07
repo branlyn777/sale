@@ -48,11 +48,13 @@
                 Roles
               </a>
             </li>
-            <li class="pc-item">
-              <a class="pc-link" href="{{ url('asignarpermisos') }}">
-                Asignar Permisos
-              </a>
-            </li>
+            @can('asignar_permisos_index')
+              <li class="pc-item">
+                <a class="pc-link" href="{{ url('asignarpermisos') }}">
+                  Asignar Permisos
+                </a>
+              </li>
+            @endcan
             <li class="pc-item">
               <a class="pc-link" href="{{ url('permisos') }}">
                 Permisos
@@ -118,11 +120,14 @@
                 Conductores
               </a>
             </li>
-            <li class="pc-item">
-              <a class="pc-link" href="{{ url('ruat') }}">
-                Ruat
-              </a>
-            </li>
+            
+            @can('ruat_index')
+              <li class="pc-item">
+                <a class="pc-link" href="{{ url('ruat') }}">
+                  Ruat
+                </a>
+              </li>
+            @endcan
             {{-- <li class="pc-item">
               <a class="pc-link" href="{{ url('propietarios') }}">
                 Propietarios

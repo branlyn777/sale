@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('sis_ruats', function (Blueprint $table) {
             $table->id();
 
+            $table->string('image')->nullable();
+            $table->string('file')->nullable();
             $table->string('license_plate')->unique();
     
             $table->string('class')->unique();
@@ -40,7 +42,6 @@ return new class extends Migration
             $table->string('color')->nullable();
             $table->integer('number_of_places')->nullable();
             $table->string('fuel')->nullable();
-            $table->string('bodywork_type')->nullable();
             $table->string('chassis_type')->nullable();
             $table->string('motor_type')->nullable();
             $table->boolean('motor_turbo')->nullable();
@@ -48,6 +49,8 @@ return new class extends Migration
             $table->decimal('towing_capacity', 8, 2)->nullable();
     
             $table->text('observations')->nullable();
+
+            $table->string('is_print', 10)->nullable()->default("false");
     
             $table->enum('status',['active','inactive'])->default('active');
     

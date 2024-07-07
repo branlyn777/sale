@@ -9,6 +9,8 @@ class SisRuat extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'image',
+        'file',
         'license_plate',
         'class',
         'mark',
@@ -32,13 +34,13 @@ class SisRuat extends Model
         'color',
         'number_of_places',
         'fuel',
-        'bodywork_type',
         'chassis_type',
         'motor_type',
         'motor_turbo',
         'weight',
         'towing_capacity',
         'observations',
+        'is_print',
         'status'
     ];
 }

@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SisCisternSeeder::class);
         $this->call(SisDriverSeeder::class);
         $this->call(SisOwnerSeeder::class);
-        $this->call(SisRuatSeeder::class);
+        // $this->call(SisRuatSeeder::class);
 
     }
 }

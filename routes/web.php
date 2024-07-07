@@ -72,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::get('conductores', SisDriverController::class);
     Route::get('propietarios', SisOwnerController::class);
     Route::get('ruat', SisRuatController::class);
+    Route::get('/download/{filename}', [SisRuatController::class, 'download'])->name('download.file');
+
 });
 
 require __DIR__.'/auth.php';

@@ -13,8 +13,7 @@ class AdmPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'editar_usuarios']);
-        Permission::create(['name' => 'eliminar_usuarios']);
-        Permission::create(['name' => 'crear_usuarios']);
+        Permission::create(['name' => 'asignar_permisos_index']);
+        Permission::create(['name' => 'ruat_index']);
     }
 }

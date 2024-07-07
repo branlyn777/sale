@@ -13,7 +13,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row mb-3">
+
+                {{-- <div class="row mb-3">
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
@@ -21,12 +22,34 @@
                             </div>
                             <div class="card-body">
                                 <div id="imagePreview" class="d-flex justify-content-center mt-3"></div>
-                                <input type="file" class="form-control mt-3" id="imageUpload" accept="image/*">
+                                <input type="file" wire:model="image" class="form-control mt-3" id="imageUpload" accept="image/*">
                             </div>
+                            @error('image')
+                                <div class="form-text text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
-                </div>
+                </div> --}}
             
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="form-label">Subir Imagen</label>
+                        <input type="file" wire:model="image" class="form-control mt-3" id="imageUpload" accept="image/*">
+                        @error('image')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="form-label">Subir Pdf</label>
+                        <input type="file" wire:model="file" class="form-control mt-3" accept="application/pdf">
+                        @error('image')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
                 <div class="row mb-3">
                     <div class="col-12">
                         <label class="form-label">Placa</label>
@@ -272,13 +295,6 @@
                         <label class="form-label">Combustible</label>
                         <input wire:model.lazy="fuel" type="text" class="form-control">
                         @error('fuel')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-6">
-                        <label class="form-label">Carrocería</label>
-                        <input wire:model.lazy="bodywork_type" type="text" class="form-control">
-                        @error('bodywork_type')
                             <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>

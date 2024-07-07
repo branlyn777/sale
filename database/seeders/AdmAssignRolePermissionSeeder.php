@@ -15,6 +15,14 @@ class AdmAssignRolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        $role = Role::find(1);
+        $permissions = Permission::all();
+        foreach($permissions as $p)
+        {
+            $role->givePermissionTo($p);
+        }
+
+
         // Asignar Roles al Usuario 1
         $user = User::find(1);
         $role = Role::find(1);
@@ -33,13 +41,11 @@ class AdmAssignRolePermissionSeeder extends Seeder
 
 
 
-        $role = Role::find(1);
-        // Asignar permisos de editar usuarios
-        $permission = Permission::find(1);
-        $role->givePermissionTo($permission);
-        $permission = Permission::find(2);
-        $role->givePermissionTo($permission);
-        $permission = Permission::find(3);
-        $role->givePermissionTo($permission);
+    //     $role = Role::find(1);
+    //     // Asignar permisos de editar usuarios
+    //     $permission = Permission::find(1);
+    //     $role->givePermissionTo($permission);
+    //     $permission = Permission::find(2);
+    //     $role->givePermissionTo($permission);
     }
 }

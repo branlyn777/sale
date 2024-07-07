@@ -26,7 +26,7 @@ class AdmAssignPermissionController extends Component
         $this->role_id = 2;
         $this->status = "active";
         $this->list_roles = Role::orderBy("name")
-        ->where('id', '!=', 1)
+        // ->where('id', '!=', 1)
         ->get();
     }
     public function render()

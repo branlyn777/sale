@@ -1,3 +1,4 @@
+@livewireScripts
 <!-- Required Js -->
 <script src="{{ asset('template/js/plugins/popper.min.js') }}"></script>
 <script src="{{ asset('template/js/plugins/simplebar.min.js') }}"></script>
@@ -7,5 +8,3 @@
 
 <!-- SweetAlert -->
 <script src="{{ asset('sweetalert/sweetalert2.all.min.js') }}"></script>
-
-@livewireScripts
