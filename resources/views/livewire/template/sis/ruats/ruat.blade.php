@@ -65,6 +65,7 @@
                                     <th class="text-center" scope="col" style="width: 25px;">Imprimir</th>
                                     <th class="text-center" scope="col">Placa</th>
                                     <th class="text-center" scope="col">Detalles</th>
+                                    <th class="text-center" scope="col">Descargar</th>
                                     <th class="text-center" scope="col">Editar</th>
                                     <th class="text-center" scope="col">Eliminar</th>
                                 </tr>
@@ -93,6 +94,9 @@
                                                 <i class="bi bi-card-list"></i>
                                             </button>
                                         </td>
+                                        <td class="text-center">
+                                            <a href="{{ asset('storage/' . $r->file) }}" target="_blank">{{ $r->file }}</a>
+                                        </td>                                        
                                         <td class="text-center">
                                             <button wire:click.prevent="showModalEdit({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
