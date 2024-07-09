@@ -6,6 +6,7 @@ use App\Models\SisRuat;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use setasign\Fpdi\Fpdi;
 
 class SisRuatController extends Component
 {
@@ -429,24 +430,56 @@ class SisRuatController extends Component
         {
             $ruat->is_print = "false";
             $ruat->save();
+
+
+            // Emite un mensaje de tipo toast
+            $this->emit("toast", [
+                'text' => 'Ruat con placa "'  . $ruat->license_plate .  '" desmarcada para imprimir',
+                'timer' => 3000,
+                'icon' => "success"
+            ]);
         }
         else
         {
             // dd("es: " . $ruat->is_print);
             $ruat->is_print = "true";
             $ruat->save();
+            // Emite un mensaje de tipo toast
+            $this->emit("toast", [
+                'text' => 'Ruat con placa "'  . $ruat->license_plate .  '" marcada para imprimir',
+                'timer' => 3000,
+                'icon' => "success"
+            ]);
         }
     }
-    // Descargar File
-    public function downloadaaa($filename)
+    public function openCombinedPdf()
     {
-        dd("fasdf");
-        $filePath = storage_path('app/' . $filename);
+        $this->joinPdf();
+    }
 
-        if (file_exists($filePath)) {
-            return response()->download($filePath);
-        } else {
-            abort(404, 'Archivo no encontrado');
+    //
+    public function joinPdf()
+    {
+        $pathPdfs = SisRuat::select("file")->where("is_print", "true")->get();
+    
+        if ($pathPdfs->isEmpty()) {
+            session()->flash('message', 'No hay PDFs para combinar.');
+            return;
         }
+    
+        $pdf = new Fpdi();
+        
+        foreach ($pathPdfs as $pathPdf) {
+            $pdf->AddPage();
+            $pdf->setSourceFile(storage_path('app/public/' . $pathPdf->file));
+            $tplId = $pdf->importPage(1);
+            $pdf->useTemplate($tplId);
+        }
+    
+        $outputFilePath = storage_path('app/public/combined.pdf');
+        $pdf->Output($outputFilePath, 'F');
+    
+        $url = asset('storage/combined.pdf');
+        $this->emit('openPdf', $url);
     }
 }

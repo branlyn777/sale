@@ -46,13 +46,11 @@
                         <div class="col-12 col-sm-6 col-md-4 text-center">
 
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 text-center">
-                            <label>Estado</label>
-                            <select wire:model="status" class="form-select">
-                                <option value="active">Activos</option>
-                                <option value="inactive">Inactivos</option>
-                            </select>
-                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 text-end">
+                            <button wire:click.prevent="openCombinedPdf" class="btn btn-primary ms-auto">
+                                Imprimir Marcados
+                            </button>                            
+                        </div>                        
                     </div>
                 </div>
                 <span wire:loading.delay.longer class="loader"></span>
@@ -134,7 +132,6 @@
     @endunless
 </div>
 @section('javascript')
-    
     <script>
         document.getElementById('imageUpload').addEventListener('change', function(event) {
             const file = event.target.files[0];
@@ -156,6 +153,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+        // Manejar el evento para abrir el PDF en una nueva pestaña
+        window.livewire.on('openPdf', url => {
+            window.open(url, '_blank');
+        });
 
             // Muestra la ventana modal crear/actualizar ruat
             window.livewire.on('show-modal-ruat', msg => {
