@@ -189,12 +189,12 @@ class SisRuatController extends Component
             'mark' => 'required|min:2|max:255',
             'vehicle_type' => 'nullable|min:2|max:255',
             'vehicle_subtype' => 'nullable|min:2|max:255',
-            'engine_number' => 'required|min:2|max:255|unique:sis_ruats,engine_number',
+            'engine_number' => 'required|min:2|max:255',
             'chassis_number' => 'nullable|min:2|max:255',
             'model' => 'nullable|min:2|max:255',
             'service' => 'nullable|min:2|max:255',
             'policy_type' => 'nullable|min:2|max:255',
-            'policy_date' => 'required|date|unique:sis_ruats,policy_date',
+            'policy_date' => 'required|date',
             'country' => 'nullable|min:2|max:255',
             'customs_import' => 'nullable|min:2|max:255',
             'policy_number' => 'nullable|min:2|max:255',
@@ -236,13 +236,11 @@ class SisRuatController extends Component
             'mark.max' => 'La marca no debe pasar los 255 caracteres',
         
             'engine_number.required' => 'El número de motor es requerido',
-            'engine_number.unique' => 'Ya existe un número de motor con ese nombre',
             'engine_number.min' => 'El número de motor debe tener al menos 2 caracteres',
             'engine_number.max' => 'El número de motor no debe pasar los 255 caracteres',
         
             'policy_date.required' => 'La fecha de póliza es requerida',
             'policy_date.date' => 'La fecha de póliza debe ser una fecha válida',
-            'policy_date.unique' => 'Ya existe una fecha de póliza con ese nombre',
         
             'vehicle_type.min' => 'El tipo de vehículo debe tener al menos 2 caracteres',
             'vehicle_type.max' => 'El tipo de vehículo no debe pasar los 255 caracteres',
@@ -456,7 +454,6 @@ class SisRuatController extends Component
     {
         $this->joinPdf();
     }
-
     // Une los PDFs seleccionados
     public function joinPdf()
     {
@@ -502,5 +499,227 @@ class SisRuatController extends Component
         $this->emit('openPdf', $url);
 
         session()->flash('message', 'Los PDFs se han combinado exitosamente.');
+    }
+    // Actualiza un Ruat
+    public function update_ruat()
+    {
+
+        $rules = [
+            'license_plate' => 'required|min:2|max:255',
+            'class' => 'required|min:2|max:255',
+            'mark' => 'required|min:2|max:255',
+            'vehicle_type' => 'nullable|min:2|max:255',
+            'vehicle_subtype' => 'nullable|min:2|max:255',
+            'engine_number' => 'required|min:2|max:255',
+            'chassis_number' => 'nullable|min:2|max:255',
+            'model' => 'nullable|min:2|max:255',
+            'service' => 'nullable|min:2|max:255',
+            'policy_type' => 'nullable|min:2|max:255',
+            'policy_date' => 'required|date',
+            'country' => 'nullable|min:2|max:255',
+            'customs_import' => 'nullable|min:2|max:255',
+            'policy_number' => 'nullable|min:2|max:255',
+            'tax_start_year' => 'nullable|digits:4',
+            'origin' => 'nullable|min:2|max:255',
+            'displacement' => 'nullable|numeric|min:0',
+            'traction' => 'nullable|min:2|max:255',
+            'number_of_wheels' => 'nullable|integer|min:0',
+            'number_of_doors' => 'nullable|integer|min:0',
+            'color' => 'nullable|min:2|max:255',
+            'number_of_places' => 'nullable|integer|min:0',
+            'fuel' => 'nullable|min:2|max:255',
+            'chassis_type' => 'nullable|min:2|max:255',
+            'motor_type' => 'nullable|min:2|max:255',
+            'motor_turbo' => 'nullable|boolean',
+            'weight' => 'nullable|numeric|min:0',
+            'towing_capacity' => 'nullable|numeric|min:0',
+            'observations' => 'nullable|max:65535',
+        ];
+        
+        $messages = [
+
+            'file.max' => 'El tamaño no debe pasar de 5MB',
+
+            'license_plate.required' => 'La placa es requerida',
+            'license_plate.min' => 'La placa debe tener al menos 2 caracteres',
+            'license_plate.max' => 'La placa no debe pasar los 255 caracteres',
+        
+            'class.required' => 'La clase es requerida',
+            'class.min' => 'La clase debe tener al menos 2 caracteres',
+            'class.max' => 'La clase no debe pasar los 255 caracteres',
+        
+            'mark.required' => 'La marca es requerida',
+            'mark.min' => 'La marca debe tener al menos 2 caracteres',
+            'mark.max' => 'La marca no debe pasar los 255 caracteres',
+        
+            'engine_number.required' => 'El número de motor es requerido',
+            'engine_number.min' => 'El número de motor debe tener al menos 2 caracteres',
+            'engine_number.max' => 'El número de motor no debe pasar los 255 caracteres',
+        
+            'policy_date.required' => 'La fecha de póliza es requerida',
+            'policy_date.date' => 'La fecha de póliza debe ser una fecha válida',
+        
+            'vehicle_type.min' => 'El tipo de vehículo debe tener al menos 2 caracteres',
+            'vehicle_type.max' => 'El tipo de vehículo no debe pasar los 255 caracteres',
+        
+            'vehicle_subtype.min' => 'El subtipo de vehículo debe tener al menos 2 caracteres',
+            'vehicle_subtype.max' => 'El subtipo de vehículo no debe pasar los 255 caracteres',
+        
+            'chassis_number.min' => 'El número de chasis debe tener al menos 2 caracteres',
+            'chassis_number.max' => 'El número de chasis no debe pasar los 255 caracteres',
+        
+            'model.min' => 'El modelo debe tener al menos 2 caracteres',
+            'model.max' => 'El modelo no debe pasar los 255 caracteres',
+        
+            'service.min' => 'El servicio debe tener al menos 2 caracteres',
+            'service.max' => 'El servicio no debe pasar los 255 caracteres',
+        
+            'policy_type.min' => 'El tipo de póliza debe tener al menos 2 caracteres',
+            'policy_type.max' => 'El tipo de póliza no debe pasar los 255 caracteres',
+        
+            'country.min' => 'El país debe tener al menos 2 caracteres',
+            'country.max' => 'El país no debe pasar los 255 caracteres',
+        
+            'customs_import.min' => 'La importación aduanera debe tener al menos 2 caracteres',
+            'customs_import.max' => 'La importación aduanera no debe pasar los 255 caracteres',
+        
+            'policy_number.min' => 'El número de póliza debe tener al menos 2 caracteres',
+            'policy_number.max' => 'El número de póliza no debe pasar los 255 caracteres',
+        
+            'tax_start_year.digits' => 'El año de inicio de impuestos debe ser un año válido de 4 dígitos',
+        
+            'origin.min' => 'El origen debe tener al menos 2 caracteres',
+            'origin.max' => 'El origen no debe pasar los 255 caracteres',
+        
+            'displacement.numeric' => 'El desplazamiento debe ser un número',
+            'displacement.min' => 'El desplazamiento debe ser un valor positivo',
+        
+            'traction.min' => 'La tracción debe tener al menos 2 caracteres',
+            'traction.max' => 'La tracción no debe pasar los 255 caracteres',
+        
+            'number_of_wheels.integer' => 'El número de ruedas debe ser un número entero',
+            'number_of_wheels.min' => 'El número de ruedas debe ser un valor positivo',
+        
+            'number_of_doors.integer' => 'El número de puertas debe ser un número entero',
+            'number_of_doors.min' => 'El número de puertas debe ser un valor positivo',
+        
+            'color.min' => 'El color debe tener al menos 2 caracteres',
+            'color.max' => 'El color no debe pasar los 255 caracteres',
+        
+            'number_of_places.integer' => 'El número de lugares debe ser un número entero',
+            'number_of_places.min' => 'El número de lugares debe ser un valor positivo',
+        
+            'fuel.min' => 'El combustible debe tener al menos 2 caracteres',
+            'fuel.max' => 'El combustible no debe pasar los 255 caracteres',
+        
+            'chassis_type.min' => 'El tipo de chasis debe tener al menos 2 caracteres',
+            'chassis_type.max' => 'El tipo de chasis no debe pasar los 255 caracteres',
+        
+            'motor_type.min' => 'El tipo de motor debe tener al menos 2 caracteres',
+            'motor_type.max' => 'El tipo de motor no debe pasar los 255 caracteres',
+        
+            'motor_turbo.boolean' => 'El turbo del motor debe ser un valor booleano',
+        
+            'weight.numeric' => 'El peso debe ser un número',
+            'weight.min' => 'El peso debe ser un valor positivo',
+        
+            'towing_capacity.numeric' => 'La capacidad de remolque debe ser un número',
+            'towing_capacity.min' => 'La capacidad de remolque debe ser un valor positivo',
+        
+            'observations.max' => 'Las observaciones no deben pasar los 65535 caracteres',
+        ];
+        
+        $this->validate($rules, $messages);
+
+
+        // Busca el Ruat y lo guarda en una variable
+        $ruat = SisRuat::find($this->ruat_id);
+
+        if ($this->image)
+        {
+            $path = $this->image->store('ruats', 'public');
+        }
+        else
+        {
+            $path = $ruat->image;
+        }
+        if ($this->file)
+        {
+            $path_file = $this->file->store('ruats/pdf', 'public');
+        }
+        else
+        {
+            $path_file = $ruat->file;
+        }
+
+
+
+
+        // Actualiza el Ruat
+        $ruat->update([
+            'image' => $path,
+            'file' => $path_file,
+            'license_plate' => $this->license_plate,
+            'class' => $this->class,
+            'chassis_number' => $this->chassis_number,
+            'mark' => $this->mark,
+            'model' => $this->model,
+            'vehicle_type' => $this->vehicle_type,
+            'service' => $this->service,
+            'vehicle_subtype' => $this->vehicle_subtype,
+            'engine_number' => $this->engine_number,
+            'policy_type' => $this->policy_type,
+            'policy_number' => $this->policy_number,
+            'policy_date' => $this->policy_date,
+            'tax_start_year' => $this->tax_start_year,
+            'country' => $this->country,
+            'origin' => $this->origin,
+            'customs_import' => $this->customs_import,
+            'displacement' => $this->displacement,
+            'chassis_type' => $this->chassis_type,
+            'traction' => $this->traction,
+            'motor_type' => $this->motor_type,
+            'number_of_wheels' => $this->number_of_wheels,
+            'motor_turbo' => $this->motor_turbo,
+            'number_of_doors' => $this->number_of_doors,
+            'weight' => $this->weight,
+            'number_of_places' => $this->number_of_places,
+            'towing_capacity' => $this->towing_capacity,
+            'fuel' => $this->fuel,
+            'color' => $this->color,
+            'observations' => $this->observations,
+        ]);
+        $ruat->save();
+        // Texto que se verá en el mensaje de tipo toast
+        $text = 'Ruat con placa: "' . $ruat->license_plate . '" actualizado exitosamente';
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
+        // Cierra la ventana modal
+        $this->emit("hide-modal-ruat");
+    }
+    // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
+    protected $listeners = [
+        'deleteRuat' => 'delete_ruat'
+    ];
+
+    // Elimina o inactiva una categoría
+    public function delete_ruat($ruat_id)
+    {
+        $ruat = SisRuat::find($ruat_id);
+        $license_plate = $ruat->license_plate;
+        $ruat->delete();
+        $text = '¡Ruat con placa: "' . $license_plate . '" eliminado exitósamente!';
+
+
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
     }
 }

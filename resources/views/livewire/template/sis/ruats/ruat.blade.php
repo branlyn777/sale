@@ -53,7 +53,7 @@
                         </div>                        
                     </div>
                 </div>
-                <span wire:loading.delay.longer class="loader"></span>
+                {{-- <span wire:loading.delay.longer class="loader"></span> --}}
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -96,12 +96,12 @@
                                             <a href="{{ asset('storage/' . $r->file) }}" target="_blank">{{ $r->file }}</a>
                                         </td>                                        
                                         <td class="text-center">
-                                            <button wire:click.prevent="showModalEdit({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                            <button wire:click.prevent="showModalRuat({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
                                         </td>
                                         <td class="text-center">
-                                            <button wire:click.prevent="confirmDelete({{ $r->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                            <button onclick="Confirm({{ $r->id }})" type="button" class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                         </td>
@@ -133,6 +133,30 @@
 </div>
 @section('javascript')
     <script>
+
+        function Confirm(id)
+        {
+            Swal.fire({
+                    title: 'ATENCION',
+                    text: '¿Esta seguro de eliminar el Ruat?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, Eliminar Ruat',
+                    cancelButtonText: 'No',
+                    }).then((result) => {
+                    if (result.isConfirmed)
+                    {
+                        window.livewire.emit('deleteRuat', id)
+                        Swal.close()
+                    }
+                })
+        }
+
+
+
+
         document.getElementById('imageUpload').addEventListener('change', function(event) {
             const file = event.target.files[0];
             const preview = document.getElementById('imagePreview');
