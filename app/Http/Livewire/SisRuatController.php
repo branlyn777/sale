@@ -457,29 +457,50 @@ class SisRuatController extends Component
         $this->joinPdf();
     }
 
-    //
+    // Une los PDFs seleccionados
     public function joinPdf()
     {
         $pathPdfs = SisRuat::select("file")->where("is_print", "true")->get();
-    
+
         if ($pathPdfs->isEmpty()) {
             session()->flash('message', 'No hay PDFs para combinar.');
             return;
         }
-    
+
         $pdf = new Fpdi();
-        
+
         foreach ($pathPdfs as $pathPdf) {
-            $pdf->AddPage();
-            $pdf->setSourceFile(storage_path('app/public/' . $pathPdf->file));
-            $tplId = $pdf->importPage(1);
-            $pdf->useTemplate($tplId);
+            $fullPath = storage_path('app/public/' . $pathPdf->file);
+
+            if (!file_exists($fullPath)) {
+                session()->flash('message', "El archivo $fullPath no existe.");
+                dd("ocurrio un error el archivo no existe");
+                return;    
+            }
+
+            $pageCount = $pdf->setSourceFile($fullPath);
+
+            // Importar y usar todas las páginas del archivo PDF
+            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                $templateId = $pdf->importPage($pageNo);
+                $size = $pdf->getTemplateSize($templateId);
+
+                // Ajustar la orientación de la página
+                if ($size['width'] > $size['height']) {
+                    $pdf->AddPage('L', [$size['width'], $size['height']]);
+                } else {
+                    $pdf->AddPage('P', [$size['width'], $size['height']]);
+                }
+
+                $pdf->useTemplate($templateId);
+            }
         }
-    
-        $outputFilePath = storage_path('app/public/combined.pdf');
-        $pdf->Output($outputFilePath, 'F');
-    
+
+        $outputPath = storage_path('app/public/combined.pdf');
+        $pdf->Output($outputPath, 'F');
         $url = asset('storage/combined.pdf');
         $this->emit('openPdf', $url);
+
+        session()->flash('message', 'Los PDFs se han combinado exitosamente.');
     }
 }
