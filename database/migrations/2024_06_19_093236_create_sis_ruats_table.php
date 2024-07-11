@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('service')->nullable();
     
             $table->string('policy_type')->nullable();
-            $table->date('policy_date')->unique();
+            $table->date('policy_date');
             $table->string('country')->nullable();
             $table->string('customs_import')->nullable();
             $table->string('policy_number')->nullable();

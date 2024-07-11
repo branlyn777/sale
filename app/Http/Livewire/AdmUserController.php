@@ -72,10 +72,19 @@ class AdmUserController extends Component
         }
         else
         {
-            // Obteniene la categoría a actualizar y lo guarda en una variable
-            $user = InvCategory::find($id);
-            // Actualiza la variable global user_name a travez de la variable user
-            $this->user_name = $user->user_name;
+            // Obteniene el usuario a actualizar y lo guarda en una variable
+            $user = User::join('model_has_roles as mhr', 'mhr.model_id', 'users.id')
+            ->select('users.*', 'mhr.role_id')
+            ->where('users.id', $id)
+            ->first();
+
+            
+            // Actualiza la variable global name a travez de la variable user
+            $this->name = $user->name;
+            $this->mail = $user->email;
+            $this->role_id = $user->role_id;
+            // $this->password_a = $user->password; bcrypt($this->password_a);
+
             // Actualiza la variable global user_id a travez de la variable recibida
             $this->user_id = $id;
         }
@@ -130,11 +139,84 @@ class AdmUserController extends Component
         // Asignar el rol al usuario
         $user->assignRole($role);
 
+        // Texto que se verá en el mensaje de tipo toast
+        $text = "Usuario '" . $user->name . "' creado exitosamente";
 
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
+
+        // Cierra la ventana modal
+        $this->emit("hide-modal-user");
+    }
+
+    // yyyyyyyyy
+
+    // actualiza los datos del usuario
+    public function update_user()
+    {
+        $rules = [
+            'name' => 'required|min:2|max:255',
+            'mail' => 'required|email',
+            'role_id' => 'required|integer|not_in:0'
+        ];
+        $messages = [
+            'name.required' => 'El nombre es requerido',
+            'name.min' => 'El nombre debe tener al menos 2 caracteres',
+            'name.max' => 'El nombre no debe pasar los 255 caracteres',
+            
+            'mail.required' => 'El correo es requerido',
+            'mail.email' => 'El correo debe ser una dirección válida',
+            
+            'role_id.required' => 'El rol es requerido',
+            'role_id.integer' => 'El rol debe ser un número entero',
+            'role_id.not_in' => 'Debe seleccionar un rol válido',
+        ];
+        
+        $this->validate($rules, $messages);
+
+
+        // Busca el usuario y lo guarda en una variable
+        // $user = User::find($id);
+        $user = User::find($this->id);
+
+        // Actualiza el usuario
+        $user->update([
+            'name' => $this->name,
+            'email' => $this->mail,
+            'password' => bcrypt($this->password_a),
+        ]);
+        $user->save();
+
+
+
+        if ($user)
+        {
+            // Recuperar el rol actual
+            $currentRole = Role::find($user->role_id);
+        
+            if ($currentRole)
+            {
+                $user->removeRole($currentRole);
+
+                dd($this->role_id);
+                $nameRole = Role::find($this->role_id)->name;
+
+                if ($user)
+                {
+                    $user->assignRole($nameRole);
+                }
+
+
+            }
+        }
 
 
         // Texto que se verá en el mensaje de tipo toast
-        $text = "Usuario '" . $user->name . "' creado exitosamente";
+        $text = 'el usuario: "' . $user. '"fue actualizado exitosamente';
         // Emite un mensaje de tipo toast
         $this->emit("toast", [
             'text' => $text,
@@ -142,6 +224,32 @@ class AdmUserController extends Component
             'icon' => "success"
         ]);
         // Cierra la ventana modal
-        $this->emit("hide-modal-user");
+        $this->emit("hide-modal-ruat");
     }
+    // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
+    protected $listeners = [
+        'deleteRuat' => 'delete_ruat'
+    ];
+
+    // Elimina o inactiva una categoría
+    public function delete_ruat($ruat_id)
+    {
+        $ruat = SisRuat::find($ruat_id);
+        $license_plate = $ruat->license_plate;
+        $ruat->delete();
+        $text = '¡Ruat con placa: "' . $license_plate . '" eliminado exitósamente!';
+
+
+        // Emite un mensaje de tipo toast
+        $this->emit("toast", [
+            'text' => $text,
+            'timer' => 3000,
+            'icon' => "success"
+        ]);
+    }
+    
+
+
+
+
 }

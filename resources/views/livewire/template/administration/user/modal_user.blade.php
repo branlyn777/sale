@@ -42,7 +42,7 @@
             </div>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 mb-2">
-                    <label class="form-label">Ingrese Contraseña</label> <span class="text-danger">*</span>
+                    <label class="form-label">Ingrese Contraseña</label> {!! $this->user_id > 0 ? '' : '<span class="text-danger">*</span>' !!}
                     <div class="input-group mb-3">
                         <div class="input-group-text">
                             <i class="bi bi-key"></i>
@@ -54,7 +54,7 @@
                     @enderror
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 mb-2">
-                    <label class="form-label">Repita Contraseña</label> <span class="text-danger">*</span>
+                    <label class="form-label">Repita Contraseña</label> {!! $this->user_id > 0 ? '' : '<span class="text-danger">*</span>' !!}
                     <div class="input-group mb-3">
                         <div class="input-group-text">
                             <i class="bi bi-key"></i>
