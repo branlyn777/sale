@@ -33,15 +33,11 @@
 
                     </div>
                     <div class="col-12 col-sm-6 col-md-4 text-center">
-                        <label>Estado</label>
-                        <select wire:model="status" class="form-select">
-                            <option value="active">Activos</option>
-                            <option value="inactive">Inactivos</option>
-                        </select>
+                        
                     </div>
                 </div>
             </div>
-            <span wire:loading.delay.longer class="loader"></span>
+            {{-- <span wire:loading.delay.longer class="loader"></span> --}}
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -80,7 +76,7 @@
                                         </button>
                                     </td>
                                     <td class="text-center">
-                                        <button wire:click.prevent="check_user({{ $u->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                        <button onclick="confirm({{ $u->id }}, '{{ $u->name }}')" type="button" class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
@@ -107,8 +103,37 @@
     </div>
     <!-- [ Main Content ] end -->
   </div>
-  @section('javascript')
+@section('javascript')
     <script>
+
+        function confirm(id, name)
+        {
+            Swal.fire({
+                    title: name,
+                    text: '¿Esta seguro de eliminar el usuario?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, Eliminar Usuario',
+                    cancelButtonText: 'No',
+                    }).then((result) => {
+                    if (result.isConfirmed)
+                    {
+                        window.livewire.emit('deleteUser', id)
+                        Swal.close()
+                    }
+                })
+        }
+
+
+
+
+
+
+
+
+
         document.addEventListener('DOMContentLoaded', function() {
 
             // Muestra la ventana modal crear/actualizar usuario producto

@@ -7,6 +7,8 @@ use App\Models\Role;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class AdmUserController extends Component
@@ -19,8 +21,6 @@ class AdmUserController extends Component
     public $list_branches;
     // Guarda la lista de Roles
     public $list_roles;
-    // Guarda true o false para mostrar usuarios activos o inactivos
-    public $status;
 
     public $search;
 
@@ -36,21 +36,18 @@ class AdmUserController extends Component
     {
         $this->list_branches = InvBranch::where("status","active")->get();
         $this->list_roles = Role::all();
-        $this->status = "active";
         $this->user_id = 0;
     }
     public function render()
     {
         if (strlen($this->search) == 0)
         {
-            $users = User::where("status",$this->status)
-            ->orderBy("created_at","desc")
+            $users = User::orderBy("created_at","desc")
             ->paginate(10);
         }
         else
         {
-            $users = User::where("status",$this->status)
-            ->where('name', 'like', '%' . $this->search . '%')
+            $users = User::where('name', 'like', '%' . $this->search . '%')
             ->orderBy("created_at","desc")
             ->paginate(10);
         }
@@ -72,17 +69,11 @@ class AdmUserController extends Component
         }
         else
         {
-            // Obteniene el usuario a actualizar y lo guarda en una variable
-            $user = User::join('model_has_roles as mhr', 'mhr.model_id', 'users.id')
-            ->select('users.*', 'mhr.role_id')
-            ->where('users.id', $id)
-            ->first();
-
-            
+            $user = User::find($id);
             // Actualiza la variable global name a travez de la variable user
             $this->name = $user->name;
             $this->mail = $user->email;
-            $this->role_id = $user->role_id;
+            $this->role_id = $user->getRoleObject()->id;
             // $this->password_a = $user->password; bcrypt($this->password_a);
 
             // Actualiza la variable global user_id a travez de la variable recibida
@@ -152,71 +143,78 @@ class AdmUserController extends Component
         // Cierra la ventana modal
         $this->emit("hide-modal-user");
     }
-
-    // yyyyyyyyy
-
     // actualiza los datos del usuario
     public function update_user()
     {
         $rules = [
             'name' => 'required|min:2|max:255',
             'mail' => 'required|email',
-            'role_id' => 'required|integer|not_in:0'
+            'role_id' => 'required|integer|not_in:0',
         ];
+
         $messages = [
             'name.required' => 'El nombre es requerido',
             'name.min' => 'El nombre debe tener al menos 2 caracteres',
             'name.max' => 'El nombre no debe pasar los 255 caracteres',
-            
+
             'mail.required' => 'El correo es requerido',
             'mail.email' => 'El correo debe ser una dirección válida',
-            
+
             'role_id.required' => 'El rol es requerido',
             'role_id.integer' => 'El rol debe ser un número entero',
             'role_id.not_in' => 'Debe seleccionar un rol válido',
+
+            'password_a.min' => 'La contraseña debe tener al menos 6 caracteres',
+            'password_b.same' => 'Las contraseñas no coinciden',
+            'password_b.required_with' => 'Ambas contraseñas son requeridas si una de ellas está presente',
         ];
+
+        $validator = Validator::make($this->all(), $rules, $messages);
+
+        // Condicionalmente agregar reglas para password_a y password_b
+        if (!empty($this->password_a) || !empty($this->password_b)) {
+            $validator->sometimes('password_a', 'required|min:6', function ($input) {
+                return !empty($input->password_b);
+            });
+
+            $validator->sometimes('password_b', 'required|same:password_a', function ($input) {
+                return !empty($input->password_a);
+            });
+        }
+
+        $validator->validate();
         
-        $this->validate($rules, $messages);
+        
 
 
         // Busca el usuario y lo guarda en una variable
-        // $user = User::find($id);
-        $user = User::find($this->id);
-
+        $user = User::find($this->user_id);
         // Actualiza el usuario
         $user->update([
             'name' => $this->name,
             'email' => $this->mail,
-            'password' => bcrypt($this->password_a),
         ]);
+        if ($this->password_a)
+        {
+            $user->update([
+                'password' => bcrypt($this->password_a),
+            ]);
+        }
         $user->save();
 
 
+        // Remover Rol anterior
+        $role = $user->getRoleObject();
+        $user->removeRole($role);
 
-        if ($user)
-        {
-            // Recuperar el rol actual
-            $currentRole = Role::find($user->role_id);
         
-            if ($currentRole)
-            {
-                $user->removeRole($currentRole);
-
-                dd($this->role_id);
-                $nameRole = Role::find($this->role_id)->name;
-
-                if ($user)
-                {
-                    $user->assignRole($nameRole);
-                }
-
-
-            }
-        }
+        // Asignar nuevo Rol
+        $nameRole = Role::find($this->role_id)->name;
+        $user->assignRole($nameRole);
 
 
         // Texto que se verá en el mensaje de tipo toast
-        $text = 'el usuario: "' . $user. '"fue actualizado exitosamente';
+        $text = 'El usuario: "' . $user->name. '" fue actualizado exitosamente';
         // Emite un mensaje de tipo toast
         $this->emit("toast", [
             'text' => $text,
@@ -224,32 +222,26 @@ class AdmUserController extends Component
             'icon' => "success"
         ]);
         // Cierra la ventana modal
-        $this->emit("hide-modal-ruat");
+        $this->emit("hide-modal-user");
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
-        'deleteRuat' => 'delete_ruat'
+        'deleteUser' => 'delete_user'
     ];
-
     // Elimina o inactiva una categoría
-    public function delete_ruat($ruat_id)
+    public function delete_user($user_id)
     {
-        $ruat = SisRuat::find($ruat_id);
-        $license_plate = $ruat->license_plate;
-        $ruat->delete();
-        $text = '¡Ruat con placa: "' . $license_plate . '" eliminado exitósamente!';
+        $user = User::find($user_id);
+        $name = $user->name;
+        $user->delete();
+        $text = '¡Usuario: "' . $name . '" eliminado exitósamente!';
 
 
         // Emite un mensaje de tipo toast
         $this->emit("toast", [
             'text' => $text,
-            'timer' => 3000,
+            'timer' => 5000,
             'icon' => "success"
         ]);
     }
-    
-
-
-
-
 }

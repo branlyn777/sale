@@ -112,9 +112,16 @@ class SisRuatController extends Component
             ->orderBy("created_at", "desc")
             ->paginate(10);
         }
+
+
+        // Verifica que haya Ruat seleccionados para unir sus PDFs
+        $ruatsCount = SisRuat::where("status", "active")
+        ->where("is_print", "true")
+        ->count();
         
         return view('livewire.template.sis.ruats.ruat', [
-            'ruats' => $ruats
+            'ruats' => $ruats,
+            'ruatsCount' => $ruatsCount
         ])
         ->extends('layouts.theme.app')
         ->section('content');

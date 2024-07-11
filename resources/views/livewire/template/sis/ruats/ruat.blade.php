@@ -47,8 +47,8 @@
 
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-end">
-                            <button wire:click.prevent="openCombinedPdf" class="btn btn-primary ms-auto">
-                                Imprimir Marcados
+                            <button wire:click.prevent="openCombinedPdf" class="btn btn-primary ms-auto" @if ($ruatsCount == 0) disabled @endif>
+                                Imprimir Marcados @if ($ruatsCount > 0) ({{$ruatsCount}}) @endif
                             </button>                            
                         </div>                        
                     </div>
@@ -93,7 +93,9 @@
                                             </button>
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ asset('storage/' . $r->file) }}" target="_blank">{{ $r->file }}</a>
+                                            <a href="{{ asset('storage/' . $r->file) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                            </a>
                                         </td>                                        
                                         <td class="text-center">
                                             <button wire:click.prevent="showModalRuat({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm">
