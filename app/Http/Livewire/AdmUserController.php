@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\InvBranch;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Validator;
@@ -17,8 +18,6 @@ class AdmUserController extends Component
     public $user_id;
     // Guarda el nombre de un Usuario
     public $user_name;
-    // Guarda la lista de Sucursales
-    public $list_branches;
     // Guarda la lista de Roles
     public $list_roles;
 
@@ -34,7 +33,6 @@ class AdmUserController extends Component
 
     public function mount()
     {
-        $this->list_branches = InvBranch::where("status","active")->get();
         $this->list_roles = Role::all();
         $this->user_id = 0;
     }
@@ -64,8 +62,10 @@ class AdmUserController extends Component
         // Si el id recibido es igual a cero significa que se va a crear un ususario, caso contrario se actualizará un ususario
         if ($id == 0)
         {
+            // Restablecer los campos de entrada
+            $this->reset(['name', 'mail', 'password_a', 'password_b']);
+            $this->role_id = 0;
             $this->user_id = 0;
-            $this->user_name = "";
         }
         else
         {
@@ -226,22 +226,55 @@ class AdmUserController extends Component
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
-        'deleteUser' => 'delete_user'
+        'delete' => 'delete_user'
     ];
-    // Elimina o inactiva una categoría
+    // Elimina un usuario
     public function delete_user($user_id)
     {
-        $user = User::find($user_id);
-        $name = $user->name;
-        $user->delete();
-        $text = '¡Usuario: "' . $name . '" eliminado exitósamente!';
+        try
+        {
+            // Inicia una transacción
+            DB::beginTransaction();
+    
+            // Encuentra el registro Ruat
+            $user = User::find($user_id);
+    
+            if (!$user)
+            {
+                throw new \Exception('Ruat no encontrado');
+            }
+    
+            // Guarda la placa del auto antes de eliminar el registro
+            $name = $user->name;
+            $user->delete();
+    
+            // Emite el mensaje de éxito
+            $text = '¡Usuario: "' . $name . '" eliminado exitósamente!';
+            $this->emit("toast", [
+                'text' => $text,
+                'timer' => 4000,
+                'icon' => "success"
+            ]);
+    
+            // Confirma la transacción
+            DB::commit();
+        }
+        catch (\Throwable $th)
+        {
+            // Rollback en caso de error
+            DB::rollBack();
 
+            $text = "<b>Archivo:</b> " . $th->getFile() . "<br>"
+            . "<b>Línea:</b> " . $th->getLine() . "<br>"
+            . "<b>Código:</b> " . $th->getCode() . "<br>"
+            . "<b>Mensaje:</b> " . $th->getMessage();
 
-        // Emite un mensaje de tipo toast
-        $this->emit("toast", [
-            'text' => $text,
-            'timer' => 5000,
-            'icon' => "success"
-        ]);
+            $this->emit("message", [
+                'text' => $text,
+                'title' => "Se encontro un error",
+                'icon' => "error"
+            ]);
+        }
     }
+
 }

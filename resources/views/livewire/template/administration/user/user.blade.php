@@ -76,7 +76,7 @@
                                         </button>
                                     </td>
                                     <td class="text-center">
-                                        <button onclick="confirm({{ $u->id }}, '{{ $u->name }}')" type="button" class="btn btn-outline-danger btn-sm">
+                                        <button onclick="confirm({{ $u->id }}, 'Usuario: {{ $u->name }}', '¿Esta seguro de eliminar el usuario?' ,'warning', 'Si, eliminar usuario')" type="button" class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
@@ -105,35 +105,6 @@
   </div>
 @section('javascript')
     <script>
-
-        function confirm(id, name)
-        {
-            Swal.fire({
-                    title: name,
-                    text: '¿Esta seguro de eliminar el usuario?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, Eliminar Usuario',
-                    cancelButtonText: 'No',
-                    }).then((result) => {
-                    if (result.isConfirmed)
-                    {
-                        window.livewire.emit('deleteUser', id)
-                        Swal.close()
-                    }
-                })
-        }
-
-
-
-
-
-
-
-
-
         document.addEventListener('DOMContentLoaded', function() {
 
             // Muestra la ventana modal crear/actualizar usuario producto
@@ -177,6 +148,14 @@
                     timerProgressBar: true,
                     icon: msg.icon
                 })
+            });
+            // Muestra un mensaje
+            window.livewire.on('message', msg => {
+                Swal.fire({
+                icon: msg.icon,
+                title: msg.title,
+                html: msg.text
+                });
             });
 
         });

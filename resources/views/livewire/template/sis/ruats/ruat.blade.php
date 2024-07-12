@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-4 text-center mb-3">
+                        <div class="col-12 col-sm-12 col-md-4 text-center mb-3">
                             <label>Buscar</label>
                             <div class="input-group">
                                 <span class="input-group-text">
@@ -43,11 +43,13 @@
                                 <input wire:model="search" type="text" class="form-control" placeholder="Buscar...">
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 text-center">
-
+                        <div class="col-12 col-sm-12 col-md-4 text-end">
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 text-end">
-                            <button wire:click.prevent="openCombinedPdf" class="btn btn-primary ms-auto" @if ($ruatsCount == 0) disabled @endif>
+                        <div class="col-12 col-sm-12 col-md-4 text-end">
+                            <button wire:click.prevent="" class="btn btn-success ms-auto mb-2">
+                                Importar Excel
+                            </button>
+                            <button wire:click.prevent="openCombinedPdf" class="btn btn-primary ms-auto mb-2" @if ($ruatsCount == 0) disabled @endif>
                                 Imprimir Marcados @if ($ruatsCount > 0) ({{$ruatsCount}}) @endif
                             </button>                            
                         </div>                        
@@ -62,8 +64,8 @@
                                     <th class="text-center" scope="col">#</th>
                                     <th class="text-center" scope="col" style="width: 25px;">Imprimir</th>
                                     <th class="text-center" scope="col">Placa</th>
-                                    <th class="text-center" scope="col">Detalles</th>
                                     <th class="text-center" scope="col">Descargar</th>
+                                    <th class="text-center" scope="col">Detalles</th>
                                     <th class="text-center" scope="col">Editar</th>
                                     <th class="text-center" scope="col">Eliminar</th>
                                 </tr>
@@ -75,9 +77,6 @@
                                             {{ ($ruats->currentpage() - 1) * $ruats->perpage() + $loop->index + 1 }}
                                         </th>
                                         <td class="text-center">
-
-                                            
-
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" role="switch" style="cursor: pointer;"
                                                     wire:change="addRemovePrint($event.target.checked, '{{ $r->id }}')"
@@ -88,22 +87,22 @@
                                         </td>
                                         <td class="text-center">{{ $r->license_plate }}</td>
                                         <td class="text-center">
+                                            <a href="{{ asset('storage/' . $r->file) }}" target="_blank" class="btn btn-sm" style="color: red;">
+                                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                            </a>
+                                        </td>   
+                                        <td class="text-center">
                                             <button wire:click.prevent="showModalRuatDetail({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm" title="Mostrar Detalles">
                                                 <i class="bi bi-card-list"></i>
                                             </button>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ asset('storage/' . $r->file) }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                                <i class="bi bi-file-earmark-pdf-fill"></i>
-                                            </a>
-                                        </td>                                        
+                                        </td>                                     
                                         <td class="text-center">
                                             <button wire:click.prevent="showModalRuat({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
                                         </td>
                                         <td class="text-center">
-                                            <button onclick="Confirm({{ $r->id }})" type="button" class="btn btn-outline-danger btn-sm">
+                                            <button onclick="confirm({{ $r->id }}, 'Placa: {{ $r->license_plate }}', '¿Esta seguro de eliminar el Ruat?' ,'warning', 'Si, eliminar ruat')" type="button" class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                         </td>
@@ -134,49 +133,6 @@
     @endunless
 </div>
 @section('javascript')
-    <script>
-
-        function Confirm(id)
-        {
-            Swal.fire({
-                    title: 'ATENCION',
-                    text: '¿Esta seguro de eliminar el Ruat?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, Eliminar Ruat',
-                    cancelButtonText: 'No',
-                    }).then((result) => {
-                    if (result.isConfirmed)
-                    {
-                        window.livewire.emit('deleteRuat', id)
-                        Swal.close()
-                    }
-                })
-        }
-
-
-
-
-        document.getElementById('imageUpload').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            const preview = document.getElementById('imagePreview');
-
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Previsualización de la imagen">`;
-                };
-
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '';
-            }
-        });
-    </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -237,6 +193,14 @@
                     timerProgressBar: true,
                     icon: msg.icon
                 })
+            });
+            // Muestra un mensaje
+            window.livewire.on('message', msg => {
+                Swal.fire({
+                icon: msg.icon,
+                title: msg.title,
+                html: msg.text
+                });
             });
 
         });

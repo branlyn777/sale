@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="d-flex justify-content-center">
                                 <div class="auth-header">
-                                    <h2 class="text-primary mt-5"><b>Sistema de Venta</b></h2>
+                                    <h2 class="text-primary mt-5"><b>Trans Alvama</b></h2>
                                 </div>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
 
 
                         <hr />
-                        <h5 class="d-flex justify-content-center">¿No tienes cuenta?</h5>
+                        {{-- <h5 class="d-flex justify-content-center">¿No tienes cuenta?</h5> --}}
                     </div>
                 </div>
             </div>

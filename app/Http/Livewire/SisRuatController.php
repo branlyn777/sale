@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\SisRuat;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -133,8 +135,16 @@ class SisRuatController extends Component
         // Si el id recibido es igual a cero significa que se va a crear un ruat, caso contrario se actualizará un ruat
         if ($id == 0)
         {
-            // Restablecer los campos de entrada después de guardar
-            $this->reset(['class', 'mark', 'vehicle_type', 'vehicle_subtype', 'engine_number', 'chassis_number', 'model', 'service', 'license_plate', 'policy_type', 'policy_date', 'country', 'customs_import', 'policy_number', 'tax_start_year', 'origin', 'displacement', 'traction', 'number_of_wheels', 'number_of_doors', 'color', 'number_of_places', 'fuel', 'chassis_type', 'motor_type', 'motor_turbo', 'weight', 'towing_capacity', 'observations']);
+            // Restablecer los campos de entrada
+            $this->reset([
+                'image', 'file', 'class', 'mark', 'vehicle_type', 'vehicle_subtype',
+                'engine_number', 'chassis_number', 'model', 'service', 'license_plate',
+                'policy_type', 'policy_number', 'policy_date', 'tax_start_year',
+                'country', 'origin', 'customs_import', 'displacement', 'chassis_type',
+                'traction', 'motor_type', 'number_of_wheels', 'motor_turbo',
+                'number_of_doors', 'weight', 'number_of_places', 'towing_capacity',
+                'fuel', 'color', 'observations'
+            ]);
 
             $this->ruat_id = 0;
         }
@@ -510,7 +520,6 @@ class SisRuatController extends Component
     // Actualiza un Ruat
     public function update_ruat()
     {
-
         $rules = [
             'license_plate' => 'required|min:2|max:255',
             'class' => 'required|min:2|max:255',
@@ -710,23 +719,59 @@ class SisRuatController extends Component
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
-        'deleteRuat' => 'delete_ruat'
+        'delete' => 'delete_ruat'
     ];
 
-    // Elimina o inactiva una categoría
+    // Elimina un Ruat
     public function delete_ruat($ruat_id)
     {
-        $ruat = SisRuat::find($ruat_id);
-        $license_plate = $ruat->license_plate;
-        $ruat->delete();
-        $text = '¡Ruat con placa: "' . $license_plate . '" eliminado exitósamente!';
+        try
+        {
+            // Inicia una transacción
+            DB::beginTransaction();
+    
+            // Encuentra el registro Ruat
+            $ruat = SisRuat::find($ruat_id);
+    
+            if (!$ruat)
+            {
+                throw new \Exception('Ruat no encontrado');
+            }
+    
+            // Eliminar archivos
+            Storage::disk('public')->delete($ruat->image); 
+            Storage::disk('public')->delete($ruat->file);
+    
+            // Guarda la placa del auto antes de eliminar el registro
+            $license_plate = $ruat->license_plate;
+            $ruat->delete();
+    
+            // Emite el mensaje de éxito
+            $text = '¡Ruat con placa: "' . $license_plate . '" eliminado exitósamente!';
+            $this->emit("toast", [
+                'text' => $text,
+                'timer' => 4000,
+                'icon' => "success"
+            ]);
+    
+            // Confirma la transacción
+            DB::commit();
+        }
+        catch (\Throwable $th)
+        {
+            // Rollback en caso de error
+            DB::rollBack();
 
+            $text = "<b>Archivo:</b> " . $th->getFile() . "<br>"
+            . "<b>Línea:</b> " . $th->getLine() . "<br>"
+            . "<b>Código:</b> " . $th->getCode() . "<br>"
+            . "<b>Mensaje:</b> " . $th->getMessage();
 
-        // Emite un mensaje de tipo toast
-        $this->emit("toast", [
-            'text' => $text,
-            'timer' => 3000,
-            'icon' => "success"
-        ]);
+            $this->emit("message", [
+                'text' => $text,
+                'title' => "Se encontro un error",
+                'icon' => "error"
+            ]);
+        }
     }
 }
