@@ -17,15 +17,13 @@ class SisDriverController extends Component
     public $driver_id;
     // Guarda true o false para eliminar o inactivar una conductor
     public $delete_cancel;
-
     public $name, $paternal_surname, $maternal_surname, $ci_number, $license_number, $start_date, $end_date, $photo_path, $cistern_id;
-
     // Lista las conductors para el select
     public $list_cisterns;
 
-
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+
     public function mount()
     {
         $this->driver_id = 0;
@@ -179,7 +177,6 @@ class SisDriverController extends Component
         $this->emit("hide-modal-driver");
 
     }
-
     // Verifica si un conductor tiene registros con su id y muestra una alerta para inactivar o eliminar la conductor
     public function check_driver(SisDriver $driver)
     {
@@ -212,7 +209,6 @@ class SisDriverController extends Component
             'id' => $driver->id
         ]);
     }
-
     // Actualiza un conductor
     public function update_driver()
     {
@@ -283,13 +279,10 @@ class SisDriverController extends Component
         // Cierra la ventana modal
         $this->emit("hide-modal-driver");
     }
-
-
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
         'deleteDriver' => 'delete_driver'
     ];
-
     // Elimina o inactiva un Conductor
     public function delete_driver($driver_id)
     {
@@ -313,5 +306,4 @@ class SisDriverController extends Component
             'icon' => "success"
         ]);
     }
-
 }

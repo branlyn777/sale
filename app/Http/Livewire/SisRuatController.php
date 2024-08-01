@@ -2,18 +2,20 @@
 
 namespace App\Http\Livewire;
 
+use App\Imports\SisRuatImport;
 use App\Models\SisRuat;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 use setasign\Fpdi\Fpdi;
 
 class SisRuatController extends Component
 {
     // Guarda los terminos de busqueda para encontrar
-    public $search;
+    public $search, $file_excel;
     // Guarda true o false para mostrar propietarios activas o inactivos
     public $status;
     // Guarda el id de la propietario
@@ -99,20 +101,18 @@ class SisRuatController extends Component
 
         if (strlen($this->search) == 0)
         {
-            $ruats = SisRuat::where("status", $this->status)
-            ->orderBy("created_at","desc")
-            ->paginate(10);
+            $ruats = SisRuat::orderBy("created_at","desc")
+            ->paginate(100);
         }
         else
         {
             $this->resetPage();
-            $ruats = SisRuat::where("status", $this->status)
-            ->where(function ($query) {
+            $ruats = SisRuat::where(function ($query) {
                 $query->where('license_plate', 'like', '%' . $this->search . '%')
                     ->orWhere('color', 'like', '%' . $this->search . '%');
             })
             ->orderBy("created_at", "desc")
-            ->paginate(10);
+            ->paginate(100);
         }
 
 
@@ -717,6 +717,14 @@ class SisRuatController extends Component
         // Cierra la ventana modal
         $this->emit("hide-modal-ruat");
     }
+    // Importa archivo Excel
+    public function import_excel()
+    {
+
+        // dd($this->file_excel->path());
+        Excel::import(new SisRuatImport, $this->file_excel->path());
+    }
+    
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
         'delete' => 'delete_ruat'

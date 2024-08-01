@@ -43,15 +43,19 @@
                                 <input wire:model="search" type="text" class="form-control" placeholder="Buscar...">
                             </div>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-4 text-end">
+                        <div class="col-12 col-sm-12 col-md-4 text-center">
+                            
                         </div>
                         <div class="col-12 col-sm-12 col-md-4 text-end">
-                            <button wire:click.prevent="" class="btn btn-success ms-auto mb-2">
-                                Importar Excel
-                            </button>
-                            <button wire:click.prevent="openCombinedPdf" class="btn btn-primary ms-auto mb-2" @if ($ruatsCount == 0) disabled @endif>
-                                Imprimir Marcados @if ($ruatsCount > 0) ({{$ruatsCount}}) @endif
-                            </button>                            
+                            <div class="input-group">
+                                <input type="file" wire:model="file_excel" class="form-control" aria-label="Upload">
+                                    <button wire:click.prevent="import_excel" class="btn btn-success ms-auto mb-2">
+                                        Importar
+                                    </button>                              
+                                <button wire:click.prevent="openCombinedPdf" class="btn btn-primary ms-auto mb-2" type="button" @if ($ruatsCount == 0) disabled @endif>
+                                    Imprimir Marcados @if ($ruatsCount > 0) ({{$ruatsCount}}) @endif
+                                </button>
+                            </div>                        
                         </div>                        
                     </div>
                 </div>
