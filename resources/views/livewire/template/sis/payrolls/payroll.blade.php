@@ -1,3 +1,65 @@
+@section('css')
+<style>
+    .payment-slip {
+        border: 2px solid rgb(1, 1, 167);
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+    
+    .header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+        border-bottom: 2px solid rgb(1, 1, 167);
+        padding-bottom: 10px;
+    }
+    
+    .payment-table, .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    
+    .payment-table th, .payment-table td,
+    .summary-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    .payment-table th {
+        background-color: #f2f2f2;
+    }
+    
+    .summary-table td {
+        border: 1px solid #ddd;
+        text-align: right;
+    }
+    
+    .summary-table td.amount {
+        font-weight: bold;
+    }
+    
+    .signature {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    
+    .signature .line {
+        border-bottom: 1px solid black;
+        width: 200px;
+    }
+    
+    .date {
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+@endsection
 <div class="pc-content">
     <div class="row">
         <!-- [ sample-page ] start -->
@@ -34,11 +96,19 @@
                         <div class="col-12 col-sm-6 col-md-4 text-center">
                             
                             <div class="input-group">
-                                <input type="file" wire:model="file_excel_payroll" class="form-control" aria-label="Upload">
-                                <button wire:click.prevent="import_excel_payroll()" class="btn btn-success ms-auto mb-0">
+                                <input 
+                                    type="file" 
+                                    wire:model="file_excel_payroll" 
+                                    class="form-control" 
+                                    aria-label="Upload" 
+                                    accept=".xlsx, .xls"
+                                >
+                                <button 
+                                    wire:click.prevent="import_excel_payroll()" 
+                                    class="btn btn-success ms-auto mb-0">
                                     Importar
                                 </button>
-                            </div> 
+                            </div>                            
                               
                         </div>
                     </div>
@@ -49,6 +119,7 @@
                         <table class="table table-hover">
                             <thead class="text-center">
                                 <tr>
+                                    <th>No</th>
                                     <th>ID</th>
                                     <th>Cliente</th>
                                     <th>Número de Transporte</th>
@@ -59,8 +130,7 @@
                                     <th>Fecha de Carga</th>
                                     <th>Carguio</th>
                                     <th>Fecha de Llegada</th>
-                                    <th>Volumen</th>
-                                    <th>Descarguio</th>
+                                    <th>Volumen Descarguio</th>
                                     <th>Cobros al 100% de la Merma</th>
                                     <th>Merma Cobrable</th>
                                     <th>Precio de la Merma</th>
@@ -75,7 +145,7 @@
                                     <th>Saldo</th>
                                     <th>Fecha de Pago</th>
                                     <th>Fecha de Pago Saldo Literal</th>
-                                    <th>Total (Anticipos, Gastos Operativos y Saldo)</th>
+                                    <th>Total</th>
                                     <th>Total Deuda</th>
                                     <th>Factura Nº</th>
                                     <th>Fecha</th>
@@ -87,54 +157,75 @@
                                     <th>Gastos Administrativos Santa Cruz</th>
                                     <th>Merma</th>
                                     <th>IBMETRO</th>
-                                    <th>Rastreo Satelital Nov y Diciembre</th>
+                                    <th>Rastreo Satelital</th>
                                     <th>Otros Descuentos</th>
                                     <th>Totales</th>
                                 </tr>
                             </thead>
-                            
                             <tbody>
-                                {{-- @foreach($owners as $o)
-                                    <tr>
-                                        <th class="text-center" scope="row">
-                                            {{ ($owners->currentpage() - 1) * $owners->perpage() + $loop->index + 1 }}
-                                        </th>
+                                @foreach ($payrolls as $payroll)
+                                    <tr class="text-center">
                                         <td>
-                                            {{$o->owner_code}}
+                                            {{ ($payrolls->currentpage() - 1) * $payrolls->perpage() + $loop->index + 1 }}
                                         </td>
                                         <td>
-                                            {{$o->name}} {{$o->paternal_surname}} {{$o->maternal_surname}}
+                                            <button class="btn btn-primary btn-sm" wire:click="$emit('show-modal-payment-slip', {{ $payroll->id }})">
+                                                {{ $payroll->id }}
+                                            </button>                                            
                                         </td>
-                                        <td class="text-center">
-                                            {{$o->ci_number}}
-                                        </td>
-                                        <td class="text-center">
-                                            {{$o->nit_number}}
-                                        </td>
-                                        <td class="text-center">
-                                            <button wire:click.prevent="showModalOwner({{ $o->id }})" type="button" class="btn btn-outline-primary btn-sm">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                        </td>
-                                        <td class="text-center">
-                                            <button wire:click.prevent="check_owner({{ $o->id }})" type="button" class="btn btn-outline-danger btn-sm">
-                                                <i class="bi bi-trash3"></i>
-                                            </button>
-                                        </td>
-                                    </tr>                                
-                                @endforeach --}}
+                                        <td>{{ $payroll->cliente }}</td>
+                                        <td>{{ $payroll->numero_de_transporte }}</td>
+                                        <td>{{ $payroll->propietario }}</td>
+                                        <td>{{ $payroll->placa }}</td>
+                                        <td>{{ $payroll->tramo }}</td>
+                                        <td>{{ $payroll->producto }}</td>
+                                        <td>{{ $payroll->fecha_de_carga }}</td>
+                                        <td>{{ $payroll->carguio }}</td>
+                                        <td>{{ $payroll->fecha_de_llegada }}</td>
+                                        <td>{{ $payroll->volumen_descarguio }}</td>
+                                        <td>{{ $payroll->cobros_al_100_de_la_merma }}</td>
+                                        <td>{{ $payroll->merma_cobrable }}</td>
+                                        <td>{{ $payroll->precio_de_la_merma }}</td>
+                                        <td>{{ $payroll->merma_por_cobrar }}</td>
+                                        <td>{{ $payroll->flete }}</td>
+                                        <td>{{ $payroll->liquido_basico }}</td>
+                                        <td>{{ $payroll->derecho_de_empresa }}</td>
+                                        <td>{{ $payroll->liquido_facturado }}</td>
+                                        <td>{{ $payroll->anticipo }}</td>
+                                        <td>{{ $payroll->fecha_de_pago_anticipo }}</td>
+                                        <td>{{ $payroll->fecha_de_pago_anticipo_literal }}</td>
+                                        <td>{{ $payroll->saldo }}</td>
+                                        <td>{{ $payroll->fecha_de_pago }}</td>
+                                        <td>{{ $payroll->fecha_de_pago_saldo_literal }}</td>
+                                        <td>{{ $payroll->total }}</td>
+                                        <td>{{ $payroll->total_deuda }}</td>
+                                        <td>{{ $payroll->factura_numero }}</td>
+                                        <td>{{ $payroll->fecha }}</td>
+                                        <td>{{ $payroll->it }}</td>
+                                        <td>{{ $payroll->resolucion_internacional }}</td>
+                                        <td>{{ $payroll->poliza_de_responsabilidad_civil }}</td>
+                                        <td>{{ $payroll->poliza_de_transporte }}</td>
+                                        <td>{{ $payroll->iva }}</td>
+                                        <td>{{ $payroll->gastos_administrativos_santa_cruz }}</td>
+                                        <td>{{ $payroll->merma }}</td>
+                                        <td>{{ $payroll->ibmetro }}</td>
+                                        <td>{{ $payroll->rastreo_satelital }}</td>
+                                        <td>{{ $payroll->otros_descuentos }}</td>
+                                        <td>{{ $payroll->totales }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
-                    
-                    {{-- {{ $owners->links() }} --}}
-                </div>
+                    {{ $payrolls->links() }}
+                </div>                
             </div>
         </div>
         <!-- [ sample-page ] end -->
     
         <!-- [ Modal ] start -->
             @include('livewire.template.sis.payrolls.modal_payroll')
+            @include('livewire.template.sis.payrolls.modal_payment_slip')
         <!-- [ Modal ] end -->
     </div>
 </div>
@@ -150,6 +241,20 @@
             // Oculta la ventana modal crear/actualizar categoria producto
             window.livewire.on('hide-modal-cistern', msg => {
                 var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('payroll'));
+                modal.hide();
+            });
+
+
+
+
+            // Muestra la ventana modal Boleta de Pago
+            window.livewire.on('show-modal-payment-slip', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('payment_slip'));
+                modal.show();
+            });
+            // Oculta la ventana modal Boleta de Pago
+            window.livewire.on('hide-modal-payment-slip', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('payment_slip'));
                 modal.hide();
             });
 

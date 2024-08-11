@@ -5,14 +5,14 @@ namespace App\Http\Livewire;
 use App\Imports\SisPayrollImport;
 use Livewire\Component;
 use App\Models\SisPayroll;
+use Exception;
 use Maatwebsite\Excel\Facades\Excel;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class SisPayrollController extends Component
 {
-    // Guarda el id de la cliente
-    public $client_id;
+    public $client_id, $search;
     public $cliente, $numero_de_transporte, $propietario, 
     $placa, $tramo, $producto, $fecha_de_carga, $carguio, 
     $fecha_de_llegada, $volumen_descarguio, $cobros_al_100_de_la_merma, 
@@ -22,19 +22,30 @@ class SisPayrollController extends Component
     $total_deuda, $factura_numero, $fecha, $it, $resolucion_internacional, $poliza_de_responsabilidad_civil, 
     $poliza_de_transporte, $iva, $gastos_administrativos_santa_cruz, $merma, $ibmetro, $rastreo_satelital, $otros_descuentos,
     $totales;
-     // Guarda true o false para mostrar cisternas activas o inactivas
-    public $status;
 
     // Para guardar el excel
     public $file_excel_payroll;
 
     use WithPagination, WithFileUploads;
+    protected $paginationTheme = 'bootstrap';
     public function render()
     {
-        $payroll = "";
+        $payrolls = "";
+
+        if (strlen($this->search) == 0)
+        {
+            $payrolls = SisPayroll::orderBy("created_at","desc")
+            ->paginate(10);
+        }
+        else
+        {
+            $payrolls = SisPayroll::orderBy("created_at","desc")
+            ->paginate(10);
+        }
+
 
         return view('livewire.template.sis.payrolls.payroll', [
-            'payroll' => $payroll
+            'payrolls' => $payrolls
         ])
         ->extends('layouts.theme.app')
         ->section('content');
@@ -165,7 +176,34 @@ class SisPayrollController extends Component
 
     public function import_excel_payroll()
     {
-        Excel::import(new SisPayrollImport, $this->file_excel_payroll->path());
-    }
+        $import = new SisPayrollImport();
+        $filePath = $this->file_excel_payroll->path();
+        
+        try
+        {
+            Excel::import($import, $filePath);
+            
+            // Obtener la colección y mostrarla con dd()
+            $collection = $import->getCollection();
+    
+            // Eliminar el archivo después de la importación
+            if (file_exists($filePath))
+            {
+                unlink($filePath);
+            }
 
+            // Realizar el insert de todos los registros en la tabla
+            foreach ($collection as $row)
+            {
+                SisPayroll::create($row); // Aquí $row ya es un array
+            }
+    
+            // dd($collection->toArray());
+            
+        }
+        catch (Exception $e)
+        {
+            dd($e->getMessage());
+        }
+    }     
 }
