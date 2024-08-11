@@ -720,7 +720,6 @@ class SisRuatController extends Component
     // Importa archivo Excel
     public function import_excel()
     {
-
         // dd($this->file_excel->path());
         Excel::import(new SisRuatImport, $this->file_excel->path());
     }

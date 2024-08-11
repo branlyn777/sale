@@ -16,6 +16,7 @@ use App\Http\Livewire\InvSaleController;
 use App\Http\Livewire\SisCisternController;
 use App\Http\Livewire\SisDriverController;
 use App\Http\Livewire\SisOwnerController;
+use App\Http\Livewire\SisPayrollController;
 use App\Http\Livewire\SisRuatController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,9 @@ Route::middleware('auth')->group(function () {
     Route::get('propietarios', SisOwnerController::class);
     Route::get('ruat', SisRuatController::class);
     Route::get('/download/{filename}', [SisRuatController::class, 'download'])->name('download.file');
+
+    
+    Route::get('planillapago', SisPayrollController::class);
 
 });
 

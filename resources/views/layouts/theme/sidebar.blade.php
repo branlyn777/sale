@@ -138,6 +138,11 @@
                 Cisternas
               </a>
             </li>
+            <li class="pc-item">
+              <a class="pc-link" href="{{ url('planillapago') }}">
+                Planilla de pago
+              </a>
+            </li>
             {{-- <li class="pc-item">
               <a class="pc-link" href="">
                 Planillas
