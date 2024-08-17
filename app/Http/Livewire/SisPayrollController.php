@@ -5,7 +5,9 @@ namespace App\Http\Livewire;
 use App\Imports\SisPayrollImport;
 use Livewire\Component;
 use App\Models\SisPayroll;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -205,5 +207,71 @@ class SisPayrollController extends Component
         {
             dd($e->getMessage());
         }
-    }     
+    }
+    
+    // Genera el PDF
+    public function paymentSlipPDF($id)
+    {
+        $payroll = SisPayroll::find($id);
+        
+        // Datos que se pasan al PDF
+        $data = [
+            'placa' => $payroll->placa, // Este campo existe en la migración
+            'tramo' => $payroll->tramo, // Este campo existe en la migración
+            
+            'fechaCarguio' => $payroll->fecha_de_carga, // Este campo existe en la migración como 'fecha_de_carga'
+            
+            // Este campo existe en la migración
+            'volumenCarguio' => $payroll->carguio, 
+            
+            'volumenDescarguio' => $payroll->volumen_descarguio, // Este campo existe en la migración
+            
+            // diferencia = carguio - volumen_descarguio
+            'diferencia' => $payroll->carguio - $payroll->volumen_descarguio,
+            
+            'flete' => $payroll->flete, // Este campo existe en la migración
+            
+            // Este campo 'liquidoFacturar' viene de la migración como 'liquido_facturado'
+            'liquidoFacturar' => $payroll->liquido_basico, 
+            
+            'derechoEmpresa' => $payroll->derecho_de_empresa, // Este campo existe en la migración
+            
+            // Este campo 'totalFlete'debes usar 'liquido_basico' - 'derecho_de_empresa'
+            'totalFlete' => $payroll->liquido_basico - $payroll->derecho_de_empresa,
+            
+            // Este campo 'gastosOperativos' viene de la migración como 'it', 'resolucion_internacional', 'poliza_de_responsabilidad_civil', 'poliza_de_transporte', 'iva', 'gastos_administrativos_santa_cruz', 'merma', 'ibmetro', 'rastreo_satelital'
+            'gastosOperativos' => $payroll->it + $payroll->resolucion_internacional + $payroll->poliza_de_responsabilidad_civil + $payroll->poliza_de_transporte + $payroll->iva + $payroll->gastos_administrativos_santa_cruz + $payroll->merma + $payroll->ibmetro + $payroll->rastreo_satelital,
+            
+            // Este campo 'anticiposCancelados' viene de la migración como 'anticipo'
+            'anticiposCancelados' => $payroll->anticipo,
+            
+            // Este campo 'importeCancelado' viene de la migración como 'saldo'
+            'importeCancelado' => $payroll->saldo,
+            
+            // Este campo 'recibidoPor' viene de la migración como 'propietario'
+            'recibidoPor' => $payroll->propietario,
+            
+            // Este campo 'ci' no existe en la migración
+            'ci' => 'NO SE ENCUENTRA', 
+            
+            // Este campo 'fecha' existe en la migración como 'fecha'
+            'fecha' => $payroll->fecha,
+
+            // Este campo 'fechaDescarguio' viene de la migración como 'fecha_de_llegada'
+            'fechaDescarguio' => $payroll->fecha_de_llegada,
+        ];
+    
+        // Renderizar la vista con los datos
+        $html = view('livewire.template.sis.payrolls.pdf_payment_slip', $data)->render();
+    
+        // Generar el PDF con el contenido del modal
+        $pdf = SnappyPdf::loadHTML($html);
+    
+        // Guardar el PDF temporalmente en el almacenamiento público o temporal
+        $pdfPath = 'pdfs/payment_slip.pdf';
+        Storage::disk('public')->put($pdfPath, $pdf->output());
+    
+        // Emitir evento para abrir el PDF en una nueva pestaña
+        $this->emit('openPdf', Storage::url($pdfPath));
+    }    
 }

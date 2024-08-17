@@ -1,64 +1,7 @@
 @section('css')
-<style>
-    .payment-slip {
-        border: 2px solid rgb(1, 1, 167);
-        border-radius: 10px;
-        padding: 20px;
-        background-color: #f9f9f9;
-    }
-    
-    .header {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-align: center;
-        border-bottom: 2px solid rgb(1, 1, 167);
-        padding-bottom: 10px;
-    }
-    
-    .payment-table, .summary-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-    
-    .payment-table th, .payment-table td,
-    .summary-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    
-    .payment-table th {
-        background-color: #f2f2f2;
-    }
-    
-    .summary-table td {
-        border: 1px solid #ddd;
-        text-align: right;
-    }
-    
-    .summary-table td.amount {
-        font-weight: bold;
-    }
-    
-    .signature {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-    }
-    
-    .signature .line {
-        border-bottom: 1px solid black;
-        width: 200px;
-    }
-    
-    .date {
-        margin-top: 20px;
-        text-align: center;
-        font-weight: bold;
-    }
-</style>
+
+    @include('livewire.template.sis.payrolls.styles_payroll')
+
 @endsection
 <div class="pc-content">
     <div class="row">
@@ -169,9 +112,34 @@
                                             {{ ($payrolls->currentpage() - 1) * $payrolls->perpage() + $loop->index + 1 }}
                                         </td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm" wire:click="$emit('show-modal-payment-slip', {{ $payroll->id }})">
-                                                {{ $payroll->id }}
-                                            </button>                                            
+                                            <div class="dropdown" data-bs-theme="blue">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLight" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    {{ $payroll->id }}
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonLight">
+                                                    <li>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <button wire:click="$emit('show-modal-payment-slip', {{ $payroll->id }})" type="button" class="dropdown-item">
+                                                                Planilla de Pago
+                                                            </button>
+                                                            <a wire:click="paymentSlipPDF({{ $payroll->id }})" class="btn btn-sm" style="color: red; padding-top: 10px;">
+                                                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" wire:click="$emit('show-modal-expenses-sheet', {{ $payroll->id }})">
+                                                            Planilla de Gastos Operativos
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" wire:click="$emit('show-modal-advance-payment', {{ $payroll->id }})">
+                                                            Pago de Anticipo
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                              </div>
+
                                         </td>
                                         <td>{{ $payroll->cliente }}</td>
                                         <td>{{ $payroll->numero_de_transporte }}</td>
@@ -226,6 +194,8 @@
         <!-- [ Modal ] start -->
             @include('livewire.template.sis.payrolls.modal_payroll')
             @include('livewire.template.sis.payrolls.modal_payment_slip')
+            @include('livewire.template.sis.payrolls.modal_expenses_sheet')
+            @include('livewire.template.sis.payrolls.modal_advance_payment')
         <!-- [ Modal ] end -->
     </div>
 </div>
@@ -257,6 +227,36 @@
                 var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('payment_slip'));
                 modal.hide();
             });
+
+
+
+            // Muestra la ventana modal Planilla de Gastos Operativos
+            window.livewire.on('show-modal-expenses-sheet', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('expenses_sheet'));
+                modal.show();
+            });
+            // Oculta la ventana modal Planilla de Gastos Operativos
+            window.livewire.on('hide-modal-expenses-sheet', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('expenses_sheet'));
+                modal.hide();
+            });
+
+
+
+            
+
+            // Muestra la ventana modal Planilla de Gastos Operativos
+            window.livewire.on('show-modal-advance-payment', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('advance_payment'));
+                modal.show();
+            });
+            // Oculta la ventana modal Planilla de Gastos Operativos
+            window.livewire.on('hide-modal-advance-payment', msg => {
+                var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('advance_payment'));
+                modal.hide();
+            });
+
+
 
             // Muestra una alerta
             window.livewire.on('alert', msg => {
@@ -292,4 +292,15 @@
 
         });
     </script>
+
+
+    {{-- Para abrir el PDF en una nueva pestaña del navegador, agregue el siguiente script en la vista de Livewire: --}}
+    <script>
+        document.addEventListener('livewire:load', function () {
+            @this.on('openPdf', pdfUrl => {
+                window.open(pdfUrl, '_blank');
+            });
+        });
+    </script>
+
 @endsection
