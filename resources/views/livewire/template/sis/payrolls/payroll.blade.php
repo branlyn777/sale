@@ -128,9 +128,14 @@
                                                         </div>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item" wire:click="$emit('show-modal-expenses-sheet', {{ $payroll->id }})">
-                                                            Planilla de Gastos Operativos
-                                                        </a>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <button wire:click="$emit('show-modal-expenses-sheet', {{ $payroll->id }})" type="button" class="dropdown-item">
+                                                                Planilla de Gastos Operativos
+                                                            </button>
+                                                            <a wire:click="expensesSheetPDF({{ $payroll->id }})" class="btn btn-sm" style="color: red; padding-top: 10px;">
+                                                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                                            </a>
+                                                        </div>
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item" wire:click="$emit('show-modal-advance-payment', {{ $payroll->id }})">

@@ -92,9 +92,9 @@
         </tr>
     </table>
     <div class="client-info">
-        <p>Cliente: CARGILL S.A.</p>
-        <p>Nº TRANS ALVAMA 004</p>
-        <p>Producto: ACEITE DE SOYA</p>
+        <p>Cliente: {{ $cliente }}</p>
+        <p>Nº: TRANS ALVAMA {{ $cliente }}</p>
+        <p>Producto: {{ $producto }}</p>
     </div>
     <div class="date">
         Cochabamba {{ \Carbon\Carbon::parse($fecha)->format('d-m-Y') }}
