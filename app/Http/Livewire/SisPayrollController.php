@@ -77,15 +77,15 @@ class SisPayrollController extends Component
     {
         if ($id == 0) {
             // Restablece las variables
-            $this->reset([
-                'cliente', 'numero_de_transporte', 'propietario', 'placa', 'tramo', 'producto',
-                'fecha_de_carga', 'carguio', 'fecha_de_llegada', 'volumen_descarguio', 'cobros_al_100_de_la_merma',
-                'merma_cobrable', 'precio_de_la_merma', 'merma_por_cobrar', 'flete', 'liquido_basico', 'derecho_de_empresa',
-                'liquido_facturado', 'anticipo', 'fecha_de_pago_anticipo', 'fecha_de_pago_anticipo_literal', 'saldo',
-                'fecha_de_pago', 'fecha_de_pago_saldo_literal', 'total', 'total_deuda', 'factura_numero', 'fecha', 'it',
-                'resolucion_internacional', 'poliza_de_responsabilidad_civil', 'poliza_de_transporte', 'iva', 'gastos_administrativos_santa_cruz',
-                'merma', 'ibmetro', 'rastreo_satelital', 'otros_descuentos', 'totales'
-            ]);
+            // $this->reset([
+            //     'cliente', 'numero_de_transporte', 'propietario', 'placa', 'tramo', 'producto',
+            //     'fecha_de_carga', 'carguio', 'fecha_de_llegada', 'volumen_descarguio', 'cobros_al_100_de_la_merma',
+            //     'merma_cobrable', 'precio_de_la_merma', 'merma_por_cobrar', 'flete', 'liquido_basico', 'derecho_de_empresa',
+            //     'liquido_facturado', 'anticipo', 'fecha_de_pago_anticipo', 'fecha_de_pago_anticipo_literal', 'saldo',
+            //     'fecha_de_pago', 'fecha_de_pago_saldo_literal', 'total', 'total_deuda', 'factura_numero', 'fecha', 'it',
+            //     'resolucion_internacional', 'poliza_de_responsabilidad_civil', 'poliza_de_transporte', 'iva', 'gastos_administrativos_santa_cruz',
+            //     'merma', 'ibmetro', 'rastreo_satelital', 'otros_descuentos', 'totales'
+            // ]);
             
             $this->payroll_id = 0; // Asegúrate de tener esta variable para identificar el ID de la planilla
         } else {
