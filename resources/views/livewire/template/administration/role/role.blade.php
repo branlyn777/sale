@@ -9,13 +9,13 @@
                             
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-center mb-3">
-                            <h5>CISTERNAS</h5>
+                            <h5>ROLES</h5>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-end mb-3">
-                            <button wire:click.prevent="showModalRole(0)" type="button" class="btn btn-outline-primary">
+                            {{-- <button wire:click.prevent="showModalRole(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
-                                Nueva Rolea
-                            </button>
+                                Nuevo Rol
+                            </button> --}}
                         </div>
                     </div>
                     <div class="row">
@@ -32,11 +32,11 @@
 
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-center">
-                            <label>Estado</label>
+                            {{-- <label>Estado</label>
                             <select wire:model="status" class="form-select">
                                 <option value="active">Activos</option>
                                 <option value="inactive">Inactivos</option>
-                            </select>
+                            </select> --}}
                         </div>
                     </div>
                 </div>
@@ -51,8 +51,8 @@
                                     <th scope="col">Descripcion</th>
                                     {{-- <th class="text-center" scope="col">Fecha de Creacion</th> --}}
                                     <th class="text-center" scope="col">Fecha de Actualizacion</th>
-                                    <th class="text-center" scope="col">Editar</th>
-                                    <th class="text-center" scope="col">Eliminar</th>
+                                    {{-- <th class="text-center" scope="col">Editar</th>
+                                    <th class="text-center" scope="col">Eliminar</th> --}}
                                 </tr>                                
                             </thead>
                             <tbody>
@@ -73,7 +73,7 @@
                                         <td class="text-center">
                                             {{ \Carbon\Carbon::parse($r->updated_at)->format('d/m/Y g:i A') }}
                                         </td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             <button wire:click.prevent="showModalRole({{ $r->id }})" type="button" class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
@@ -82,7 +82,7 @@
                                             <button wire:click.prevent="check_cistern({{ $r->id }})" type="button" class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
-                                        </td>
+                                        </td> --}}
                                     </tr>                                
                                 @endforeach
                             </tbody>

@@ -53,6 +53,7 @@ return new class extends Migration
             $table->decimal('otros_descuentos', 10, 2)->nullable();
             $table->decimal('totales', 10, 2)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

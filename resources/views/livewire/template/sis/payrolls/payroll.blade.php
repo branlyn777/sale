@@ -19,7 +19,7 @@
                         <div class="col-12 col-sm-6 col-md-4 text-end mb-3">
                             <button wire:click.prevent="showModalPayroll(0)" type="button" class="btn btn-outline-primary">
                                 <i class="bi bi-plus-lg"></i>
-                                Nuevo pago
+                                Nueva Planilla
                             </button>
                         </div>
                     </div>
@@ -48,7 +48,8 @@
                                 >
                                 <button 
                                     wire:click.prevent="import_excel_payroll()" 
-                                    class="btn btn-success ms-auto mb-0">
+                                    class="btn btn-success ms-auto mb-0" 
+                                    @disabled(! $file_excel_payroll)>
                                     Importar
                                 </button>
                             </div>                            
@@ -103,6 +104,8 @@
                                     <th>Rastreo Satelital</th>
                                     <th>Otros Descuentos</th>
                                     <th>Totales</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,7 +122,8 @@
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonLight">
                                                     <li>
                                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                                            <button wire:click="$emit('show-modal-payment-slip', {{ $payroll->id }})" type="button" class="dropdown-item">
+                                                            {{-- <button wire:click="$emit('show-modal-payment-slip', {{ $payroll->id }})" type="button" class="dropdown-item"> --}}
+                                                            <button type="button" class="dropdown-item">
                                                                 Planilla de Pago
                                                             </button>
                                                             <a wire:click="paymentSlipPDF({{ $payroll->id }})" class="btn btn-sm" style="color: red; padding-top: 10px;">
@@ -129,7 +133,8 @@
                                                     </li>
                                                     <li>
                                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                                            <button wire:click="$emit('show-modal-expenses-sheet', {{ $payroll->id }})" type="button" class="dropdown-item">
+                                                            {{-- <button wire:click="$emit('show-modal-expenses-sheet', {{ $payroll->id }})" type="button" class="dropdown-item"> --}}
+                                                            <button type="button" class="dropdown-item">
                                                                 Planilla de Gastos Operativos
                                                             </button>
                                                             <a wire:click="expensesSheetPDF({{ $payroll->id }})" class="btn btn-sm" style="color: red; padding-top: 10px;">
@@ -138,13 +143,18 @@
                                                         </div>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item" wire:click="$emit('show-modal-advance-payment', {{ $payroll->id }})">
-                                                            Pago de Anticipo
-                                                        </a>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            {{-- <button wire:click="$emit('show-modal-advance-payment', {{ $payroll->id }})" type="button" class="dropdown-item"> --}}
+                                                            <button type="button" class="dropdown-item">
+                                                                Pago de Anticipo
+                                                            </button>
+                                                            <a wire:click="advancePaymentPDF({{ $payroll->id }})" class="btn btn-sm" style="color: red; padding-top: 10px;">
+                                                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                                            </a>
+                                                        </div>
                                                     </li>
                                                 </ul>
                                               </div>
-
                                         </td>
                                         <td>{{ $payroll->cliente }}</td>
                                         <td>{{ $payroll->numero_de_transporte }}</td>
@@ -185,6 +195,17 @@
                                         <td>{{ $payroll->rastreo_satelital }}</td>
                                         <td>{{ $payroll->otros_descuentos }}</td>
                                         <td>{{ $payroll->totales }}</td>
+                                        
+                                        <td class="text-center">
+                                            <button wire:click.prevent="showModalPayroll({{ $payroll->id }})" type="button" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button onclick="confirm({{ $payroll->id }}, 'Placa: {{ $payroll->placa }}', '¿Esta seguro de eliminar?' ,'warning', 'Si, eliminar')" type="button" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -208,13 +229,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Muestra la ventana modal crear/actualizar categoria producto
+            // Muestra la ventana modal crear/actualizar
             window.livewire.on('show-modal-payroll', msg => {
                 var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('payroll'));
                 modal.show();
             });
-            // Oculta la ventana modal crear/actualizar categoria producto
-            window.livewire.on('hide-modal-cistern', msg => {
+            // Oculta la ventana modal crear/actualizar
+            window.livewire.on('hide-modal-payroll', msg => {
                 var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('payroll'));
                 modal.hide();
             });

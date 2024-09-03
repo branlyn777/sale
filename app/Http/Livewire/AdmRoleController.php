@@ -36,7 +36,7 @@ class AdmRoleController extends Component
         {
             $this->resetPage();
             $roles = Role::where(function ($query) {
-                $query->where('description', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderBy("created_at", "desc")
             ->paginate(10);

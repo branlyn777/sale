@@ -34,7 +34,7 @@ class AdmPermissionController extends Component
         {
             $this->resetPage();
             $permission = Permission::where(function ($query) {
-                $query->where('section', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderBy("created_at", "desc")
             ->paginate(10);
