@@ -11,14 +11,15 @@
             <tr>
                 <td>IMPORTE FACTURADO</td>
                 <td class="amount text-end">
-                {{ $liquido_facturado }}
+                    {{ number_format($liquido_facturado, 2, ',', '.') }}
                 </td>
             </tr>
             <tr>
                 <td>ANTICIPO CANCELADO</td>
                 <td class="amount text-end">
                     
-                    {{ $anticipo }}
+                    {{ number_format($anticipo, 2, ',', '.') }}
+
 
                 </td>
             </tr>
@@ -26,7 +27,8 @@
                 <td><strong>SALDO POR PAGAR</strong></td>
                 <td class="amount text-end">
                     <strong>
-                        {{ $liquido_facturado - $anticipo }}
+                        {{ number_format($liquido_facturado - $anticipo, 2, ',', '.') }}
+
                     </strong>
                 </td>
             </tr>
@@ -36,6 +38,10 @@
         <tr>
             <td class="signature-cell">
                 <p>Recibí Conforme: <span>{{ $propietario }}</span></p>
+                <br>
+                <br>
+                <br>
+                <br>
                 <p>C.I. ___________________</p>
                 {{-- <div class="line"></div> --}}
             </td>
