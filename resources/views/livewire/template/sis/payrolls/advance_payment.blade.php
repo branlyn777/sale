@@ -10,31 +10,42 @@
         <tbody>
             <tr>
                 <td>IMPORTE FACTURADO</td>
-                <td class="amount text-end">16.724,00</td>
+                <td class="amount text-end">
+                {{ $liquido_facturado }}
+                </td>
             </tr>
             <tr>
                 <td>ANTICIPO CANCELADO</td>
-                <td class="amount text-end">10.000,00</td>
+                <td class="amount text-end">
+                    
+                    {{ $anticipo }}
+
+                </td>
             </tr>
             <tr>
                 <td><strong>SALDO POR PAGAR</strong></td>
-                <td class="amount text-end"><strong>6.724,00</strong></td>
+                <td class="amount text-end">
+                    <strong>
+                        {{ $liquido_facturado - $anticipo }}
+                    </strong>
+                </td>
             </tr>
         </tbody>
     </table>
     <table class="signature-table">
         <tr>
             <td class="signature-cell">
-                <p>Recibí Conforme: <span>JAVIER ALI</span></p>
+                <p>Recibí Conforme: <span>{{ $propietario }}</span></p>
                 <p>C.I. ___________________</p>
                 {{-- <div class="line"></div> --}}
             </td>
         </tr>
     </table>
     <div class="client-info">
-        <p>Cliente: CARGILL S.A.</p>
-        <p>Nº: TRANS ALVAMA 005</p>
-        <p>Tramo: Santa Cruz-Ilo</p>
-        <p class="date">Cochabamba, 0 de enero de 1900</p>
+        <p>Cliente: {{ $cliente }}</p>
+        <p>Nº: TRANS ALVAMA {{ $id }}</p>
+        <p>Tramo: {{ $tramo }}</p>
+        <p class="date">Cochabamba {{ \Carbon\Carbon::parse($fecha_de_pago_anticipo)->translatedFormat('j \d\e F \d\e Y') }}
+        </p>
     </div>
 </div>

@@ -117,7 +117,7 @@
                                         <td>
                                             <div class="dropdown" data-bs-theme="blue">
                                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLight" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    {{ $payroll->id }}
+                                                    <b>{{ $payroll->id }}</b>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonLight">
                                                     <li>

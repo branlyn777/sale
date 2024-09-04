@@ -56,13 +56,13 @@ class SisPayrollController extends Component
         if (strlen($this->search) == 0)
         {
             $payrolls = SisPayroll::orderBy("created_at","desc")
-            ->paginate(10);
+            ->paginate(100);
         }
         else
         {
             $payrolls = SisPayroll::orderBy("created_at","desc")
             ->where('placa', 'like', '%' . $this->search . '%')
-            ->paginate(10);
+            ->paginate(100);
         }
 
 
@@ -467,6 +467,19 @@ class SisPayrollController extends Component
         
         // Asignar valores a partir del objeto $payroll
         $data['numero_de_transporte'] = $payroll->numero_de_transporte;
+
+
+        $data['liquido_facturado'] = $payroll->liquido_facturado;
+        $data['anticipo'] = $payroll->anticipo;
+        $data['id'] = $payroll->id;
+        $data['tramo'] = $payroll->tramo;
+        $data['fecha_de_pago_anticipo'] = $payroll->fecha_de_pago_anticipo;
+        $data['cliente'] = $payroll->cliente;
+        $data['propietario'] = $payroll->propietario;
+        
+
+
+        
 
         // Renderizar la vista con los datos
         $html = view('livewire.template.sis.payrolls.pdf_advance_payment', $data)->render();
