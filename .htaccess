@@ -1,0 +1,56 @@
+# Redirige todas las solicitudes a la carpeta public
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # If your Laravel project is not in the root directory, uncomment and modify the following line:
+    # RewriteBase /your-subdirectory/
+
+    # Redirige todas las solicitudes al archivo public/index.php
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Evita el acceso directo a ciertos archivos y directorios
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [L]
+</IfModule>
+
+# Seguridad: Proteger archivos sensibles
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files composer.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files composer.lock>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files package.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files server.php>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files artisan>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Proteger el directorio storage
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(storage)($|/) - [F,L,NC]
+</IfModule>
+
+# Deshabilitar la exploración de directorios
+Options -Indexes
