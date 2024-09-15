@@ -36,12 +36,12 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect('/');
+    // return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Ruta del catálogo (fuera del inicio de sesión)
-Route::get('home', LandingHomeController::class);
-Route::get('catalogo', LandingCatalogueController::class);
+// Route::get('home', LandingHomeController::class);
 
 Route::middleware('auth')->group(function () {
 
@@ -61,12 +61,6 @@ Route::middleware('auth')->group(function () {
     Route::get('roles', AdmRoleController::class);
     Route::get('permisos', AdmPermissionController::class);
     Route::get('asignarpermisos', AdmAssignPermissionController::class);
-
-    // Inventories
-    Route::get('categorias', InvCategoryController::class);
-    Route::get('productos', InvProductController::class);
-    Route::get('comprar', InvBuyController::class);
-    Route::get('vender', InvSaleController::class);
 
     // SIS - PETROL
     Route::get('cisternas', SisCisternController::class);

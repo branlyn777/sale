@@ -133,11 +133,11 @@
                 Propietarios
               </a>
             </li> --}}
-            {{-- <li class="pc-item">
+            <li class="pc-item">
               <a class="pc-link" href="{{ url('cisternas') }}">
                 Cisternas
               </a>
-            </li> --}}
+            </li>
             <li class="pc-item">
               <a class="pc-link" href="{{ url('planillapago') }}">
                 Planilla de pago

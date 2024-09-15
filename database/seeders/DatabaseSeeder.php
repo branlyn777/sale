@@ -34,8 +34,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AdmAssignRolePermissionSeeder::class);
 
         // SIS - PETROL
-        $this->call(SisCisternSeeder::class);
-        $this->call(SisDriverSeeder::class);
+        // $this->call(SisCisternSeeder::class);
+        // $this->call(SisDriverSeeder::class);
         $this->call(SisOwnerSeeder::class);
         // $this->call(SisRuatSeeder::class);
 
