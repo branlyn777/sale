@@ -12,6 +12,10 @@
         </div>
     </div>
     <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
+
+
+
+        
         <div class="me-auto pc-mob-drp">
             <ul class="list-unstyled">
                 <li class="pc-h-item header-mobile-collapse">
@@ -19,7 +23,7 @@
                         <i class="ti ti-menu-2"></i>
                     </a>
                 </li>
-                <li class="dropdown pc-h-item d-inline-flex d-md-none">
+                {{-- <li class="dropdown pc-h-item d-inline-flex d-md-none">
                     <a class="pc-head-link head-link-primary dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ti ti-search"></i>
@@ -40,18 +44,20 @@
                         <input type="search" class="form-control" placeholder="Buscar..." />
                         <button class="btn btn-light-primary btn-search"><i class="ti ti-adjustments-horizontal"></i></button>
                     </form>
-                </li>
+                </li> --}}
             </ul>
         </div>
+
+
         <!-- [Mobile Media Block end] -->
         <div class="ms-auto">
             <ul class="list-unstyled">
                 <li class="dropdown pc-h-item">
-                    <a class="pc-head-link head-link-primary dropdown-toggle arrow-none me-0"
+                    {{-- <a class="pc-head-link head-link-primary dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                         aria-expanded="false">
                         <i class="ti ti-bell"></i>
-                    </a>
+                    </a> --}}
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header">
                             <a href="#!" class="link-primary float-end text-decoration-underline">Todo como
@@ -167,16 +173,40 @@
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header">
-                            <h4>Buenos Dias, <span class="small text-muted"> Branlyn Mamani</span></h4>
-                            <p class="text-muted">Administrador</p>
-                            <form class="header-search">
+                            <h4>Buenos Días, 
+                                @if(auth()->check())
+                                    <span class="small text-muted">{{ auth()->user()->name }}</span>
+                                @else
+                                    Invitado
+                                @endif
+                            </h4>                            
+                            <p class="text-muted">
+                                @if(auth()->check() && auth()->user()->getRoleObject())
+                                    {{ auth()->user()->getRoleObject()->name }}
+                                @else
+                                    Sin rol asignado
+                                @endif
+                            </p>  
+                            
+                            
+
+
+                            {{-- <form class="header-search">
                                 <i class="ti ti-search icon-search"></i>
                                 <input type="search" class="form-control" placeholder="Buscar opciones perfil" />
-                            </form>
+                            </form> --}}
+
+
+
+
+
                             <hr />
-                            <div class="profile-notification-scroll position-relative"
-                                style="max-height: calc(100vh - 280px)">
-                                <div class="upgradeplan-block bg-light-warning rounded">
+                            <div class="profile-notification-scroll position-relative" style="max-height: calc(100vh - 280px)">
+
+
+
+
+                                {{-- <div class="upgradeplan-block bg-light-warning rounded">
                                     <h4>Ver tus reportes</h4>
                                     <p class="text-muted">Mira todas las ventas realizadas hasta ahora</p>
                                     <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/"
@@ -205,7 +235,10 @@
                                 <a href="#" class="dropdown-item">
                                     <i class="ti ti-user"></i>
                                     <span>Perfil Social</span>
-                                </a>
+                                </a> --}}
+
+
+
                                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit()" class="dropdown-item">
                                     <i class="ti ti-logout"></i>
                                     <span>Cerrar Sesión</span>

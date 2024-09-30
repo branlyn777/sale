@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         /* Administration */
         $this->call(AdmUserSeeder::class);
-        $this->call(AdmSupplierSeeder::class);
         $this->call(AdmPermissionSeeder::class);
         $this->call(AdmRoleSeeder::class);
         $this->call(AdmAssignRolePermissionSeeder::class);

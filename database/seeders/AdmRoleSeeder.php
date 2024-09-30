@@ -13,13 +13,15 @@ class AdmRoleSeeder extends Seeder
      */
     public function run(): void
     {
+        // ID = 1;
+        Role::create([
+            'name' => 'Developer',
+            'guard_name' => 'web',
+            'description' => 'Programador de la página'
+        ]);
+        // ID = 2;
         Role::create([
             'name' => 'Administrador',
-            'guard_name' => 'web',
-            'description' => 'Control Total'
-        ]);
-        Role::create([
-            'name' => 'Basico',
             'guard_name' => 'web',
             'description' => 'Control Total'
         ]);

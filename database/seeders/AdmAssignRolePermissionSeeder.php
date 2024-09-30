@@ -15,37 +15,27 @@ class AdmAssignRolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        // Assigning all permissions to the first role (Developer)
         $role = Role::find(1);
+        // Search all permissions
         $permissions = Permission::all();
+        // Assigning all permissions to the role
         foreach($permissions as $p)
         {
             $role->givePermissionTo($p);
         }
-
-
-        // Asignar Roles al Usuario 1
+        // Assign the role to the first user (Branlyn)
         $user = User::find(1);
         $role = Role::find(1);
         $user->assignRole($role);
+
+
+
+
         
-        // Asignar Roles al Usuario 2
+        // Assign the role to the second user (Leonardo)
         $user = User::find(2);
         $role = Role::find(1);
         $user->assignRole($role);
-
-        // Asignar Roles al Usuario 3
-        $user = User::find(3);
-        $role = Role::find(2);
-        $user->assignRole($role);
-
-
-
-
-    //     $role = Role::find(1);
-    //     // Asignar permisos de editar usuarios
-    //     $permission = Permission::find(1);
-    //     $role->givePermissionTo($permission);
-    //     $permission = Permission::find(2);
-    //     $role->givePermissionTo($permission);
     }
 }
