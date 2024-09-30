@@ -13,22 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        /* Administration */
         $this->call(AdmUserSeeder::class);
-        $this->call(InvCategorySeeder::class);
-        $this->call(InvProductSeeder::class);
-        $this->call(InvBranchSeeder::class);
-        $this->call(InvWarehouseSeeder::class);
-        $this->call(InvInventorySeeder::class);
-        $this->call(AdmUserBranchSeeder::class);
         $this->call(AdmSupplierSeeder::class);
-        $this->call(TxnCashRegisterSeeder::class);
-        $this->call(TxnPaymensTypeSeeder::class);
         $this->call(AdmPermissionSeeder::class);
         $this->call(AdmRoleSeeder::class);
         $this->call(AdmAssignRolePermissionSeeder::class);
