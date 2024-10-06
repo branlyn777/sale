@@ -41,22 +41,96 @@ class SisPayrollImport implements ToCollection, WithHeadingRow, WithCalculatedFo
                 'carguio' => $row['carguio'] ?? null,
                 'fecha_de_llegada' => isset($row['fecha_de_llegada']) ? $this->transformDate($row['fecha_de_llegada']) : null,
                 'volumen_descarguio' => $row['volumen_descarguio'] ?? null,
-                'cobros_al_100_de_la_merma' => $row['cobros_al_100_de_la_merma'] ?? null,
+                // Automatic Calculation
+                'merma' => (isset($row['carguio']) && isset($row['volumen_descarguio'])) ? $row['carguio'] - $row['volumen_descarguio'] : null,
+                'merma_limite_excedible' => isset($row['carguio']) ? $row['carguio'] * 0.003 : null,
+                'cobros_al_100_de_la_merma' => $this->get_cobros_al_100_de_la_merma(($row['carguio'] - $row['volumen_descarguio']), ($row['carguio'] * 0.003)),
+                // ---------------------
                 'merma_cobrable' => $row['merma_cobrable'] ?? null,
                 'precio_de_la_merma' => $row['precio_de_la_merma'] ?? null,
-                'merma_por_cobrar' => $row['merma_por_cobrar'] ?? null,
+                // Automatic Calculation
+                'merma_por_cobrar' => (isset($row['precio_de_la_merma']))
+                ? ($this->get_cobros_al_100_de_la_merma(($row['carguio'] - $row['volumen_descarguio']), ($row['carguio'] * 0.003)) * $row['precio_de_la_merma']) * 1000
+                : null,
+                // ---------------------
                 'flete' => $row['flete'] ?? null,
-                'liquido_basico' => $row['liquido_basico'] ?? null,
-                'derecho_de_empresa' => $row['derecho_de_empresa'] ?? null,
-                'liquido_facturado' => $row['liquido_facturado'] ?? null,
+                // Automatic Calculation
+                'liquido_basico' => (isset($row['carguio']) && isset($row['flete']))
+                ? round($row['carguio'] * $row['flete'], 0)
+                : null,
+                'derecho_de_empresa' => (isset($row['carguio']) && isset($row['flete']))
+                ? round(round($row['carguio'] * $row['flete'], 0) * 0.07, 0)
+                : null,
+                'liquido_facturado' => (isset($row['carguio']) && isset($row['flete']))
+                ? round($row['carguio'] * $row['flete'], 0) - round(round($row['carguio'] * $row['flete'], 0) * 0.07, 0)
+                : null,
+                // ---------------------
                 'anticipo' => $row['anticipo'] ?? null,
                 'fecha_de_pago_anticipo' => isset($row['fecha_de_pago_anticipo']) ? $this->transformDate($row['fecha_de_pago_anticipo']) : null,
-                'fecha_de_pago_anticipo_literal' => $row['fecha_de_pago_anticipo_literal'] ?? null,
-                'saldo' => $row['saldo'] ?? null,
+                // Automatic Calculation
+                'fecha_de_pago_anticipo_literal' => isset($row['fecha_de_pago_anticipo']) ? $this->transformDate($row['fecha_de_pago_anticipo']) : null,
+                'saldo' => (isset($row['carguio']) && isset($row['flete']))
+                ? round($row['carguio'] * $row['flete'], 0) - round(round($row['carguio'] * $row['flete'], 0) * 0.07, 0) - $row['anticipo'] - ($row['it'] + $row['resolucion_internacional'] + $row['poliza_de_responsabilidad_civil'] + $row['poliza_de_transporte'] + $row['iva'] + $row['gastos_administrativos_santa_cruz'] + (($this->get_cobros_al_100_de_la_merma(($row['carguio'] - $row['volumen_descarguio']), ($row['carguio'] * 0.003)) * $row['precio_de_la_merma']) * 1000) + $row['ibmetro'] + $row['rastreo_satelital'] + $row['otros_descuentos'])
+                : null,
+                // ---------------------
                 'fecha_de_pago' => isset($row['fecha_de_pago']) ? $this->transformDate($row['fecha_de_pago']) : null,
-                'fecha_de_pago_saldo_literal' => $row['fecha_de_pago_saldo_literal'] ?? null,
-                'total' => $row['total'] ?? null,
-                'total_deuda' => $row['total_deuda'] ?? null,
+                // Automatic Calculation
+                'fecha_de_pago_saldo_literal' => isset($row['fecha_de_pago']) ? $this->transformDate($row['fecha_de_pago']) : null,
+                // ---------------------
+                'total' => $row['anticipo'] + round($row['carguio'] * $row['flete'], 0) - round(round($row['carguio'] * $row['flete'], 0) * 0.07, 0) - (isset($row['anticipo']) ? $row['anticipo'] : 0) - array_sum(array_filter([
+                    $row['it'],
+                    $row['resolucion_internacional'],
+                    $row['poliza_de_responsabilidad_civil'],
+                    $row['poliza_de_transporte'],
+                    $row['iva'],
+                    $row['gastos_administrativos_santa_cruz'],
+                    ($row['carguio'] - $row['volumen_descarguio']),
+                    $row['ibmetro'],
+                    $row['rastreo_satelital'],
+                    $row['otros_descuentos'],
+                ], function($value) {
+                    return !is_null($value);
+                })) + array_sum(array_filter([
+                    $row['it'],
+                    $row['resolucion_internacional'],
+                    $row['poliza_de_responsabilidad_civil'],
+                    $row['poliza_de_transporte'],
+                    $row['iva'],
+                    $row['gastos_administrativos_santa_cruz'],
+                    ($row['carguio'] - $row['volumen_descarguio']),
+                    $row['ibmetro'],
+                    $row['rastreo_satelital'],
+                    $row['otros_descuentos'],
+                ], function($value) {
+                    return !is_null($value);
+                })),
+                'total_deuda' => round($row['carguio'] * $row['flete'], 0) - round(round($row['carguio'] * $row['flete'], 0) * 0.07, 0) - ($row['anticipo'] + round($row['carguio'] * $row['flete'], 0) - round(round($row['carguio'] * $row['flete'], 0) * 0.07, 0) - (isset($row['anticipo']) ? $row['anticipo'] : 0) - array_sum(array_filter([
+                    $row['it'],
+                    $row['resolucion_internacional'],
+                    $row['poliza_de_responsabilidad_civil'],
+                    $row['poliza_de_transporte'],
+                    $row['iva'],
+                    $row['gastos_administrativos_santa_cruz'],
+                    ($row['carguio'] - $row['volumen_descarguio']),
+                    $row['ibmetro'],
+                    $row['rastreo_satelital'],
+                    $row['otros_descuentos'],
+                ], function($value) {
+                    return !is_null($value);
+                })) + array_sum(array_filter([
+                    $row['it'],
+                    $row['resolucion_internacional'],
+                    $row['poliza_de_responsabilidad_civil'],
+                    $row['poliza_de_transporte'],
+                    $row['iva'],
+                    $row['gastos_administrativos_santa_cruz'],
+                    ($row['carguio'] - $row['volumen_descarguio']),
+                    $row['ibmetro'],
+                    $row['rastreo_satelital'],
+                    $row['otros_descuentos'],
+                ], function($value) {
+                    return !is_null($value);
+                }))),
                 'factura_numero' => $row['factura_numero'] ?? null,
                 'fecha' => isset($row['fecha']) ? $this->transformDate($row['fecha']) : null,
                 'it' => $row['it'] ?? null,
@@ -65,11 +139,13 @@ class SisPayrollImport implements ToCollection, WithHeadingRow, WithCalculatedFo
                 'poliza_de_transporte' => $row['poliza_de_transporte'] ?? null,
                 'iva' => $row['iva'] ?? null,
                 'gastos_administrativos_santa_cruz' => $row['gastos_administrativos_santa_cruz'] ?? null,
-                'merma' => $row['merma'] ?? null,
+                // Automatic Calculation
+                'merma' => ($this->get_cobros_al_100_de_la_merma(($row['carguio'] - $row['volumen_descarguio']), ($row['carguio'] * 0.003)) * $row['precio_de_la_merma']) * 1000,
+                // ---------------------
                 'ibmetro' => $row['ibmetro'] ?? null,
                 'rastreo_satelital' => $row['rastreo_satelital'] ?? null,
                 'otros_descuentos' => $row['otros_descuentos'] ?? null,
-                'totales' => $row['totales'] ?? null,
+                'totales' => $row['it'] + $row['resolucion_internacional'] + $row['poliza_de_responsabilidad_civil'] + $row['poliza_de_transporte'] + $row['iva'] + $row['gastos_administrativos_santa_cruz'] + (($this->get_cobros_al_100_de_la_merma(($row['carguio'] - $row['volumen_descarguio']), ($row['carguio'] * 0.003)) * $row['precio_de_la_merma']) * 1000) + $row['ibmetro'] + $row['rastreo_satelital'] + $row['otros_descuentos'],
             ]);
         }
     }
@@ -80,6 +156,19 @@ class SisPayrollImport implements ToCollection, WithHeadingRow, WithCalculatedFo
      * @param mixed $value El valor de la fecha, que puede ser un número o una cadena.
      * @return \Carbon\Carbon La fecha transformada como un objeto Carbon.
      */
+    function get_cobros_al_100_de_la_merma($merma_carguio, $merma_limite_excedible)
+    {
+        if ($merma_carguio == null || $merma_limite_excedible == null)
+        {
+            return 0;
+        }
+        $value = 0;
+        if ( $merma_carguio > $merma_limite_excedible)
+        {
+            $value = $merma_carguio - $merma_limite_excedible;
+        }
+        return $value;
+    }
     private function transformDate($value)
     {
         // Si el valor es numérico, se asume que es una fecha en formato Excel

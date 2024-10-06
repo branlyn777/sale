@@ -20,6 +20,8 @@ class SisPayroll extends Model
         'carguio',
         'fecha_de_llegada',
         'volumen_descarguio',
+        'merma_carguio',
+        'merma_limite_excedible',
         'cobros_al_100_de_la_merma',
         'merma_cobrable',
         'precio_de_la_merma',

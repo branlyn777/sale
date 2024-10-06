@@ -89,6 +89,8 @@
                                     <th>Carguio</th>
                                     <th>Fecha de Llegada</th>
                                     <th>Volumen Descarguio</th>
+                                    <th>Merma</th>
+                                    <th>Merma Limite Excedible</th>
                                     <th>Cobros al 100% de la Merma</th>
                                     <th>Merma Cobrable</th>
                                     <th>Precio de la Merma</th>
@@ -179,23 +181,25 @@
                                         <td>{{ $payroll->fecha_de_carga }}</td>
                                         <td>{{ $payroll->carguio }}</td>
                                         <td>{{ $payroll->fecha_de_llegada }}</td>
-                                        <td>{{ $payroll->volumen_descarguio }}</td>
-                                        <td>{{ $payroll->cobros_al_100_de_la_merma }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->volumen_descarguio, 3)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->merma, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->merma_limite_excedible, 3)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->cobros_al_100_de_la_merma, 2)) }}</td>
                                         <td>{{ $payroll->merma_cobrable }}</td>
-                                        <td>{{ $payroll->precio_de_la_merma }}</td>
-                                        <td>{{ $payroll->merma_por_cobrar }}</td>
-                                        <td>{{ $payroll->flete }}</td>
-                                        <td>{{ $payroll->liquido_basico }}</td>
-                                        <td>{{ $payroll->derecho_de_empresa }}</td>
-                                        <td>{{ $payroll->liquido_facturado }}</td>
-                                        <td>{{ $payroll->anticipo }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->precio_de_la_merma, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->merma_por_cobrar, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->flete, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->liquido_basico, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->derecho_de_empresa, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->liquido_facturado, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->anticipo, 2)) }}</td>
                                         <td>{{ $payroll->fecha_de_pago_anticipo }}</td>
                                         <td>{{ $payroll->fecha_de_pago_anticipo_literal }}</td>
-                                        <td>{{ $payroll->saldo }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->saldo, 2)) }}</td>
                                         <td>{{ $payroll->fecha_de_pago }}</td>
                                         <td>{{ $payroll->fecha_de_pago_saldo_literal }}</td>
-                                        <td>{{ $payroll->total }}</td>
-                                        <td>{{ $payroll->total_deuda }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->total, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->total_deuda, 2)) }}</td>
                                         <td>{{ $payroll->factura_numero }}</td>
                                         <td>{{ $payroll->fecha }}</td>
                                         <td>{{ $payroll->it }}</td>
@@ -204,11 +208,11 @@
                                         <td>{{ $payroll->poliza_de_transporte }}</td>
                                         <td>{{ $payroll->iva }}</td>
                                         <td>{{ $payroll->gastos_administrativos_santa_cruz }}</td>
-                                        <td>{{ $payroll->merma }}</td>
-                                        <td>{{ $payroll->ibmetro }}</td>
-                                        <td>{{ $payroll->rastreo_satelital }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->merma, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->ibmetro, 2)) }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->rastreo_satelital, 2)) }}</td>
                                         <td>{{ $payroll->otros_descuentos }}</td>
-                                        <td>{{ $payroll->totales }}</td>
+                                        <td>{{ str_replace('.', ',', number_format($payroll->totales, 2)) }}</td>
                                         
                                         <td class="text-center">
                                             <button wire:click.prevent="showModalPayroll({{ $payroll->id }})" type="button" class="btn btn-outline-primary btn-sm">
