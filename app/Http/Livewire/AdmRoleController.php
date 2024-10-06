@@ -30,7 +30,8 @@ class AdmRoleController extends Component
         if (strlen($this->search) == 0)
         {
             $roles = Role::orderBy("created_at","desc")
-            ->paginate(10);
+            ->where('id', '<>', 1)
+            ->paginate(100);
         }
         else
         {
@@ -39,8 +40,8 @@ class AdmRoleController extends Component
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderBy("created_at", "desc")
-            ->paginate(10);
-
+            ->where('id', '<>', 1)
+            ->paginate(100);
         }
 
         return view('livewire.template.administration.role.role', [

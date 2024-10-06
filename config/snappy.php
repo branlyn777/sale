@@ -35,7 +35,10 @@ return [
 
     'pdf' => [
         'enabled' => true,
-        'binary'  => base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'),
+        'binary' => env('APP_URL') === 'http://localhost'
+            ? '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"'
+            : base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'),
+        'timeout' => false,
         'timeout' => false,
         'options' => [],
         'env'     => [],

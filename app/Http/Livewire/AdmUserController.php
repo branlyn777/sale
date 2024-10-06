@@ -33,21 +33,23 @@ class AdmUserController extends Component
 
     public function mount()
     {
-        $this->list_roles = Role::all();
+        $this->list_roles = Role::where('id', '<>', 1)->get();
         $this->user_id = 0;
     }
     public function render()
     {
         if (strlen($this->search) == 0)
         {
-            $users = User::orderBy("created_at","desc")
-            ->paginate(10);
+            $users = User::orderBy('created_at','desc')
+            ->where('id', '<>', 1)
+            ->paginate(100);
         }
         else
         {
             $users = User::where('name', 'like', '%' . $this->search . '%')
-            ->orderBy("created_at","desc")
-            ->paginate(10);
+            ->orderBy('created_at','desc')
+            ->where('id', '<>', 1)
+            ->paginate(100);
         }
 
         return view('livewire.template.administration.user.user', [
@@ -82,7 +84,7 @@ class AdmUserController extends Component
         // Quita los mensajes de validación
         $this->resetValidation();
         // Lanza el evento para mostrar la ventana modal
-        $this->emit("show-modal-user");
+        $this->emit('show-modal-user');
     }
     // Crea un nuevo usuario
     public function create_user()
@@ -134,14 +136,14 @@ class AdmUserController extends Component
         $text = "Usuario '" . $user->name . "' creado exitosamente";
 
         // Emite un mensaje de tipo toast
-        $this->emit("toast", [
+        $this->emit('toast', [
             'text' => $text,
             'timer' => 3000,
-            'icon' => "success"
+            'icon' => 'success'
         ]);
 
         // Cierra la ventana modal
-        $this->emit("hide-modal-user");
+        $this->emit('hide-modal-user');
     }
     // actualiza los datos del usuario
     public function update_user()
@@ -216,13 +218,13 @@ class AdmUserController extends Component
         // Texto que se verá en el mensaje de tipo toast
         $text = 'El usuario: "' . $user->name. '" fue actualizado exitosamente';
         // Emite un mensaje de tipo toast
-        $this->emit("toast", [
+        $this->emit('toast', [
             'text' => $text,
             'timer' => 3000,
-            'icon' => "success"
+            'icon' => 'success'
         ]);
         // Cierra la ventana modal
-        $this->emit("hide-modal-user");
+        $this->emit('hide-modal-user');
     }
     // Escucha eventos JavaScript de la vista para ejecutar métodos en este controlador
     protected $listeners = [
@@ -250,10 +252,10 @@ class AdmUserController extends Component
     
             // Emite el mensaje de éxito
             $text = '¡Usuario: "' . $name . '" eliminado exitósamente!';
-            $this->emit("toast", [
+            $this->emit('toast', [
                 'text' => $text,
                 'timer' => 4000,
-                'icon' => "success"
+                'icon' => 'success'
             ]);
     
             // Confirma la transacción
