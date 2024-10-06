@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 text-center">
-                            <label for="mes">Seleccione un mes:</label>
+                            {{-- <label for="mes">Seleccione un mes:</label>
                             <select id="mes" class="form-control">
                                 <option value="01">Enero</option>
                                 <option value="02">Febrero</option>
@@ -48,7 +48,7 @@
                                 <option value="10">Octubre</option>
                                 <option value="11">Noviembre</option>
                                 <option value="12">Diciembre</option>
-                            </select>
+                            </select> --}}
                         </div>                        
                         <div class="col-12 col-sm-6 col-md-4 text-center">
                             
